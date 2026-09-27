@@ -201,7 +201,7 @@ export async function updateInternship(id: number, title: string, content: strin
   return { success: true };
 }
 
-import { uploadToDrive } from "@/lib/drive";
+import { uploadFileToSupabase } from "@/lib/storage";
 
 export async function submitCvWithFile(formData: FormData) {
   try {
@@ -219,16 +219,14 @@ export async function submitCvWithFile(formData: FormData) {
     let cv_drive_link = "";
     
     if (file && file.size > 0) {
-      if (!folderId) {
-        return { success: false, error: "Admin paneldə Google Drive qovluq ID-si təyin edilməyib!" };
-      }
+      
       
       const buffer = Buffer.from(await file.arrayBuffer());
       const fileName = `${first_name}_${last_name}_CV.pdf`;
-      const link = await uploadToDrive(buffer, fileName, file.type, folderId);
+      const link = await uploadFileToSupabase(buffer, fileName, file.type);
       
       if (!link) {
-        return { success: false, error: "Fayl Google Drive-a yüklənərkən xəta baş verdi." };
+        return { success: false, error: "Fayl sistemə yüklənərkən xəta baş verdi. Zəhmət olmasa Supabase-də 'pdfs' adlı Storage qovluğunu (Bucket) yaratdığınıza əmin olun." };
       }
       cv_drive_link = link;
     }
@@ -266,16 +264,14 @@ export async function addServicePdfWithFile(formData: FormData) {
     if (!file || file.size === 0) {
       return { success: false, error: "Fayl seçilməyib!" };
     }
-    if (!folderId) {
-      return { success: false, error: "Admin paneldə Google Drive qovluq ID-si təyin edilməyib!" };
-    }
+    
     
     const buffer = Buffer.from(await file.arrayBuffer());
     const fileName = `${service_id}_${title}.pdf`;
-    const link = await uploadToDrive(buffer, fileName, file.type, folderId);
+    const link = await uploadFileToSupabase(buffer, fileName, file.type);
     
     if (!link) {
-      return { success: false, error: "Fayl Google Drive-a yüklənərkən xəta baş verdi." };
+      return { success: false, error: "Fayl sistemə yüklənərkən xəta baş verdi. Zəhmət olmasa Supabase-də 'pdfs' adlı Storage qovluğunu (Bucket) yaratdığınıza əmin olun." };
     }
 
     const { error } = await supabase.from("service_pdfs").insert([{ service_id, title, drive_link: link }]);

@@ -57,8 +57,8 @@ export async function uploadToDrive(fileBuffer: Buffer, fileName: string, mimeTy
     }
 
     return response.data.webViewLink; // Returns the public viewable Google Drive link
-  } catch (error) {
+  } catch (error: any) {
     console.error("Google Drive Upload Error:", error);
-    return null;
+    throw new Error(error.message || JSON.stringify(error));
   }
 }

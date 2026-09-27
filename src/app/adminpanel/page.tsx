@@ -199,8 +199,7 @@ export default function AdminPanelPage() {
             {id:'services_media', icon: Video, title: 'Xidmət (PDF/Video)'},
             {id:'social', icon: LinkIcon, title: 'Sosial Şəbəkələr'},
             {id:'menus', icon: LayoutDashboard, title: 'Menyular'},
-            {id:'home_images', icon: ImageIcon, title: 'Ana Səhifə Şəkilləri'},
-            {id:'drive', icon: FolderIcon, title: 'Google Drive İnteqrasiyası'}
+            {id:'home_images', icon: ImageIcon, title: 'Ana Səhifə Şəkilləri'}
           ].map(item => (
             <button key={item.id} onClick={() => setActiveTab(item.id)} className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${activeTab === item.id ? 'bg-accent text-dark-bg' : 'hover:bg-white/5 text-text-muted hover:text-white'}`}>
               <item.icon className="w-4 h-4" /> {item.title}
