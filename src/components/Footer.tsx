@@ -11,9 +11,9 @@ export default function Footer() {
   };
 
   return (
-    <footer className="w-full bg-dark-bg-card text-white py-12 px-6 md:px-16 border-t border-white/10 overflow-hidden relative">
+    <footer className="w-full bg-dark-bg-card text-white py-8 px-6 md:px-16 border-t border-white/10 overflow-hidden relative">
       
-      <div className="w-full flex flex-col lg:flex-row justify-between items-start gap-12 mb-16 relative z-10">
+      <div className="w-full flex flex-col lg:flex-row justify-between items-start gap-10 mb-10 relative z-10">
         
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
@@ -22,12 +22,12 @@ export default function Footer() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col gap-4 max-w-sm"
         >
-          <div className="flex items-center gap-4 mb-1">
+          <button onClick={scrollToTop} className="flex items-center gap-4 mb-1 text-left hover:opacity-80 transition-opacity">
             <div className="relative w-14 h-14 overflow-hidden rounded-full border border-white/20 bg-white p-1">
               <Image src="/ProLogo.png" alt="TMHSE Logo" fill className="object-cover rounded-full" />
             </div>
             <span className="font-bold text-xl tracking-wider uppercase text-white">TMHSE</span>
-          </div>
+          </button>
           <p className="text-accent text-base font-medium leading-relaxed italic border-l-2 border-accent pl-4">
             "Təhlükəsizlik qaydadan daha böyük dəyərdir."
           </p>

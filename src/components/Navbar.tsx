@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
@@ -10,6 +10,15 @@ import { usePathname } from "next/navigation";
 export default function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <>
@@ -17,10 +26,12 @@ export default function Navbar() {
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full flex items-center justify-between py-4 px-6 md:px-16 absolute top-0 left-0 right-0 z-[60] bg-transparent"
+        className={`w-full flex items-center justify-between py-3 px-6 md:px-16 fixed top-0 left-0 right-0 z-[60] transition-colors duration-500 ${
+          scrolled ? "bg-dark-bg/95 backdrop-blur-md shadow-lg border-b border-white/5" : "bg-transparent"
+        }`}
       >
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="relative w-12 h-12 md:w-16 md:h-16 overflow-hidden rounded-full border-2 border-white/20 bg-white group-hover:border-accent transition-colors duration-500 flex items-center justify-center p-1">
+          <div className="relative w-12 h-12 overflow-hidden rounded-full border-2 border-white/20 bg-white group-hover:border-accent transition-colors duration-500 flex items-center justify-center p-1">
             <Image 
               src="/ProLogo.png" 
               alt="TMHSE Logo" 
@@ -36,9 +47,9 @@ export default function Navbar() {
         {/* Desktop Menu */}
         <div className="hidden lg:flex items-center gap-8 text-sm font-medium">
           <Link href="/haqqimizda" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/haqqimizda' ? 'text-accent' : 'text-white'}`}>Haqqımızda</Link>
-          <Link href="/xidmetler" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/xidmetler' ? 'text-accent' : 'text-white'}`}>Xidmətlər</Link>
+          <Link href="/xidmetler" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname.startsWith('/xidmetler') ? 'text-accent' : 'text-white'}`}>Xidmətlər</Link>
           <Link href="/vakansiyalar" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/vakansiyalar' ? 'text-accent' : 'text-white'}`}>Vakansiyalar</Link>
-          <a href="mailto:hr@tmhse.expert" className="transition-all duration-300 text-white hover:text-accent hover:scale-105">CV Göndər</a>
+          <Link href="/cv-gonder" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/cv-gonder' ? 'text-accent' : 'text-white'}`}>CV Göndər</Link>
           <Link 
             href="/elaqe" 
             className="flex items-center gap-2 bg-white/5 border border-accent/30 text-accent px-5 py-2.5 rounded-full hover:bg-accent hover:text-dark-bg transition-all duration-300 hover:scale-105 ml-4"
@@ -53,7 +64,7 @@ export default function Navbar() {
           className="lg:hidden text-white p-2"
           onClick={() => setMobileMenuOpen(true)}
         >
-          <Menu className="w-8 h-8" />
+          <Menu className="w-7 h-7" />
         </button>
       </motion.nav>
 
@@ -87,7 +98,7 @@ export default function Navbar() {
               <Link href="/xidmetler" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-4 active:text-accent">Xidmətlər</Link>
               <Link href="/vakansiyalar" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-4 active:text-accent">Vakansiyalar</Link>
               <Link href="/elaqe" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-4 active:text-accent">Əlaqə</Link>
-              <a href="mailto:hr@tmhse.expert" onClick={() => setMobileMenuOpen(false)} className="text-accent border-b border-white/10 pb-4">CV Göndər</a>
+              <Link href="/cv-gonder" onClick={() => setMobileMenuOpen(false)} className="text-accent border-b border-white/10 pb-4">CV Göndər</Link>
             </div>
 
             <div className="mt-12 flex flex-col gap-6">

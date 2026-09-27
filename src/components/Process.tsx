@@ -45,7 +45,7 @@ export default function Process() {
               <div className="w-8 h-[2px] bg-accent"></div>
               <span className="text-xs uppercase tracking-[0.3em] text-accent font-bold">İş Prinsipləri</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold leading-[1.1]">
+            <h2 className="text-3xl md:text-4xl font-bold leading-[1.1]">
               Aydın proses.<br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-500">Davamlı inkişaf.</span>
             </h2>

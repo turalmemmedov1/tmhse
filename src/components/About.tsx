@@ -33,7 +33,7 @@ export default function About() {
             <span className="text-xs uppercase tracking-[0.3em] text-accent font-bold">TMHSE</span>
           </div>
 
-          <h2 className="text-4xl md:text-5xl font-bold leading-[1.2] text-white">
+          <h2 className="text-3xl md:text-4xl font-bold leading-[1.2] text-white">
             Təhlükəsizlik <span className="text-accent">qaydadan</span><br />
             daha böyük dəyərdir.
           </h2>

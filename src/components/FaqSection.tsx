@@ -45,7 +45,7 @@ export default function FaqSection() {
             <div className="w-8 h-[2px] bg-accent-hover"></div>
             <span className="text-xs uppercase tracking-[0.3em] text-foreground/80 font-bold">Məlumat mərkəzi</span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-bold leading-[1.1] text-dark-bg tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-bold leading-[1.1] text-dark-bg tracking-tight">
             Tez-tez verilən<br />
             <span className="text-accent-hover drop-shadow-sm">suallar.</span>
           </h2>
