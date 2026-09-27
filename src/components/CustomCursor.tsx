@@ -27,14 +27,16 @@ export default function CustomCursor() {
       if (!isVisible) setIsVisible(true);
     };
 
-    if (!isMobile) {
+    if (!isMobile && !pathname?.startsWith('/adminpanel')) {
       window.addEventListener("mousemove", handleMouseMove);
+      document.body.classList.add('hide-cursor');
     }
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
+      document.body.classList.remove('hide-cursor');
     };
-  }, [mouseX, mouseY, isMobile, isVisible]);
+  }, [mouseX, mouseY, isMobile, isVisible, pathname]);
 
   if (isMobile || pathname?.startsWith('/adminpanel')) return null;
 

@@ -27,12 +27,10 @@ body {
   color: #ffffff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  cursor: none;
 }
 
 /* Make sure interactive elements don't show default cursor */
 a, button, [role="button"], input, select, textarea {
-  cursor: none !important;
 }
 
 /* Smooth scrolling */
@@ -58,4 +56,8 @@ html {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent);
+}
+
+.hide-cursor, .hide-cursor * {
+  cursor: none !important;
 }
