@@ -7,7 +7,7 @@ import Image from "next/image";
 import { 
   getVacancies, deleteVacancy, getCvs, deleteCv, getSettings, updateSetting, 
   getNews, addNews, deleteNews, updateNews, getLegislation, addLegislation, deleteLegislation, updateLegislation,
-  getInternships, addInternship, deleteInternship, updateInternship, getServicePdfs, addServicePdf, deleteServicePdf,
+  getInternships, addInternship, deleteInternship, updateInternship, getServicePdfs, addServicePdf, addServicePdfWithFile, deleteServicePdf,
   getServiceVideos, addServiceVideo, deleteServiceVideo, getMonthlyVisits
 } from "@/app/actions";
 import { uploadToImgbb } from "@/lib/imgbb";
@@ -302,13 +302,17 @@ export default function AdminPanelPage() {
                     <form onSubmit={async(e)=>{
                       e.preventDefault(); 
                       const fd=new FormData(e.currentTarget); 
-                      const t = toast.loading("Əlavə edilir...");
-                      await addServicePdf(fd.get('service_id') as string, fd.get('title') as string, fd.get('drive_link') as string); 
-                      toast.success('Əlavə edildi', { id: t }); 
-                      (e.target as any).reset(); 
-                      loadData();
+                      const t = toast.loading("PDF Google Drive-a Yüklənir...");
+                      const res = await addServicePdfWithFile(fd); 
+                      if (res.success) {
+                        toast.success('Əlavə edildi', { id: t }); 
+                        (e.target as any).reset(); 
+                        loadData();
+                      } else {
+                        toast.error(res.error || "Xəta baş verdi", { id: t });
+                      }
                     }} className="flex flex-col gap-4">
-                      <h4 className="text-sm font-bold text-dark-bg border-b pb-2">PDF (Drive Link) Əlavə Et</h4>
+                      <h4 className="text-sm font-bold text-dark-bg border-b pb-2">PDF Yüklə</h4>
                       <select name="service_id" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent">
                         <option value="emeyin-muhafizesi">Əməyin Mühafizəsi</option>
                         <option value="yanqina-qarsi-mubarize">Yanğına Qarşı Mübarizə</option>
@@ -318,8 +322,8 @@ export default function AdminPanelPage() {
                         <option value="ilk-yardim">İlk Yardım</option>
                       </select>
                       <input type="text" name="title" required placeholder="PDF Adı (məs: Təlimat)" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
-                      <input type="url" name="drive_link" required placeholder="Drive Linki (https://drive...)" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
-                      <button type="submit" className="bg-dark-bg text-white px-6 py-2 rounded-lg text-sm font-bold mt-2">Yadda Saxla</button>
+                      <input type="file" name="pdf_file" accept=".pdf" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
+                      <button type="submit" className="bg-dark-bg text-white px-6 py-2 rounded-lg text-sm font-bold mt-2">Yüklə və Yadda Saxla</button>
                     </form>
 
                     {/* Add Video */}

@@ -2,7 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { UploadCloud, CheckCircle, User, Mail, Phone, Briefcase, Link as LinkIcon } from "lucide-react";
 import { submitCvWithFile, getCvs } from "@/app/actions";
@@ -25,6 +25,7 @@ export default function CvYuklePage() {
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -146,6 +147,9 @@ export default function CvYuklePage() {
         <div className="w-full lg:w-2/3 flex flex-col gap-6">
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-2xl font-bold text-dark-bg">Aktiv CV-lər / Elanlar</h2>
+            <button onClick={() => setIsModalOpen(true)} className="bg-accent hover:bg-accent-hover text-dark-bg font-bold py-2 px-6 rounded-lg transition-colors text-sm">
+              + CV Yüklə
+            </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

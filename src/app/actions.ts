@@ -252,3 +252,38 @@ export async function submitCvWithFile(formData: FormData) {
     return { success: false, error: err.message || "Xəta baş verdi" };
   }
 }
+
+export async function addServicePdfWithFile(formData: FormData) {
+  try {
+    const file = formData.get("pdf_file") as File | null;
+    const service_id = formData.get("service_id") as string;
+    const title = formData.get("title") as string;
+    
+    // Get the configured Google Drive Folder ID from settings
+    const settings = await getSettings();
+    const folderId = settings?.google_drive_folder_id;
+
+    if (!file || file.size === 0) {
+      return { success: false, error: "Fayl seçilməyib!" };
+    }
+    if (!folderId) {
+      return { success: false, error: "Admin paneldə Google Drive qovluq ID-si təyin edilməyib!" };
+    }
+    
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const fileName = `${service_id}_${title}.pdf`;
+    const link = await uploadToDrive(buffer, fileName, file.type, folderId);
+    
+    if (!link) {
+      return { success: false, error: "Fayl Google Drive-a yüklənərkən xəta baş verdi." };
+    }
+
+    const { error } = await supabase.from("service_pdfs").insert([{ service_id, title, drive_link: link }]);
+    if (error) throw new Error(error.message);
+    
+    return { success: true };
+  } catch (err: any) {
+    console.error("addServicePdfWithFile error:", err);
+    return { success: false, error: err.message || "Xəta baş verdi" };
+  }
+}

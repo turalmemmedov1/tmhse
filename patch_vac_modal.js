@@ -1,67 +1,15 @@
-"use client";
+const fs = require('fs');
+const file = 'src/app/vakansiyalar/page.tsx';
+let code = fs.readFileSync(file, 'utf8');
 
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
-import { Building2, MapPin, CheckCircle } from "lucide-react";
-import { addVacancy, getVacancies } from "@/app/actions";
+// Add modal open state
+code = code.replace("const [isSubmitting, setIsSubmitting] = useState(false);", "const [isSubmitting, setIsSubmitting] = useState(false);\n  const [isModalOpen, setIsModalOpen] = useState(false);");
 
-type Vacancy = {
-  id: number;
-  company: string;
-  role: string;
-  location: string;
-  type: string;
-  description: string;
-  contact_email: string;
-};
+// Replace the entire left column
+const regexLeftCol = /<div className="w-full lg:w-1\/3 flex flex-col gap-6">[\s\S]*?<\/div>(\s+)<div className="w-full lg:w-2\/3 flex flex-col gap-6">/;
 
-export default function VacanciesPage() {
-  const [vacancies, setVacancies] = useState<Vacancy[]>([]);
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(() => {
-    async function load() {
-      const data = await getVacancies();
-      setVacancies(data);
-      setLoading(false);
-    }
-    load();
-  }, []);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    const formData = new FormData(e.currentTarget);
-    const res = await addVacancy(formData);
-    
-    if (res.success) {
-      setSubmitted(true);
-      const data = await getVacancies(); // reload real data
-      setVacancies(data);
-      setTimeout(() => {
-        setSubmitted(false);
-      }, 4000);
-      (e.target as HTMLFormElement).reset();
-    } else {
-      alert(res.error);
-    }
-    setIsSubmitting(false);
-  };
-
-  return (
-    <main className="flex min-h-screen flex-col w-full bg-background text-foreground">
-      <div className="bg-dark-bg">
-        <Navbar />
-      </div>
-      
-      <section className="pt-28 pb-20 px-6 md:px-16 w-full max-w-[1920px] mx-auto min-h-[70vh] flex flex-col lg:flex-row gap-12">
-        
-        <AnimatePresence>
+// The form string
+let formString = `<AnimatePresence>
           {isModalOpen && (
             <motion.div 
               initial={{ opacity: 0 }}
@@ -136,54 +84,22 @@ export default function VacanciesPage() {
           )}
         </AnimatePresence>
 
-        <div className="w-full flex flex-col gap-6">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-2xl font-bold text-dark-bg">Aktiv Vakansiyalar</h2>
+        <div className="w-full flex flex-col gap-6">`;
+
+code = code.replace(regexLeftCol, formString);
+
+// Add button to right column header
+code = code.replace(
+  `<h2 className="text-2xl font-bold text-dark-bg">Aktiv Vakansiyalar</h2>`,
+  `<h2 className="text-2xl font-bold text-dark-bg">Aktiv Vakansiyalar</h2>
             <button onClick={() => setIsModalOpen(true)} className="bg-accent hover:bg-accent-hover text-dark-bg font-bold py-2 px-6 rounded-lg transition-colors text-sm">
               + Vakansiya Yerləşdir
-            </button>
-          </div>
+            </button>`
+);
 
-          <div className="flex flex-col gap-4">
-            {loading ? (
-              <p className="text-sm text-foreground/70">Yüklənir...</p>
-            ) : vacancies.length === 0 ? (
-              <p className="text-sm text-foreground/70">Hazırda aktiv vakansiya yoxdur.</p>
-            ) : (
-              vacancies.map((vac) => (
-                <motion.div 
-                  key={vac.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col md:flex-row justify-between gap-6 group hover:shadow-md transition-shadow"
-                >
-                  <div className="flex flex-col gap-3 max-w-xl">
-                    <div>
-                      <h3 className="text-xl font-bold text-dark-bg group-hover:text-accent-hover transition-colors">{vac.role}</h3>
-                      <div className="flex items-center gap-2 mt-1 text-sm text-foreground/70 font-medium">
-                        <Building2 className="w-4 h-4 text-accent-hover" /> {vac.company}
-                        <span className="text-dark-bg/20">|</span>
-                        <MapPin className="w-4 h-4 text-accent-hover" /> {vac.location}
-                      </div>
-                    </div>
-                    <p className="text-sm text-foreground/70 leading-relaxed whitespace-pre-wrap">{vac.description}</p>
-                    <span className="text-xs font-bold bg-dark-bg/5 px-3 py-1 rounded-full w-fit mt-1">{vac.type}</span>
-                  </div>
-                  
-                  <div className="flex flex-col items-start md:items-end justify-center shrink-0">
-                    <a href={`mailto:${vac.contact_email}`} className="bg-dark-bg text-white text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-accent-hover transition-colors shadow-md">
-                      Müraciət Et
-                    </a>
-                  </div>
-                </motion.div>
-              ))
-            )}
-          </div>
-        </div>
-
-      </section>
-
-      <Footer />
-    </main>
-  );
+// Add AnimatePresence to imports
+if(!code.includes("AnimatePresence")) {
+  code = code.replace('import { motion } from "framer-motion";', 'import { motion, AnimatePresence } from "framer-motion";');
 }
+
+fs.writeFileSync(file, code);
