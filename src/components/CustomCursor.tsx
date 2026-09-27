@@ -2,12 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 export default function CustomCursor() {
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
   const [isMobile, setIsMobile] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
+  
+  const pathname = usePathname();
 
   // Smooth, springy animation for outer circle
   const springX = useSpring(mouseX, { stiffness: 150, damping: 15, mass: 0.5 });
@@ -33,7 +36,7 @@ export default function CustomCursor() {
     };
   }, [mouseX, mouseY, isMobile, isVisible]);
 
-  if (isMobile) return null;
+  if (isMobile || pathname?.startsWith('/adminpanel')) return null;
 
   return (
     <>
