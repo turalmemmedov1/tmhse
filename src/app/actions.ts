@@ -200,3 +200,55 @@ export async function updateInternship(id: number, title: string, content: strin
   if (error) return { success: false, error: error.message };
   return { success: true };
 }
+
+import { uploadToDrive } from "@/lib/drive";
+
+export async function submitCvWithFile(formData: FormData) {
+  try {
+    const file = formData.get("pdf_file") as File | null;
+    const first_name = formData.get("first_name") as string;
+    const last_name = formData.get("last_name") as string;
+    const email = formData.get("email") as string;
+    const phone = formData.get("phone") as string;
+    const skills = formData.get("skills") as string;
+    
+    // Get the configured Google Drive Folder ID from settings
+    const settings = await getSettings();
+    const folderId = settings?.google_drive_folder_id;
+
+    let cv_drive_link = "";
+    
+    if (file && file.size > 0) {
+      if (!folderId) {
+        return { success: false, error: "Admin paneldə Google Drive qovluq ID-si təyin edilməyib!" };
+      }
+      
+      const buffer = Buffer.from(await file.arrayBuffer());
+      const fileName = `${first_name}_${last_name}_CV.pdf`;
+      const link = await uploadToDrive(buffer, fileName, file.type, folderId);
+      
+      if (!link) {
+        return { success: false, error: "Fayl Google Drive-a yüklənərkən xəta baş verdi." };
+      }
+      cv_drive_link = link;
+    }
+
+    const cvData = {
+      first_name,
+      last_name,
+      email,
+      phone,
+      skills,
+      image_url: formData.get("image_url") as string || "",
+      cv_drive_link
+    };
+
+    const { error } = await supabase.from("cvs").insert([cvData]);
+    if (error) throw new Error(error.message);
+    
+    return { success: true };
+  } catch (err: any) {
+    console.error("submitCvWithFile error:", err);
+    return { success: false, error: err.message || "Xəta baş verdi" };
+  }
+}

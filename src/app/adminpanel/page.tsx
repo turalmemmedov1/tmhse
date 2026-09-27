@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { LayoutDashboard, LogOut, Link as LinkIcon, ImageIcon as ImageIcon, FileText, Briefcase, FileBadge, Trash2, PlusCircle, Newspaper, Users, BookOpen, Presentation, Video } from "lucide-react";
+import { LayoutDashboard, LogOut, Link as LinkIcon, ImageIcon as ImageIcon, Folder as FolderIcon, FileText, Briefcase, FileBadge, Trash2, PlusCircle, Newspaper, Users, BookOpen, Presentation, Video } from "lucide-react";
 import Image from "next/image";
 import { 
   getVacancies, deleteVacancy, getCvs, deleteCv, getSettings, updateSetting, 
@@ -199,7 +199,8 @@ export default function AdminPanelPage() {
             {id:'services_media', icon: Video, title: 'Xidmət (PDF/Video)'},
             {id:'social', icon: LinkIcon, title: 'Sosial Şəbəkələr'},
             {id:'menus', icon: LayoutDashboard, title: 'Menyular'},
-            {id:'home_images', icon: ImageIcon, title: 'Ana Səhifə Şəkilləri'}
+            {id:'home_images', icon: ImageIcon, title: 'Ana Səhifə Şəkilləri'},
+            {id:'drive', icon: FolderIcon, title: 'Google Drive İnteqrasiyası'}
           ].map(item => (
             <button key={item.id} onClick={() => setActiveTab(item.id)} className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${activeTab === item.id ? 'bg-accent text-dark-bg' : 'hover:bg-white/5 text-text-muted hover:text-white'}`}>
               <item.icon className="w-4 h-4" /> {item.title}
@@ -565,6 +566,29 @@ export default function AdminPanelPage() {
                     <input type="file" name="image_2" accept="image/*" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm" />
                   </div>
                   <button type="submit" className="bg-dark-bg text-white px-6 py-2 rounded-lg text-sm font-bold w-fit hover:bg-accent-hover transition-colors">Yenilə</button>
+                </form>
+              </motion.div>
+            )}
+
+            {activeTab === 'drive' && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5 max-w-xl">
+                <h3 className="font-bold text-lg text-dark-bg mb-6">Google Drive İnteqrasiyası</h3>
+                <p className="text-sm text-gray-500 mb-6">
+                  Vebsayta yüklənən CV-lərin (PDF) birbaşa Google Drive-a getməsi üçün hədəf qovluğun ID-sini bura yazın.
+                </p>
+                <form onSubmit={async (e) => {
+                  e.preventDefault();
+                  const loadingToast = toast.loading("Yadda saxlanılır...");
+                  const formData = new FormData(e.currentTarget);
+                  await updateSetting("google_drive_folder_id", formData.get("folder_id") as string);
+                  toast.success("Yadda saxlanıldı", { id: loadingToast });
+                  loadData();
+                }} className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-bold text-dark-bg">Qovluq ID-si (Folder ID)</label>
+                    <input type="text" name="folder_id" defaultValue={settings?.google_drive_folder_id || ""} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" placeholder="1aBcDeFgHiJkLmNoPqRsTuVwXyZ" />
+                  </div>
+                  <button type="submit" className="bg-dark-bg text-white px-6 py-2 rounded-lg text-sm font-bold w-fit mt-2 hover:bg-accent-hover transition-colors">Yadda Saxla</button>
                 </form>
               </motion.div>
             )}

@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { UploadCloud, CheckCircle, User, Mail, Phone, Briefcase, Link as LinkIcon } from "lucide-react";
-import { addCv, getCvs } from "@/app/actions";
+import { submitCvWithFile, getCvs } from "@/app/actions";
 import { uploadToImgbb } from "@/lib/imgbb";
 
 type CV = {
@@ -46,29 +46,12 @@ export default function CvYuklePage() {
       if (url) image_url = url;
     }
 
-    const cvData = {
-      first_name: formData.get("first_name") as string,
-      last_name: formData.get("last_name") as string,
-      email: formData.get("email") as string,
-      phone: formData.get("phone") as string,
-      skills: formData.get("skills") as string,
-      cv_drive_link: formData.get("cv_drive_link") as string || "",
-      image_url
-    };
-
-    const res = await addCv(cvData);
-    
+    formData.append("image_url", image_url);
+    const res = await submitCvWithFile(formData);
     if (res.success) {
       setSubmitted(true);
-      const data = await getCvs();
-      setCvs(data);
-      setTimeout(() => {
-        setSubmitted(false);
-        setSelectedFile(null);
-      }, 4000);
-      (e.target as HTMLFormElement).reset();
     } else {
-      alert(res.error);
+      alert(res.error || "Xəta baş verdi");
     }
     setIsSubmitting(false);
   };
@@ -126,8 +109,8 @@ export default function CvYuklePage() {
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="text-xs font-bold text-dark-bg">CV (Google Drive Linki)</label>
-                <input type="url" name="cv_drive_link" className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="https://drive.google.com/..." />
+                <label className="text-xs font-bold text-dark-bg">CV Yüklə (PDF)</label>
+                <input type="file" name="pdf_file" accept=".pdf" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" />
               </div>
 
               <div className="flex flex-col gap-1">
