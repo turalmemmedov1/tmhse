@@ -3,8 +3,9 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Building2, MapPin, CheckCircle } from "lucide-react";
+import { addVacancy, getVacancies } from "@/app/actions";
 
 type Vacancy = {
   id: number;
@@ -12,60 +13,43 @@ type Vacancy = {
   role: string;
   location: string;
   type: string;
-  desc: string;
-  contact: string;
+  description: string;
+  contact_email: string;
 };
 
-const initialMockVacancies: Vacancy[] = [
-  {
-    id: 1,
-    company: "SOCAR Downstream",
-    role: "SƏTƏM üzrə Mühəndis",
-    location: "Bakı, Azərbaycan",
-    type: "Tam ştat",
-    desc: "İstehsalat sahəsində təhlükəsizlik qaydalarının yoxlanılması, risk analizlərinin aparılması və hesabatların hazırlanması.",
-    contact: "hr@socar-example.az",
-  },
-  {
-    id: 2,
-    company: "AzərGold QSC",
-    role: "Əməyin Mühafizəsi Mütəxəssisi",
-    location: "Daşkəsən, Azərbaycan",
-    type: "Tam ştat",
-    desc: "Mədən ərazisində işçilərin təlimatlandırılması və əməyin mühafizəsi standartlarına nəzarət.",
-    contact: "cv@azergold-example.az",
-  }
-];
-
 export default function VacanciesPage() {
-  const [vacancies, setVacancies] = useState<Vacancy[]>(initialMockVacancies);
+  const [vacancies, setVacancies] = useState<Vacancy[]>([]);
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [formData, setFormData] = useState({
-    company: "",
-    role: "",
-    location: "",
-    type: "Tam ştat",
-    desc: "",
-    contact: "",
-  });
+  useEffect(() => {
+    async function load() {
+      const data = await getVacancies();
+      setVacancies(data);
+      setLoading(false);
+    }
+    load();
+  }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newVacancy = {
-      id: Date.now(),
-      ...formData
-    };
-    setVacancies(prev => [newVacancy, ...prev].slice(0, 5));
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ company: "", role: "", location: "", type: "Tam ştat", desc: "", contact: "" });
-    }, 4000);
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
+    const res = await addVacancy(formData);
+    
+    if (res.success) {
+      setSubmitted(true);
+      const data = await getVacancies(); // reload real data
+      setVacancies(data);
+      setTimeout(() => {
+        setSubmitted(false);
+      }, 4000);
+      (e.target as HTMLFormElement).reset();
+    } else {
+      alert(res.error);
+    }
+    setIsSubmitting(false);
   };
 
   return (
@@ -96,21 +80,21 @@ export default function VacanciesPage() {
             >
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-bold text-dark-bg">Şirkətin adı *</label>
-                <input type="text" name="company" value={formData.company} onChange={handleChange} required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="Məs: SOCAR" />
+                <input type="text" name="company" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="Məs: SOCAR" />
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-bold text-dark-bg">Vəzifə (Rol) *</label>
-                <input type="text" name="role" value={formData.role} onChange={handleChange} required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="SƏTƏM Mühəndisi" />
+                <input type="text" name="role" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="SƏTƏM Mühəndisi" />
               </div>
               
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-bold text-dark-bg">Ünvan / Şəhər *</label>
-                <input type="text" name="location" value={formData.location} onChange={handleChange} required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="Bakı" />
+                <input type="text" name="location" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="Bakı" />
               </div>
 
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-bold text-dark-bg">İş qrafiki</label>
-                <select name="type" value={formData.type} onChange={handleChange} className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm">
+                <select name="type" className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm">
                   <option>Tam ştat</option>
                   <option>Yarım ştat</option>
                   <option>Təcrübə proqramı</option>
@@ -120,16 +104,16 @@ export default function VacanciesPage() {
 
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-bold text-dark-bg">Tələblər / Təsvir *</label>
-                <textarea name="desc" value={formData.desc} onChange={handleChange} required rows={3} className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm resize-none" placeholder="Vakansiya barədə məlumat..."></textarea>
+                <textarea name="desc" required rows={3} className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm resize-none" placeholder="Vakansiya barədə məlumat..."></textarea>
               </div>
 
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-bold text-dark-bg">Əlaqə E-poçtu *</label>
-                <input type="email" name="contact" value={formData.contact} onChange={handleChange} required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="hr@sirket.az" />
+                <input type="email" name="contact" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="hr@sirket.az" />
               </div>
 
-              <button type="submit" className="w-full bg-dark-bg hover:bg-accent-hover text-white font-bold py-3 rounded-lg transition-colors duration-300 text-sm mt-2">
-                Elan Əlavə Et
+              <button disabled={isSubmitting} type="submit" className="w-full bg-dark-bg hover:bg-accent-hover text-white font-bold py-3 rounded-lg transition-colors duration-300 text-sm mt-2 disabled:opacity-50">
+                {isSubmitting ? "Yüklənir..." : "Elan Əlavə Et"}
               </button>
             </motion.form>
           ) : (
@@ -151,33 +135,39 @@ export default function VacanciesPage() {
           </div>
 
           <div className="flex flex-col gap-4">
-            {vacancies.map((vac) => (
-              <motion.div 
-                key={vac.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col md:flex-row justify-between gap-6 group hover:shadow-md transition-shadow"
-              >
-                <div className="flex flex-col gap-3 max-w-xl">
-                  <div>
-                    <h3 className="text-xl font-bold text-dark-bg group-hover:text-accent-hover transition-colors">{vac.role}</h3>
-                    <div className="flex items-center gap-2 mt-1 text-sm text-foreground/70 font-medium">
-                      <Building2 className="w-4 h-4 text-accent-hover" /> {vac.company}
-                      <span className="text-dark-bg/20">|</span>
-                      <MapPin className="w-4 h-4 text-accent-hover" /> {vac.location}
+            {loading ? (
+              <p className="text-sm text-foreground/70">Yüklənir...</p>
+            ) : vacancies.length === 0 ? (
+              <p className="text-sm text-foreground/70">Hazırda aktiv vakansiya yoxdur.</p>
+            ) : (
+              vacancies.map((vac) => (
+                <motion.div 
+                  key={vac.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col md:flex-row justify-between gap-6 group hover:shadow-md transition-shadow"
+                >
+                  <div className="flex flex-col gap-3 max-w-xl">
+                    <div>
+                      <h3 className="text-xl font-bold text-dark-bg group-hover:text-accent-hover transition-colors">{vac.role}</h3>
+                      <div className="flex items-center gap-2 mt-1 text-sm text-foreground/70 font-medium">
+                        <Building2 className="w-4 h-4 text-accent-hover" /> {vac.company}
+                        <span className="text-dark-bg/20">|</span>
+                        <MapPin className="w-4 h-4 text-accent-hover" /> {vac.location}
+                      </div>
                     </div>
+                    <p className="text-sm text-foreground/70 leading-relaxed whitespace-pre-wrap">{vac.description}</p>
+                    <span className="text-xs font-bold bg-dark-bg/5 px-3 py-1 rounded-full w-fit mt-1">{vac.type}</span>
                   </div>
-                  <p className="text-sm text-foreground/70 leading-relaxed">{vac.desc}</p>
-                  <span className="text-xs font-bold bg-dark-bg/5 px-3 py-1 rounded-full w-fit mt-1">{vac.type}</span>
-                </div>
-                
-                <div className="flex flex-col items-start md:items-end justify-center shrink-0">
-                  <a href={`mailto:${vac.contact}`} className="bg-dark-bg text-white text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-accent-hover transition-colors shadow-md">
-                    Müraciət Et
-                  </a>
-                </div>
-              </motion.div>
-            ))}
+                  
+                  <div className="flex flex-col items-start md:items-end justify-center shrink-0">
+                    <a href={`mailto:${vac.contact_email}`} className="bg-dark-bg text-white text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-accent-hover transition-colors shadow-md">
+                      Müraciət Et
+                    </a>
+                  </div>
+                </motion.div>
+              ))
+            )}
           </div>
         </div>
 

@@ -3,67 +3,74 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
-import { useState } from "react";
-import { UploadCloud, CheckCircle, User, Mail, Phone, Briefcase } from "lucide-react";
+import { useState, useEffect } from "react";
+import { UploadCloud, CheckCircle, User, Mail, Phone, Briefcase, Link as LinkIcon } from "lucide-react";
+import { addCv, getCvs } from "@/app/actions";
+import { uploadToImgbb } from "@/lib/imgbb";
 
 type CV = {
   id: number;
-  name: string;
-  surname: string;
+  first_name: string;
+  last_name: string;
   email: string;
   phone: string;
   skills: string;
-  image?: string;
+  image_url: string;
+  cv_drive_link: string;
 };
 
-const initialMockCvs: CV[] = [
-  {
-    id: 1,
-    name: "Əli",
-    surname: "Qasımlı",
-    email: "ali.q@email.com",
-    phone: "+994 50 123 45 67",
-    skills: "Əməyin mühafizəsi, ISO 45001, Yanğın təhlükəsizliyi təlimçisi",
-  },
-  {
-    id: 2,
-    name: "Aygün",
-    surname: "Məmmədova",
-    email: "aygun.m@email.com",
-    phone: "+994 55 987 65 43",
-    skills: "Risklərin qiymətləndirilməsi, Ətraf mühit üzrə mühəndis",
-  }
-];
-
 export default function CvYuklePage() {
-  const [cvs, setCvs] = useState<CV[]>(initialMockCvs);
+  const [cvs, setCvs] = useState<CV[]>([]);
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    surname: "",
-    email: "",
-    phone: "",
-    skills: "",
-  });
+  useEffect(() => {
+    async function load() {
+      const data = await getCvs();
+      setCvs(data);
+      setLoading(false);
+    }
+    load();
+  }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newCv = {
-      id: Date.now(),
-      ...formData
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
+    
+    let image_url = "";
+    if (selectedFile) {
+      const url = await uploadToImgbb(selectedFile);
+      if (url) image_url = url;
+    }
+
+    const cvData = {
+      first_name: formData.get("first_name") as string,
+      last_name: formData.get("last_name") as string,
+      email: formData.get("email") as string,
+      phone: formData.get("phone") as string,
+      skills: formData.get("skills") as string,
+      cv_drive_link: formData.get("cv_drive_link") as string || "",
+      image_url
     };
-    // Keep only latest 6 CVs to avoid clutter, new ones push out old
-    setCvs(prev => [newCv, ...prev].slice(0, 6));
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ name: "", surname: "", email: "", phone: "", skills: "" });
-    }, 4000);
+
+    const res = await addCv(cvData);
+    
+    if (res.success) {
+      setSubmitted(true);
+      const data = await getCvs();
+      setCvs(data);
+      setTimeout(() => {
+        setSubmitted(false);
+        setSelectedFile(null);
+      }, 4000);
+      (e.target as HTMLFormElement).reset();
+    } else {
+      alert(res.error);
+    }
+    setIsSubmitting(false);
   };
 
   return (
@@ -82,7 +89,7 @@ export default function CvYuklePage() {
           >
             <h1 className="text-3xl md:text-4xl font-bold mb-4 text-dark-bg">CV Yüklə</h1>
             <p className="text-sm md:text-base text-foreground/70">
-              Öz profilinizi və bacarıqlarınızı bura əlavə edərək potensial işəgötürənlərin sizi tapmasına kömək edin. Məlumatlar açıq CV lövhəsində göstəriləcək.
+              Öz profilinizi və bacarıqlarınızı bura əlavə edərək potensial işəgötürənlərin sizi tapmasına kömək edin.
             </p>
           </motion.div>
 
@@ -96,39 +103,46 @@ export default function CvYuklePage() {
             >
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-bold text-dark-bg">Adınız *</label>
-                <input type="text" name="name" value={formData.name} onChange={handleChange} required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="Tural" />
+                <input type="text" name="first_name" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="Tural" />
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-bold text-dark-bg">Soyadınız *</label>
-                <input type="text" name="surname" value={formData.surname} onChange={handleChange} required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="Məmmədov" />
+                <input type="text" name="last_name" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="Məmmədov" />
               </div>
               
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-bold text-dark-bg">E-poçt ünvanınız *</label>
-                <input type="email" name="email" value={formData.email} onChange={handleChange} required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="numune@email.com" />
+                <input type="email" name="email" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="numune@email.com" />
               </div>
 
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-bold text-dark-bg">Əlaqə nömrəsi *</label>
-                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="+994 50 123 45 67" />
+                <input type="tel" name="phone" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="+994 50 123 45 67" />
               </div>
 
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-bold text-dark-bg">Bacarıqlar / İxtisas *</label>
-                <textarea name="skills" value={formData.skills} onChange={handleChange} required rows={3} className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm resize-none" placeholder="Məsələn: SƏTƏM mütəxəssisi, ISO standartları..."></textarea>
+                <textarea name="skills" required rows={3} className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm resize-none" placeholder="Məsələn: SƏTƏM mütəxəssisi, ISO standartları..."></textarea>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-bold text-dark-bg">CV (Google Drive Linki)</label>
+                <input type="url" name="cv_drive_link" className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="https://drive.google.com/..." />
               </div>
 
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-bold text-dark-bg">Profil Şəkli (İstəyə bağlı)</label>
-                <label className="w-full border-2 border-dashed border-dark-bg/20 rounded-lg p-4 flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-accent-hover hover:bg-accent/5 transition-colors">
-                  <UploadCloud className="w-5 h-5 text-accent-hover" />
-                  <span className="text-xs font-medium text-foreground/60 text-center">Şəkil yükləmək üçün klikləyin</span>
-                  <input type="file" accept="image/*" className="hidden" />
+                <label className={`w-full border-2 border-dashed ${selectedFile ? 'border-accent-hover bg-accent/5' : 'border-dark-bg/20'} rounded-lg p-4 flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-accent-hover hover:bg-accent/5 transition-colors`}>
+                  <UploadCloud className={`w-5 h-5 ${selectedFile ? 'text-accent-hover' : 'text-foreground/40'}`} />
+                  <span className="text-xs font-medium text-foreground/60 text-center">
+                    {selectedFile ? selectedFile.name : "Şəkil yükləmək üçün klikləyin"}
+                  </span>
+                  <input type="file" accept="image/*" onChange={(e) => setSelectedFile(e.target.files?.[0] || null)} className="hidden" />
                 </label>
               </div>
 
-              <button type="submit" className="w-full bg-accent-hover hover:bg-[#349b65] text-white font-bold py-3 rounded-lg transition-colors duration-300 text-sm mt-2">
-                CV Yerləşdir
+              <button disabled={isSubmitting} type="submit" className="w-full bg-accent-hover hover:bg-[#349b65] text-white font-bold py-3 rounded-lg transition-colors duration-300 text-sm mt-2 disabled:opacity-50">
+                {isSubmitting ? "Yüklənir..." : "CV Yerləşdir"}
               </button>
             </motion.form>
           ) : (
@@ -152,41 +166,52 @@ export default function CvYuklePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {cvs.map((cv) => (
-              <motion.div 
-                key={cv.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-4 group hover:shadow-md transition-shadow"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-background border border-dark-bg/10 flex items-center justify-center overflow-hidden shrink-0">
-                    {cv.image ? <img src={cv.image} alt={cv.name} className="w-full h-full object-cover" /> : <User className="w-6 h-6 text-dark-bg/30" />}
+            {loading ? (
+              <p className="text-sm text-foreground/70">Yüklənir...</p>
+            ) : cvs.length === 0 ? (
+              <p className="text-sm text-foreground/70">Hazırda aktiv CV yoxdur.</p>
+            ) : (
+              cvs.map((cv) => (
+                <motion.div 
+                  key={cv.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-4 group hover:shadow-md transition-shadow"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-background border border-dark-bg/10 flex items-center justify-center overflow-hidden shrink-0">
+                      {cv.image_url ? <img src={cv.image_url} alt={cv.first_name} className="w-full h-full object-cover" /> : <User className="w-6 h-6 text-dark-bg/30" />}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-dark-bg">{cv.first_name} {cv.last_name}</h3>
+                      <span className="text-xs font-medium text-accent-hover">SƏTƏM Namizədi</span>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-dark-bg">{cv.name} {cv.surname}</h3>
-                    <span className="text-xs font-medium text-accent-hover">SƏTƏM Namizədi</span>
-                  </div>
-                </div>
 
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-start gap-2 text-sm text-foreground/80">
-                    <Briefcase className="w-4 h-4 text-dark-bg/40 mt-0.5 shrink-0" />
-                    <p className="leading-tight font-medium">{cv.skills}</p>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-start gap-2 text-sm text-foreground/80">
+                      <Briefcase className="w-4 h-4 text-dark-bg/40 mt-0.5 shrink-0" />
+                      <p className="leading-tight font-medium">{cv.skills}</p>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-foreground/60">
+                      <Mail className="w-3.5 h-3.5" /> <a href={`mailto:${cv.email}`} className="hover:text-accent-hover">{cv.email}</a>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-foreground/60">
+                      <Phone className="w-3.5 h-3.5" /> <a href={`tel:${cv.phone}`} className="hover:text-accent-hover">{cv.phone}</a>
+                    </div>
+                    {cv.cv_drive_link && (
+                      <div className="flex items-center gap-2 text-xs text-foreground/60 mt-1">
+                        <LinkIcon className="w-3.5 h-3.5 text-accent" /> <a href={cv.cv_drive_link} target="_blank" rel="noreferrer" className="hover:text-accent-hover text-accent font-bold">Ətraflı CV PDF</a>
+                      </div>
+                    )}
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-foreground/60">
-                    <Mail className="w-3.5 h-3.5" /> <a href={`mailto:${cv.email}`} className="hover:text-accent-hover">{cv.email}</a>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-foreground/60">
-                    <Phone className="w-3.5 h-3.5" /> <a href={`tel:${cv.phone}`} className="hover:text-accent-hover">{cv.phone}</a>
-                  </div>
-                </div>
-                
-                <a href={`mailto:${cv.email}`} className="mt-auto w-full bg-dark-bg text-white text-center py-2 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-accent-hover transition-colors">
-                  Əlaqə
-                </a>
-              </motion.div>
-            ))}
+                  
+                  <a href={`mailto:${cv.email}`} className="mt-auto w-full bg-dark-bg text-white text-center py-2 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-accent-hover transition-colors">
+                    Əlaqə
+                  </a>
+                </motion.div>
+              ))
+            )}
           </div>
         </div>
 
