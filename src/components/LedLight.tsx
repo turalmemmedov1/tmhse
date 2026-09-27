@@ -8,28 +8,28 @@ export default function LedLight() {
       <motion.div
         animate={{
           rotate: [0, 360],
-          scale: [1, 1.2, 1],
+          scale: [1, 1.1, 1],
         }}
         transition={{
-          duration: 20,
+          duration: 30,
           repeat: Infinity,
           ease: "linear",
         }}
-        className="absolute top-1/4 left-1/4 w-[40vw] h-[40vw] max-w-[600px] max-h-[600px] bg-accent/20 rounded-full blur-[100px] mix-blend-screen"
-        style={{ transformOrigin: "center center" }}
+        className="absolute top-[10%] left-[10%] w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-accent/20 rounded-full blur-[80px] md:blur-[120px]"
+        style={{ transformOrigin: "center center", WebkitTransform: "translateZ(0)" }}
       />
       <motion.div
         animate={{
           rotate: [360, 0],
-          scale: [1, 1.5, 1],
+          scale: [1, 1.2, 1],
         }}
         transition={{
-          duration: 25,
+          duration: 35,
           repeat: Infinity,
           ease: "linear",
         }}
-        className="absolute bottom-1/4 right-1/4 w-[35vw] h-[35vw] max-w-[500px] max-h-[500px] bg-green-500/10 rounded-full blur-[120px] mix-blend-screen"
-        style={{ transformOrigin: "center center" }}
+        className="absolute bottom-[10%] right-[10%] w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-green-500/10 rounded-full blur-[80px] md:blur-[120px]"
+        style={{ transformOrigin: "center center", WebkitTransform: "translateZ(0)" }}
       />
     </div>
   );

@@ -23,7 +23,7 @@ export default function RootLayout({
       lang="az"
       className={`${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">
+      <body className="min-h-full flex flex-col font-sans w-full max-w-[100vw] overflow-x-hidden overflow-y-auto">
         <CustomCursor />
         {children}
       </body>
