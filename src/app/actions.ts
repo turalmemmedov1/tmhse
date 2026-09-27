@@ -124,3 +124,37 @@ export async function deleteInternship(id: number) {
   const { error } = await supabase.from("internships").delete().eq("id", id);
   return { success: !error };
 }
+
+// --- SERVICES MEDIA (PDFs and Videos) ---
+export async function getServicePdfs() {
+  const { data, error } = await supabase.from("service_pdfs").select("*").order("created_at", { ascending: false });
+  if (error) return [];
+  return data;
+}
+
+export async function addServicePdf(service_id: string, title: string, drive_link: string) {
+  const { error } = await supabase.from("service_pdfs").insert([{ service_id, title, drive_link }]);
+  return { success: !error };
+}
+
+export async function deleteServicePdf(id: number) {
+  const { error } = await supabase.from("service_pdfs").delete().eq("id", id);
+  return { success: !error };
+}
+
+export async function getServiceVideos() {
+  const { data, error } = await supabase.from("service_videos").select("*").order("created_at", { ascending: false });
+  if (error) return [];
+  return data;
+}
+
+export async function addServiceVideo(service_id: string, title: string, youtube_link: string) {
+  const { error } = await supabase.from("service_videos").insert([{ service_id, title, youtube_link }]);
+  return { success: !error };
+}
+
+export async function deleteServiceVideo(id: number) {
+  const { error } = await supabase.from("service_videos").delete().eq("id", id);
+  return { success: !error };
+}
+
