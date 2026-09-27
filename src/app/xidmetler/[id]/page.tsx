@@ -57,7 +57,6 @@ export default function ServiceDetailPage() {
             {service.icon}
           </div>
           <div>
-            <span className="text-accent-hover font-bold text-sm md:text-base mb-1 block">Xidmət {service.num}</span>
             <h1 className="text-2xl md:text-4xl font-bold text-dark-bg leading-tight">{service.title}</h1>
           </div>
         </motion.div>

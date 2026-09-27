@@ -3,96 +3,95 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
-import { Mail, MapPin, Plus } from "lucide-react";
-import { useState } from "react";
-
-const faqs = [
-  {
-    q: "SƏTƏM xidmətləri niyə vacibdir?",
-    a: "İş yerində sağlamlığın, təhlükəsizliyin qorunması və ətraf mühitə zərərin minimuma endirilməsi həm qanunvericiliyin tələbidir, həm də işçilərin motivasiyasını artıraraq daha məhsuldar mühit yaradır."
-  },
-  {
-    q: "Audit və monitorinq prosesi necə həyata keçirilir?",
-    a: "Peşəkar komandamız iş sahənizə baxış keçirir, mövcud qaydalara uyğunluğu yoxlayır və potensial riskləri analiz edir. Yekunda ətraflı hesabat və təkmilləşdirmə planı təqdim olunur."
-  },
-  {
-    q: "Hansı sahələr üzrə təlimlər keçirirsiniz?",
-    a: "Əməyin mühafizəsi, ilk tibbi yardım, yanğın təhlükəsizliyi, risklərin idarə olunması və s. kimi bir çox SƏTƏM sahələrində beynəlxalq standartlara cavab verən təlimlərimiz mövcuddur."
-  }
-];
+import { Mail, MapPin, Phone } from "lucide-react";
 
 export default function ContactPage() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-
   return (
-    <main className="flex min-h-screen flex-col overflow-x-hidden bg-dark-bg text-white">
-      <Navbar />
+    <main className="flex min-h-screen flex-col w-full max-w-[100vw] overflow-x-hidden overflow-y-auto bg-background text-foreground">
+      <div className="bg-dark-bg">
+        <Navbar />
+      </div>
       
-      <section className="pt-48 pb-24 px-6 md:px-16 w-full max-w-[1920px] mx-auto">
+      <section className="pt-28 pb-20 px-6 md:px-16 w-full max-w-[1920px] mx-auto min-h-[70vh]">
         <motion.div 
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-20"
+          className="mb-12"
         >
-          <h1 className="text-5xl md:text-7xl font-bold mb-6">Əlaqə</h1>
-          <p className="text-xl text-text-muted max-w-2xl">Suallarınız var və ya xidmətlərimizdən yararlanmaq istəyirsiniz? Bizimlə asanlıqla əlaqə saxlayın.</p>
+          <div className="flex items-center gap-4 mb-4">
+            <div className="w-8 h-[2px] bg-accent-hover"></div>
+            <span className="text-xs uppercase tracking-[0.3em] font-bold text-dark-bg/60">Bizimlə Əlaqə</span>
+          </div>
+          <h1 className="text-3xl md:text-5xl font-bold mb-4 text-dark-bg">Sualınız var?</h1>
+          <p className="text-sm md:text-base text-foreground/70 max-w-2xl font-medium">SƏTƏM həlləri və digər xidmətlərimiz barədə ətraflı məlumat almaq üçün bizimlə əlaqə saxlayın.</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <motion.div 
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col gap-10"
+            transition={{ delay: 0.2 }}
+            className="flex flex-col gap-6"
           >
-            <div className="bg-dark-bg-card p-10 rounded-[2rem] border border-white/5 flex items-start gap-6">
-              <Mail className="w-10 h-10 text-accent shrink-0" />
-              <div>
-                <h3 className="text-2xl font-bold mb-2">E-poçt</h3>
-                <a href="mailto:info@tmhse.expert" className="text-lg text-text-muted hover:text-accent transition-colors">info@tmhse.expert</a>
+            <div className="bg-white rounded-3xl p-8 shadow-sm border border-dark-bg/5 flex items-start gap-6 group hover:border-accent-hover transition-colors">
+              <div className="w-12 h-12 rounded-full bg-dark-bg/5 flex items-center justify-center text-dark-bg group-hover:bg-accent-hover group-hover:text-white transition-colors shrink-0">
+                <MapPin className="w-6 h-6" />
+              </div>
+              <div className="flex flex-col gap-1 mt-1">
+                <span className="text-sm font-bold text-dark-bg uppercase tracking-widest">Ünvan</span>
+                <p className="text-foreground/70 text-sm">Bakı şəhəri, Azərbaycan</p>
               </div>
             </div>
 
-            <div className="bg-dark-bg-card p-10 rounded-[2rem] border border-white/5 flex items-start gap-6">
-              <MapPin className="w-10 h-10 text-accent shrink-0" />
-              <div>
-                <h3 className="text-2xl font-bold mb-2">Ünvan</h3>
-                <p className="text-lg text-text-muted">Bakı şəhəri, Azərbaycan</p>
+            <div className="bg-white rounded-3xl p-8 shadow-sm border border-dark-bg/5 flex items-start gap-6 group hover:border-accent-hover transition-colors">
+              <div className="w-12 h-12 rounded-full bg-dark-bg/5 flex items-center justify-center text-dark-bg group-hover:bg-accent-hover group-hover:text-white transition-colors shrink-0">
+                <Mail className="w-6 h-6" />
+              </div>
+              <div className="flex flex-col gap-1 mt-1">
+                <span className="text-sm font-bold text-dark-bg uppercase tracking-widest">E-poçt</span>
+                <a href="mailto:info@tmhse.expert" className="text-accent-hover font-medium hover:underline text-sm">info@tmhse.expert</a>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-3xl p-8 shadow-sm border border-dark-bg/5 flex items-start gap-6 group hover:border-accent-hover transition-colors">
+              <div className="w-12 h-12 rounded-full bg-dark-bg/5 flex items-center justify-center text-dark-bg group-hover:bg-accent-hover group-hover:text-white transition-colors shrink-0">
+                <Phone className="w-6 h-6" />
+              </div>
+              <div className="flex flex-col gap-1 mt-1">
+                <span className="text-sm font-bold text-dark-bg uppercase tracking-widest">WhatsApp / Zəng</span>
+                <a href="tel:+994500000000" className="text-foreground/70 font-medium hover:text-accent-hover transition-colors text-sm">+994 50 000 00 00</a>
               </div>
             </div>
           </motion.div>
 
-          <motion.div 
-            initial={{ opacity: 0, x: 50 }}
+          <motion.form 
+            initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="bg-white text-dark-bg p-12 rounded-[2rem]"
+            transition={{ delay: 0.3 }}
+            className="w-full bg-white rounded-[2rem] p-8 shadow-xl shadow-black/5 border border-dark-bg/5 flex flex-col gap-4"
           >
-            <h2 className="text-4xl font-bold mb-10">Tez-tez verilən suallar</h2>
-            <div className="flex flex-col gap-4">
-              {faqs.map((faq, idx) => (
-                <div key={idx} className="border-b border-dark-bg/10 pb-4">
-                  <button 
-                    onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                    className="w-full flex items-center justify-between text-left font-bold text-xl py-4 hover:text-accent-hover transition-colors"
-                  >
-                    {faq.q}
-                    <motion.div animate={{ rotate: openFaq === idx ? 45 : 0 }}>
-                      <Plus className="w-6 h-6 shrink-0" />
-                    </motion.div>
-                  </button>
-                  <motion.div 
-                    initial={false}
-                    animate={{ height: openFaq === idx ? "auto" : 0, opacity: openFaq === idx ? 1 : 0 }}
-                    className="overflow-hidden text-foreground/70 text-lg leading-relaxed"
-                  >
-                    <p className="pb-4">{faq.a}</p>
-                  </motion.div>
-                </div>
-              ))}
+            <h3 className="text-xl font-bold text-dark-bg mb-2">Mesaj Göndər</h3>
+            
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-bold text-dark-bg">Ad və Soyad</label>
+              <input type="text" className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-accent-hover" placeholder="Adınızı yazın" />
             </div>
-          </motion.div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-bold text-dark-bg">E-poçt ünvanı</label>
+              <input type="email" className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-accent-hover" placeholder="nümunə@email.com" />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-bold text-dark-bg">Mesajınız</label>
+              <textarea rows={4} className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-accent-hover resize-none" placeholder="Sualınızı bura yazın..."></textarea>
+            </div>
+
+            <button type="button" className="w-full bg-dark-bg hover:bg-accent-hover text-white font-bold py-3 rounded-lg mt-2 transition-colors duration-300 text-sm">
+              Göndər
+            </button>
+          </motion.form>
         </div>
       </section>
 

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 
 export default function About() {
   return (
@@ -47,16 +48,18 @@ export default function About() {
             </p>
           </div>
 
-          <motion.div 
-            whileHover={{ x: 10 }}
-            className="mt-6 flex gap-4 items-center p-5 bg-white/5 rounded-2xl border border-white/10 w-fit cursor-default"
-          >
-            <ArrowUpRight className="text-accent w-6 h-6 shrink-0" />
-            <div className="flex flex-col gap-1 text-base font-medium">
-              <span className="text-white">İnsana qayğı. İşə məsuliyyət.</span>
-              <span className="text-accent/70 text-xs uppercase tracking-wider">Gələcəyə hörmət.</span>
-            </div>
-          </motion.div>
+          <Link href="/xidmetler">
+            <motion.div 
+              whileHover={{ x: 10, backgroundColor: "rgba(255,255,255,0.1)" }}
+              className="mt-6 flex gap-4 items-center p-5 bg-white/5 rounded-2xl border border-white/10 w-fit cursor-pointer transition-colors"
+            >
+              <ArrowUpRight className="text-accent w-6 h-6 shrink-0" />
+              <div className="flex flex-col gap-1 text-base font-medium">
+                <span className="text-white">İnsana qayğı. İşə məsuliyyət.</span>
+                <span className="text-accent/70 text-xs uppercase tracking-wider">Gələcəyə hörmət. (Xidmətlərə keçid)</span>
+              </div>
+            </motion.div>
+          </Link>
         </motion.div>
 
       </div>

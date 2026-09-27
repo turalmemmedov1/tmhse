@@ -100,7 +100,6 @@ export default function Services() {
                   <div className="w-14 h-14 md:w-16 md:h-16 bg-dark-bg rounded-2xl flex items-center justify-center group-hover:bg-accent transition-colors duration-500 shadow-md text-white">
                     {service.icon}
                   </div>
-                  <span className="text-accent font-bold text-lg md:text-xl">{service.num}</span>
                 </div>
                 
                 <h3 className="text-xl md:text-2xl font-bold text-dark-bg group-hover:text-accent-hover transition-colors">{service.title}</h3>

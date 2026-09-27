@@ -149,7 +149,6 @@ export default function CvYuklePage() {
         <div className="w-full lg:w-2/3 flex flex-col gap-6">
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-2xl font-bold text-dark-bg">Aktiv CV-lər / Elanlar</h2>
-            <span className="text-xs font-bold uppercase tracking-widest text-text-muted bg-dark-bg/5 px-3 py-1 rounded-full">Açıq Lövhə</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -184,7 +183,7 @@ export default function CvYuklePage() {
                 </div>
                 
                 <a href={`mailto:${cv.email}`} className="mt-auto w-full bg-dark-bg text-white text-center py-2 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-accent-hover transition-colors">
-                  İşə Götür / Əlaqə
+                  Əlaqə
                 </a>
               </motion.div>
             ))}

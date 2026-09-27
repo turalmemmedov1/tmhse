@@ -50,16 +50,6 @@ export default function Process() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-500">Davamlı inkişaf.</span>
             </h2>
           </motion.div>
-
-          <motion.p 
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="text-text-muted max-w-md text-lg font-light"
-          >
-            Hər iş mühiti fərqlidir. Yanaşma da onun insanlarına, fəaliyyətinə və risklərinə uyğun qurulmalıdır.
-          </motion.p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-12">

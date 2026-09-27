@@ -42,7 +42,6 @@ export default function ServicesPage() {
                   <div className="w-16 h-16 bg-background rounded-2xl flex items-center justify-center group-hover:bg-accent-hover transition-colors duration-500 text-dark-bg group-hover:text-white shadow-sm border border-dark-bg/10">
                     <div className="scale-75 origin-center">{service.icon}</div>
                   </div>
-                  <span className="text-3xl font-bold text-dark-bg/10 group-hover:text-accent-hover transition-colors">{service.num}</span>
                 </div>
                 
                 <h2 className="text-2xl font-bold text-dark-bg group-hover:text-accent-hover transition-colors">{service.title}</h2>
