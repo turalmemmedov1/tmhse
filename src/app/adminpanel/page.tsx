@@ -176,8 +176,8 @@ export default function AdminPanelPage() {
           </div>
         </header>
 
-        {loading ? <p>Yüklənir...</p> : (
-          <AnimatePresence mode="wait">
+        {loading ? <p className="text-dark-bg font-bold">Yüklənir...</p> : (
+          <div className="flex flex-col gap-6 w-full">
             
             {activeTab === 'dashboard' && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 md:grid-cols-5 gap-6">
@@ -329,7 +329,7 @@ export default function AdminPanelPage() {
                       {cvs.map(c => (
                         <tr key={c.id} className="border-b border-dark-bg/5">
                           <td className="p-4 font-bold">{c.first_name} {c.last_name}</td>
-                          <td className="p-4">{c.skills.substring(0,30)}...</td>
+                          <td className="p-4">{c.skills?.substring(0,30)}...</td>
                           <td className="p-4 text-right">
                             <button onClick={async () => { if(confirm("Silmək istədiyinizə əminsiniz?")) { await deleteCv(c.id); loadData(); } }} className="text-red-500 hover:text-red-700">Sil</button>
                           </td>
@@ -341,7 +341,7 @@ export default function AdminPanelPage() {
               </motion.div>
             )}
 
-          </AnimatePresence>
+          </div>
         )}
       </div>
     </main>
