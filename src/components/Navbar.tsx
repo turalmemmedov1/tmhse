@@ -22,11 +22,12 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navBgClass = scrolled 
-    ? (isLightPage ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-dark-bg/5" : "bg-dark-bg/95 backdrop-blur-md shadow-lg border-b border-white/5")
-    : "bg-transparent";
+  // Həmişə tünd fon (ağ səhifələrdə ən üstdə olanda da yazılar itməsin deyə tam tünd olur)
+  const navBgClass = isLightPage 
+    ? "bg-dark-bg border-b border-white/10 shadow-lg" 
+    : (scrolled ? "bg-dark-bg/95 backdrop-blur-md shadow-lg border-b border-white/5" : "bg-transparent");
 
-  const textColorClass = isLightPage ? "text-dark-bg" : "text-white";
+  const textColorClass = "text-white";
 
   return (
     <>

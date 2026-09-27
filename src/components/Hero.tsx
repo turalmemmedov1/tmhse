@@ -51,15 +51,24 @@ export default function Hero() {
         transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
         className="w-full md:w-1/2 relative h-[300px] md:h-[450px] rounded-[2rem] overflow-hidden group shadow-xl z-10 border border-white/10 bg-dark-bg-card flex flex-col items-center justify-center"
       >
-        {/* Boş Şəkil Yeri / Image Placeholder */}
-        <div className="absolute inset-0 bg-dark-bg/50 backdrop-blur-sm z-0"></div>
-        <span className="text-white/20 text-lg md:text-xl font-light tracking-widest z-10 uppercase">Şəkil Yeri</span>
+        <motion.div 
+          animate={{ y: [0, -15, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute inset-0 bg-dark-bg/50 backdrop-blur-sm z-0 flex items-center justify-center"
+        >
+          <span className="text-white/10 text-lg md:text-xl font-light tracking-widest uppercase">Şəkil Yeri</span>
+        </motion.div>
 
-        <div className="absolute top-4 left-4 md:top-6 md:left-6 z-20">
-          <span className="text-[10px] md:text-xs uppercase tracking-widest text-white/90 font-medium bg-black/50 px-3 py-1.5 md:px-4 md:py-2 rounded-full backdrop-blur-md">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.8 }}
+          className="absolute top-4 left-4 md:top-6 md:left-6 z-20"
+        >
+          <span className="text-[10px] md:text-xs uppercase tracking-widest text-white/90 font-medium bg-black/50 px-3 py-1.5 md:px-4 md:py-2 rounded-full backdrop-blur-md border border-white/10">
             İnsan hər şeydən öncə
           </span>
-        </div>
+        </motion.div>
       </motion.div>
     </section>
   );
