@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { LayoutDashboard, LogOut, Link as LinkIcon, FileText, Briefcase, FileBadge, Trash2, PlusCircle, Newspaper, Users, BookOpen, Presentation, Video } from "lucide-react";
 import Image from "next/image";
 import { 
@@ -11,8 +11,8 @@ import {
   getServiceVideos, addServiceVideo, deleteServiceVideo, getMonthlyVisits
 } from "@/app/actions";
 import { uploadToImgbb } from "@/lib/imgbb";
-import { supabase } from "@/lib/supabase";
 import { createClient } from "@supabase/supabase-js";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function AdminPanelPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -44,6 +44,7 @@ export default function AdminPanelPage() {
       setVacancies(v || []); setCvs(c || []); setNews(n || []); setLegislation(l || []); setInternships(i || []); setServicePdfs(sp || []); setServiceVideos(sv || []); setSettings(s || {}); setMonthlyVisits(mVisits || 0);
     } catch (e) {
       console.error("Error loading admin data:", e);
+      toast.error("Məlumatları yükləyərkən xəta baş verdi");
     }
     setLoading(false);
   };
@@ -83,47 +84,67 @@ export default function AdminPanelPage() {
       setIsLoggedIn(true);
       localStorage.setItem("tmhse_admin_logged_in", "true");
       setError("");
+      toast.success("Uğurla daxil oldunuz!");
     } else {
       setError("Email və ya şifrə yanlışdır.");
+      toast.error("Email və ya şifrə yanlışdır.");
     }
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
     localStorage.removeItem("tmhse_admin_logged_in");
+    toast.success("Çıxış edildi");
   };
 
   const genericAddWithImage = async (e: React.FormEvent<HTMLFormElement>, addAction: Function) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const title = formData.get("title") as string;
-    const content = formData.get("content") as string;
-    const file = (e.currentTarget.elements.namedItem("image") as HTMLInputElement).files?.[0];
-    
-    let img_url = "";
-    if (file) {
-      const url = await uploadToImgbb(file);
-      if (url) img_url = url;
+    const loadingToast = toast.loading("Əlavə edilir, zəhmət olmasa gözləyin...");
+    try {
+      const formData = new FormData(e.currentTarget);
+      const title = formData.get("title") as string;
+      const content = formData.get("content") as string;
+      const file = (e.currentTarget.elements.namedItem("image") as HTMLInputElement)?.files?.[0];
+      
+      let img_url = "";
+      if (file && file.size > 0) {
+        const url = await uploadToImgbb(file);
+        if (url) img_url = url;
+      }
+      
+      const res = await addAction(title, content, img_url);
+      if(res && res.success === false) throw new Error(res.error || "Xəta");
+      
+      toast.success("Uğurla əlavə edildi!", { id: loadingToast });
+      (e.target as HTMLFormElement).reset();
+      loadData();
+    } catch (err) {
+      toast.error("Əlavə edilərkən xəta baş verdi.", { id: loadingToast });
     }
-    await addAction(title, content, img_url);
-    alert("Əlavə edildi!");
-    (e.target as HTMLFormElement).reset();
-    loadData();
   };
 
   const handleSaveSocial = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    const loadingToast = toast.loading("Yadda saxlanılır...");
     await updateSetting("facebook_url", formData.get("facebook") as string);
     await updateSetting("instagram_url", formData.get("instagram") as string);
     await updateSetting("linkedin_url", formData.get("linkedin") as string);
-    alert("Yadda saxlanıldı!");
+    toast.success("Yadda saxlanıldı!", { id: loadingToast });
+    loadData();
+  };
+
+  const toggleMenu = async (menuKey: string, currentValue: string) => {
+    const newValue = currentValue === "false" ? "true" : "false";
+    await updateSetting(menuKey, newValue);
+    toast.success("Menyu statusu dəyişdirildi!");
     loadData();
   };
 
   if (!isLoggedIn) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-dark-bg text-white relative px-6">
+        <Toaster position="top-center" />
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md bg-dark-bg-card p-10 rounded-[2rem] shadow-2xl border border-white/10 flex flex-col items-center">
           <h1 className="text-2xl font-bold mb-8 text-center">İdarəetmə Paneli</h1>
           <form onSubmit={handleLogin} className="w-full flex flex-col gap-4">
@@ -139,13 +160,14 @@ export default function AdminPanelPage() {
 
   return (
     <main className="flex min-h-screen bg-background text-foreground">
+      <Toaster position="top-right" />
       {/* Sidebar */}
       <div className="w-64 bg-dark-bg text-white flex flex-col fixed inset-y-0 left-0 z-20 border-r border-white/10">
         <div className="p-6 flex items-center gap-3 border-b border-white/10">
           <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden"><Image src="/ProLogo.png" alt="Logo" width={40} height={40} /></div>
           <div><span className="font-bold text-sm">TMHSE</span><span className="text-[10px] text-accent block uppercase">Admin Panel</span></div>
         </div>
-        <div className="flex flex-col p-4 gap-2 mt-4 overflow-y-auto">
+        <div className="flex flex-col p-4 gap-2 mt-4 overflow-y-auto pb-20">
           {[
             {id:'dashboard', icon: LayoutDashboard, title: 'İcmal'},
             {id:'vacancies', icon: Briefcase, title: 'Vakansiyalar'},
@@ -154,7 +176,8 @@ export default function AdminPanelPage() {
             {id:'legislation', icon: BookOpen, title: 'Qanunvericilik'},
             {id:'internships', icon: Presentation, title: 'Təcrübə Proqramı'},
             {id:'services_media', icon: Video, title: 'Xidmət (PDF/Video)'},
-            {id:'social', icon: LinkIcon, title: 'Sosial Şəbəkələr'}
+            {id:'social', icon: LinkIcon, title: 'Sosial Şəbəkələr'},
+            {id:'menus', icon: LayoutDashboard, title: 'Menyular'}
           ].map(item => (
             <button key={item.id} onClick={() => setActiveTab(item.id)} className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${activeTab === item.id ? 'bg-accent text-dark-bg' : 'hover:bg-white/5 text-text-muted hover:text-white'}`}>
               <item.icon className="w-4 h-4" /> {item.title}
@@ -187,11 +210,11 @@ export default function AdminPanelPage() {
             
             {activeTab === 'dashboard' && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 md:grid-cols-5 gap-6">
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Vakansiyalar</span><span className="text-4xl font-black text-dark-bg">{vacancies.length}</span></div>
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">CV-lər</span><span className="text-4xl font-black text-dark-bg">{cvs.length}</span></div>
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Xəbərlər</span><span className="text-4xl font-black text-dark-bg">{news.length}</span></div>
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Qanunvericilik</span><span className="text-4xl font-black text-dark-bg">{legislation.length}</span></div>
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-accent/20 bg-accent/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Aylıq Ziyarət</span><span className="text-4xl font-black text-dark-bg">{monthlyVisits}</span></div>
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Vakansiyalar</span><span className="text-4xl font-black text-dark-bg">{vacancies?.length || 0}</span></div>
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">CV-lər</span><span className="text-4xl font-black text-dark-bg">{cvs?.length || 0}</span></div>
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Xəbərlər</span><span className="text-4xl font-black text-dark-bg">{news?.length || 0}</span></div>
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Qanunvericilik</span><span className="text-4xl font-black text-dark-bg">{legislation?.length || 0}</span></div>
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-accent/20 bg-accent/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Aylıq Ziyarət</span><span className="text-4xl font-black text-dark-bg">{monthlyVisits || 0}</span></div>
               </motion.div>
             )}
 
@@ -201,29 +224,37 @@ export default function AdminPanelPage() {
                   <h3 className="font-bold text-lg text-dark-bg mb-4 flex items-center gap-2"><PlusCircle className="w-5 h-5 text-accent"/> Yeni Əlavə Et</h3>
                   <form onSubmit={(e) => genericAddWithImage(e, activeTab === 'news' ? addNews : activeTab === 'legislation' ? addLegislation : addInternship)} className="flex flex-col gap-4 max-w-xl">
                     <input type="text" name="title" required placeholder="Başlıq" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
-                    <textarea name="content" required placeholder="Məzmun..." rows={4} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent resize-none"></textarea>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-xs font-bold text-dark-bg">Şəkil Seçin</label>
-                      <input type="file" name="image" accept="image/*" className="text-sm" />
-                    </div>
-                    <button type="submit" className="bg-dark-bg text-white px-6 py-2 rounded-lg text-sm font-bold w-fit mt-2 hover:bg-accent-hover">Dərc Et</button>
+                    <textarea name="content" required placeholder="Məzmun..." rows={6} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent resize-none"></textarea>
+                    
+                    {activeTab !== 'legislation' && (
+                      <div className="flex flex-col gap-1">
+                        <label className="text-xs font-bold text-dark-bg">Şəkil Seçin</label>
+                        <input type="file" name="image" accept="image/*" className="text-sm" />
+                      </div>
+                    )}
+
+                    <button type="submit" className="bg-dark-bg text-white px-6 py-2 rounded-lg text-sm font-bold w-fit mt-2 hover:bg-accent-hover transition-colors">Dərc Et</button>
                   </form>
                 </div>
 
                 <div>
                   <h3 className="font-bold text-lg text-dark-bg mb-4">Mövcud Paylaşım</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {(activeTab === 'news' ? news : activeTab === 'legislation' ? legislation : internships).map(item => (
+                    {(activeTab === 'news' ? news : activeTab === 'legislation' ? legislation : internships)?.map(item => (
                       <div key={item.id} className="bg-white p-4 rounded-xl border border-dark-bg/10 flex gap-4 items-start">
-                        {item.image_url ? <img src={item.image_url} alt="" className="w-20 h-20 object-cover rounded-lg shrink-0" /> : <div className="w-20 h-20 bg-background rounded-lg shrink-0 flex items-center justify-center text-xs">Şəkil yoxdur</div>}
+                        {(activeTab !== 'legislation') && (
+                          item.image_url ? <img src={item.image_url} alt="" className="w-20 h-20 object-cover rounded-lg shrink-0" /> : <div className="w-20 h-20 bg-background rounded-lg shrink-0 flex items-center justify-center text-xs text-center p-2 text-foreground/50">Şəkil yoxdur</div>
+                        )}
                         <div className="flex flex-col">
                           <h4 className="font-bold text-dark-bg line-clamp-2 leading-tight">{item.title}</h4>
-                          <span className="text-[10px] text-foreground/50 mt-1">{new Date(item.created_at).toLocaleDateString()}</span>
+                          <span className="text-[10px] text-foreground/50 mt-1">{item.created_at ? new Date(item.created_at).toLocaleDateString() : ""}</span>
                           <button onClick={async () => { 
-                            if(confirm("Silin?")) { 
+                            if(confirm("Silmək istədiyinizə əminsiniz?")) { 
+                              const loadingToast = toast.loading("Silinir...");
                               if(activeTab === 'news') await deleteNews(item.id); 
                               if(activeTab === 'legislation') await deleteLegislation(item.id);
                               if(activeTab === 'internships') await deleteInternship(item.id);
+                              toast.success("Silindi", { id: loadingToast });
                               loadData(); 
                             } 
                           }} className="text-red-500 text-xs font-bold mt-2 text-left hover:underline">Sil</button>
@@ -242,13 +273,23 @@ export default function AdminPanelPage() {
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Add PDF */}
-                    <form onSubmit={async(e)=>{e.preventDefault(); const fd=new FormData(e.currentTarget); await addServicePdf(fd.get('service_id') as string, fd.get('title') as string, fd.get('drive_link') as string); alert('Əlavə edildi'); (e.target as any).reset(); loadData();}} className="flex flex-col gap-4">
+                    <form onSubmit={async(e)=>{
+                      e.preventDefault(); 
+                      const fd=new FormData(e.currentTarget); 
+                      const t = toast.loading("Əlavə edilir...");
+                      await addServicePdf(fd.get('service_id') as string, fd.get('title') as string, fd.get('drive_link') as string); 
+                      toast.success('Əlavə edildi', { id: t }); 
+                      (e.target as any).reset(); 
+                      loadData();
+                    }} className="flex flex-col gap-4">
                       <h4 className="text-sm font-bold text-dark-bg border-b pb-2">PDF (Drive Link) Əlavə Et</h4>
                       <select name="service_id" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent">
                         <option value="emeyin-muhafizesi">Əməyin Mühafizəsi</option>
                         <option value="yanqina-qarsi-mubarize">Yanğına Qarşı Mübarizə</option>
                         <option value="hundurlukde-is">Hündürlükdə İş</option>
                         <option value="etraf-muhitin-muhafizesi">Ətraf Mühitin Mühafizəsi</option>
+                        <option value="texniki-tehlukesizlik">Texniki Təhlükəsizlik</option>
+                        <option value="ilk-yardim">İlk Yardım</option>
                       </select>
                       <input type="text" name="title" required placeholder="PDF Adı (məs: Təlimat)" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
                       <input type="url" name="drive_link" required placeholder="Drive Linki (https://drive...)" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
@@ -256,13 +297,23 @@ export default function AdminPanelPage() {
                     </form>
 
                     {/* Add Video */}
-                    <form onSubmit={async(e)=>{e.preventDefault(); const fd=new FormData(e.currentTarget); await addServiceVideo(fd.get('service_id') as string, fd.get('title') as string, fd.get('youtube_link') as string); alert('Əlavə edildi'); (e.target as any).reset(); loadData();}} className="flex flex-col gap-4">
+                    <form onSubmit={async(e)=>{
+                      e.preventDefault(); 
+                      const fd=new FormData(e.currentTarget); 
+                      const t = toast.loading("Əlavə edilir...");
+                      await addServiceVideo(fd.get('service_id') as string, fd.get('title') as string, fd.get('youtube_link') as string); 
+                      toast.success('Əlavə edildi', { id: t }); 
+                      (e.target as any).reset(); 
+                      loadData();
+                    }} className="flex flex-col gap-4">
                       <h4 className="text-sm font-bold text-dark-bg border-b pb-2">Video (YouTube) Əlavə Et</h4>
                       <select name="service_id" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent">
                         <option value="emeyin-muhafizesi">Əməyin Mühafizəsi</option>
                         <option value="yanqina-qarsi-mubarize">Yanğına Qarşı Mübarizə</option>
                         <option value="hundurlukde-is">Hündürlükdə İş</option>
                         <option value="etraf-muhitin-muhafizesi">Ətraf Mühitin Mühafizəsi</option>
+                        <option value="texniki-tehlukesizlik">Texniki Təhlükəsizlik</option>
+                        <option value="ilk-yardim">İlk Yardım</option>
                       </select>
                       <input type="text" name="title" required placeholder="Videonun Adı" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
                       <input type="url" name="youtube_link" required placeholder="YouTube Linki (https://youtube...)" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
@@ -275,10 +326,17 @@ export default function AdminPanelPage() {
                    <div>
                      <h3 className="font-bold text-sm mb-2">Mövcud PDF-lər</h3>
                      <div className="flex flex-col gap-2">
-                       {servicePdfs.map(p => (
+                       {servicePdfs?.map(p => (
                          <div key={p.id} className="bg-white p-3 border rounded-lg text-sm flex justify-between">
                            <div><span className="font-bold">{p.title}</span> <span className="text-xs text-foreground/50">({p.service_id})</span></div>
-                           <button onClick={async()=>{if(confirm("Silin?")){await deleteServicePdf(p.id); loadData()}}} className="text-red-500">Sil</button>
+                           <button onClick={async()=>{
+                             if(confirm("Silin?")){
+                               const t = toast.loading("Silinir...");
+                               await deleteServicePdf(p.id); 
+                               toast.success("Silindi", { id: t });
+                               loadData();
+                             }
+                           }} className="text-red-500 hover:underline">Sil</button>
                          </div>
                        ))}
                      </div>
@@ -286,10 +344,17 @@ export default function AdminPanelPage() {
                    <div>
                      <h3 className="font-bold text-sm mb-2">Mövcud Videolar</h3>
                      <div className="flex flex-col gap-2">
-                       {serviceVideos.map(v => (
+                       {serviceVideos?.map(v => (
                          <div key={v.id} className="bg-white p-3 border rounded-lg text-sm flex justify-between">
                            <div><span className="font-bold">{v.title}</span> <span className="text-xs text-foreground/50">({v.service_id})</span></div>
-                           <button onClick={async()=>{if(confirm("Silin?")){await deleteServiceVideo(v.id); loadData()}}} className="text-red-500">Sil</button>
+                           <button onClick={async()=>{
+                             if(confirm("Silin?")){
+                               const t = toast.loading("Silinir...");
+                               await deleteServiceVideo(v.id); 
+                               toast.success("Silindi", { id: t });
+                               loadData();
+                             }
+                           }} className="text-red-500 hover:underline">Sil</button>
                          </div>
                        ))}
                      </div>
@@ -299,7 +364,6 @@ export default function AdminPanelPage() {
               </motion.div>
             )}
             
-            {/* Vacancies / CVs views kept same... omitted full rewrite but kept structure for brevity */}
             {activeTab === 'vacancies' && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-4">
                 <h3 className="font-bold text-lg text-dark-bg">Vakansiyalar</h3>
@@ -309,11 +373,18 @@ export default function AdminPanelPage() {
                       <tr><th className="p-4">Şirkət</th><th className="p-4">Vəzifə</th><th className="p-4 text-right">Əməliyyat</th></tr>
                     </thead>
                     <tbody>
-                      {vacancies.map(v => (
+                      {vacancies?.map(v => (
                         <tr key={v.id} className="border-b border-dark-bg/5">
                           <td className="p-4">{v.company}</td><td className="p-4">{v.role}</td>
                           <td className="p-4 text-right">
-                            <button onClick={async () => { if(confirm("Silmək istədiyinizə əminsiniz?")) { await deleteVacancy(v.id); loadData(); } }} className="text-red-500 hover:text-red-700">Sil</button>
+                            <button onClick={async () => { 
+                              if(confirm("Silmək istədiyinizə əminsiniz?")) { 
+                                const t = toast.loading("Silinir...");
+                                await deleteVacancy(v.id); 
+                                toast.success("Silindi", { id: t });
+                                loadData(); 
+                              } 
+                            }} className="text-red-500 hover:text-red-700">Sil</button>
                           </td>
                         </tr>
                       ))}
@@ -332,17 +403,74 @@ export default function AdminPanelPage() {
                       <tr><th className="p-4">Ad Soyad</th><th className="p-4">İxtisas</th><th className="p-4 text-right">Əməliyyat</th></tr>
                     </thead>
                     <tbody>
-                      {cvs.map(c => (
+                      {cvs?.map(c => (
                         <tr key={c.id} className="border-b border-dark-bg/5">
                           <td className="p-4 font-bold">{c.first_name} {c.last_name}</td>
                           <td className="p-4">{c.skills?.substring(0,30)}...</td>
                           <td className="p-4 text-right">
-                            <button onClick={async () => { if(confirm("Silmək istədiyinizə əminsiniz?")) { await deleteCv(c.id); loadData(); } }} className="text-red-500 hover:text-red-700">Sil</button>
+                            <button onClick={async () => { 
+                              if(confirm("Silmək istədiyinizə əminsiniz?")) { 
+                                const t = toast.loading("Silinir...");
+                                await deleteCv(c.id); 
+                                toast.success("Silindi", { id: t });
+                                loadData(); 
+                              } 
+                            }} className="text-red-500 hover:text-red-700">Sil</button>
                           </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
+                </div>
+              </motion.div>
+            )}
+            
+            {activeTab === 'social' && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5 max-w-xl">
+                <h3 className="font-bold text-lg text-dark-bg mb-6">Sosial Media Linkləri</h3>
+                <form onSubmit={handleSaveSocial} className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-bold text-dark-bg">Facebook Linki</label>
+                    <input type="text" name="facebook" defaultValue={settings?.facebook_url || ""} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-bold text-dark-bg">Instagram Linki</label>
+                    <input type="text" name="instagram" defaultValue={settings?.instagram_url || ""} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-bold text-dark-bg">LinkedIn Linki</label>
+                    <input type="text" name="linkedin" defaultValue={settings?.linkedin_url || ""} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
+                  </div>
+                  <button type="submit" className="bg-dark-bg text-white px-6 py-3 rounded-lg text-sm font-bold w-fit mt-4 hover:bg-accent-hover transition-colors">Yadda Saxla</button>
+                </form>
+              </motion.div>
+            )}
+
+            {activeTab === 'menus' && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5 max-w-xl">
+                <h3 className="font-bold text-lg text-dark-bg mb-6">Menyuların İdarə Edilməsi (Aktiv/Deaktiv)</h3>
+                <div className="flex flex-col gap-4">
+                  {[
+                    { key: "menu_xidmetler", label: "Xidmətlərimiz" },
+                    { key: "menu_tecrube", label: "Təcrübə Proqramı" },
+                    { key: "menu_qanunvericilik", label: "Qanunvericilik" },
+                    { key: "menu_xeberler", label: "Xəbərlər" },
+                    { key: "menu_vakansiyalar", label: "Vakansiyalar" },
+                    { key: "menu_suallar", label: "Suallar" },
+                  ].map(menu => {
+                    const isActive = settings?.[menu.key] !== "false";
+                    return (
+                      <div key={menu.key} className="flex items-center justify-between p-4 border rounded-xl">
+                        <span className="font-bold text-sm text-dark-bg">{menu.label}</span>
+                        <button 
+                          onClick={() => toggleMenu(menu.key, isActive ? "false" : "true")}
+                          className={`px-4 py-2 text-xs font-bold rounded-full transition-colors ${isActive ? "bg-red-100 text-red-700 hover:bg-red-200" : "bg-green-100 text-green-700 hover:bg-green-200"}`}
+                        >
+                          {isActive ? "Gizlət" : "Göstər"}
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
               </motion.div>
             )}
