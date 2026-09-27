@@ -1,11 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUpRight, PhoneCall } from "lucide-react";
+import { ArrowUpRight, Mail } from "lucide-react";
+import Link from "next/link";
 
 export default function Contact() {
   return (
-    <section id="elaqe" className="w-full bg-background text-foreground py-32 px-6 md:px-16 overflow-hidden">
+    <section className="w-full bg-background text-foreground py-32 px-6 md:px-16 overflow-hidden">
       <div className="w-full flex flex-col md:flex-row justify-between items-center gap-16">
         
         <motion.div 
@@ -33,7 +34,7 @@ export default function Contact() {
           className="w-full md:w-2/5 flex flex-col gap-8 bg-white p-12 rounded-[2rem] shadow-2xl shadow-black/5 border border-dark-bg/5 relative"
         >
           <div className="absolute top-0 right-0 p-8 text-accent-hover/20">
-            <PhoneCall className="w-24 h-24" />
+            <Mail className="w-24 h-24" />
           </div>
 
           <div className="relative z-10">
@@ -41,21 +42,20 @@ export default function Contact() {
             <p className="text-foreground/60 text-lg font-medium">SƏTƏM üzrə əməkdaşlıq və xidmətlər</p>
           </div>
           
-          <a href="tel:+994554886668" className="relative z-10 text-4xl md:text-5xl font-black text-dark-bg hover:text-accent-hover transition-colors duration-300 w-fit">
-            +994 55 488 66 68
+          <a href="mailto:info@tmhse.expert" className="relative z-10 text-3xl md:text-4xl font-black text-dark-bg hover:text-accent-hover transition-colors duration-300 w-fit">
+            info@tmhse.expert
           </a>
 
-          <motion.a 
-            href="https://wa.me/994554886668"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.05, boxShadow: "0px 15px 40px rgba(152,207,110,0.4)" }}
-            whileTap={{ scale: 0.95 }}
-            className="relative z-10 bg-accent-hover text-white px-8 py-5 rounded-full flex items-center justify-between font-bold text-xl mt-6 hover:bg-[#349b65] transition-all duration-300"
-          >
-            WhatsApp-da yazın
-            <ArrowUpRight className="w-6 h-6" />
-          </motion.a>
+          <Link href="/elaqe">
+            <motion.button 
+              whileHover={{ scale: 1.05, boxShadow: "0px 15px 40px rgba(152,207,110,0.4)" }}
+              whileTap={{ scale: 0.95 }}
+              className="relative z-10 bg-accent-hover text-white px-8 py-5 rounded-full flex items-center justify-between font-bold text-xl mt-6 hover:bg-[#349b65] transition-all duration-300 w-full"
+            >
+              Əlaqə Səhifəsinə Keçid
+              <ArrowUpRight className="w-6 h-6" />
+            </motion.button>
+          </Link>
         </motion.div>
 
       </div>

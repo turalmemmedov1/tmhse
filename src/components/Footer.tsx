@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { ArrowUp } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function Footer() {
   const scrollToTop = () => {
@@ -23,10 +22,7 @@ export default function Footer() {
           className="flex flex-col gap-6"
         >
           <div className="flex items-center gap-3 mb-2">
-            <div className="relative w-12 h-12">
-              <Image src="/ProLogo.png" alt="TMHSE Logo" fill className="object-cover" />
-            </div>
-            <span className="font-bold text-2xl tracking-wider uppercase text-white">TMHSE</span>
+            <span className="font-bold text-3xl tracking-wider uppercase text-white">TMHSE</span>
           </div>
           <p className="text-text-muted text-sm leading-relaxed max-w-xs">
             İnsanları qoruyan, riskləri azaldan və ətraf mühitə dəyər verən iş mədəniyyəti.
@@ -41,9 +37,9 @@ export default function Footer() {
           className="flex flex-col gap-6"
         >
           <h4 className="text-accent font-bold uppercase tracking-widest text-sm mb-2">Sürətli keçidlər</h4>
-          <Link href="#haqqinda" className="text-text-muted hover:text-white transition-colors w-fit font-medium">Haqqımızda</Link>
-          <Link href="#xidmetler" className="text-text-muted hover:text-white transition-colors w-fit font-medium">Xidmətlər</Link>
-          <Link href="#yanasma" className="text-text-muted hover:text-white transition-colors w-fit font-medium">İş Prinsipləri</Link>
+          <Link href="/haqqimizda" className="text-text-muted hover:text-white transition-colors w-fit font-medium">Haqqımızda</Link>
+          <Link href="/xidmetler" className="text-text-muted hover:text-white transition-colors w-fit font-medium">Xidmətlər</Link>
+          <Link href="/vakansiyalar" className="text-text-muted hover:text-white transition-colors w-fit font-medium">Vakansiyalar</Link>
         </motion.div>
 
         <motion.div 
@@ -54,9 +50,9 @@ export default function Footer() {
           className="flex flex-col gap-6"
         >
           <h4 className="text-accent font-bold uppercase tracking-widest text-sm mb-2">Siyasətlər</h4>
-          <Link href="#" className="text-text-muted hover:text-white transition-colors w-fit font-medium">Məxfilik Siyasəti</Link>
-          <Link href="#" className="text-text-muted hover:text-white transition-colors w-fit font-medium">İstifadə Şərtləri</Link>
-          <Link href="#" className="text-text-muted hover:text-white transition-colors w-fit font-medium">SƏTƏM Siyasəti</Link>
+          <Link href="/siyasetler" className="text-text-muted hover:text-white transition-colors w-fit font-medium">Məxfilik Siyasəti</Link>
+          <Link href="/siyasetler" className="text-text-muted hover:text-white transition-colors w-fit font-medium">İstifadə Şərtləri</Link>
+          <Link href="/siyasetler" className="text-text-muted hover:text-white transition-colors w-fit font-medium">SƏTƏM Siyasəti</Link>
         </motion.div>
 
         <motion.div 
@@ -67,7 +63,7 @@ export default function Footer() {
           className="flex flex-col gap-6"
         >
           <h4 className="text-accent font-bold uppercase tracking-widest text-sm mb-2">Əlaqə</h4>
-          <a href="tel:+994554886668" className="text-text-muted hover:text-white transition-colors w-fit font-medium text-lg">+994 55 488 66 68</a>
+          <a href="mailto:info@tmhse.expert" className="text-text-muted hover:text-white transition-colors w-fit font-medium text-lg">info@tmhse.expert</a>
           <p className="text-text-muted text-sm max-w-xs">Bakı şəhəri, Azərbaycan</p>
         </motion.div>
 
@@ -97,7 +93,7 @@ export default function Footer() {
 
       {/* Huge background text */}
       <div className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 text-[15vw] font-black text-white/[0.02] whitespace-nowrap pointer-events-none select-none">
-        TURAL MAMMADOV
+        TMHSE EXPERT
       </div>
     </footer>
   );
