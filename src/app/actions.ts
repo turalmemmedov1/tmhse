@@ -226,7 +226,7 @@ export async function submitCvWithFile(formData: FormData) {
       const link = await uploadFileToSupabase(buffer, fileName, file.type);
       
       if (!link) {
-        return { success: false, error: "Fayl sistemə yüklənərkən xəta baş verdi. Zəhmət olmasa Supabase-də 'pdfs' adlı Storage qovluğunu (Bucket) yaratdığınıza əmin olun." };
+        return { success: false, error: "Fayl yüklənərkən xəta baş verdi. " };
       }
       cv_drive_link = link;
     }
@@ -271,7 +271,7 @@ export async function addServicePdfWithFile(formData: FormData) {
     const link = await uploadFileToSupabase(buffer, fileName, file.type);
     
     if (!link) {
-      return { success: false, error: "Fayl sistemə yüklənərkən xəta baş verdi. Zəhmət olmasa Supabase-də 'pdfs' adlı Storage qovluğunu (Bucket) yaratdığınıza əmin olun." };
+      return { success: false, error: "Fayl yüklənərkən xəta baş verdi. " };
     }
 
     const { error } = await supabase.from("service_pdfs").insert([{ service_id, title, drive_link: link }]);

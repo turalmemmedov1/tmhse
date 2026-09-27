@@ -15,13 +15,13 @@ export async function uploadFileToSupabase(fileBuffer: Buffer, fileName: string,
 
     if (error) {
       console.error("Supabase Storage Error:", error.message);
-      return null;
+      throw new Error(error?.message || 'Bilinməyən xəta');
     }
 
     const { data: publicUrlData } = supabase.storage.from('pdfs').getPublicUrl(filePath);
     return publicUrlData.publicUrl;
   } catch (error: any) {
     console.error("Supabase Upload Error:", error.message || error);
-    return null;
+    throw new Error(error?.message || 'Bilinməyən xəta');
   }
 }
