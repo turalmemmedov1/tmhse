@@ -301,7 +301,7 @@ export default function AdminPanelPage() {
                     <form onSubmit={async(e)=>{
                       e.preventDefault(); 
                       const fd=new FormData(e.currentTarget); 
-                      const t = toast.loading("PDF Google Drive-a Yüklənir...");
+                      const t = toast.loading("PDF Sistemə Yüklənir...");
                       const res = await addServicePdfWithFile(fd); 
                       if (res.success) {
                         toast.success('Əlavə edildi', { id: t }); 
@@ -573,28 +573,7 @@ export default function AdminPanelPage() {
               </motion.div>
             )}
 
-            {activeTab === 'drive' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5 max-w-xl">
-                <h3 className="font-bold text-lg text-dark-bg mb-6">Google Drive İnteqrasiyası</h3>
-                <p className="text-sm text-gray-500 mb-6">
-                  Vebsayta yüklənən CV-lərin (PDF) birbaşa Google Drive-a getməsi üçün hədəf qovluğun ID-sini bura yazın.
-                </p>
-                <form onSubmit={async (e) => {
-                  e.preventDefault();
-                  const loadingToast = toast.loading("Yadda saxlanılır...");
-                  const formData = new FormData(e.currentTarget);
-                  await updateSetting("google_drive_folder_id", formData.get("folder_id") as string);
-                  toast.success("Yadda saxlanıldı", { id: loadingToast });
-                  loadData();
-                }} className="flex flex-col gap-4">
-                  <div className="flex flex-col gap-1">
-                    <label className="text-sm font-bold text-dark-bg">Qovluq ID-si (Folder ID)</label>
-                    <input type="text" name="folder_id" defaultValue={settings?.google_drive_folder_id || ""} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" placeholder="1aBcDeFgHiJkLmNoPqRsTuVwXyZ" />
-                  </div>
-                  <button type="submit" className="bg-dark-bg text-white px-6 py-2 rounded-lg text-sm font-bold w-fit mt-2 hover:bg-accent-hover transition-colors">Yadda Saxla</button>
-                </form>
-              </motion.div>
-            )}
+            
           </div>
         )}
       </div>
