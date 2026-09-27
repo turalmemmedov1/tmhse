@@ -45,6 +45,7 @@ export default function Footer() {
             className="flex flex-col gap-4"
           >
             <h4 className="text-accent font-bold uppercase tracking-widest text-xs mb-1">Siyasətlər və Digər</h4>
+            <Link href="/haqqimizda" className="text-text-muted hover:text-white transition-colors w-fit text-sm font-medium">Haqqımızda</Link>
             <Link href="/siyasetler/mexfilik" className="text-text-muted hover:text-white transition-colors w-fit text-sm font-medium">Məxfilik Siyasəti</Link>
             <Link href="/siyasetler/sertler" className="text-text-muted hover:text-white transition-colors w-fit text-sm font-medium">İstifadə Şərtləri</Link>
             <Link href="/siyasetler/setem" className="text-text-muted hover:text-white transition-colors w-fit text-sm font-medium">SƏTƏM Siyasəti</Link>

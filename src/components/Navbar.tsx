@@ -12,8 +12,7 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // explicitly define light pages
-  const isLightPage = ["/xidmetler", "/elaqe", "/cv-yukle", "/vakansiyalar", "/siyasetler"].some(p => pathname.startsWith(p));
+  const isLightPage = ["/xidmetler", "/elaqe", "/cv-yukle", "/vakansiyalar", "/siyasetler", "/tecrube", "/qanunvericilik", "/xeberler", "/suallar"].some(p => pathname.startsWith(p));
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,7 +27,6 @@ export default function Navbar() {
     : "bg-transparent";
 
   const textColorClass = isLightPage ? "text-dark-bg" : "text-white";
-  const borderColor = isLightPage ? "border-dark-bg/20" : "border-white/20";
 
   return (
     <>
@@ -43,7 +41,7 @@ export default function Navbar() {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
           className="flex items-center gap-3 group"
         >
-          <div className={`relative w-12 h-12 overflow-hidden rounded-full border-2 bg-white group-hover:border-accent transition-colors duration-500 flex items-center justify-center p-1 ${borderColor}`}>
+          <div className="relative w-12 h-12 overflow-hidden rounded-full flex items-center justify-center">
             <Image 
               src="/ProLogo.png" 
               alt="TMHSE Logo" 
@@ -63,10 +61,11 @@ export default function Navbar() {
 
         {/* Desktop Menu */}
         <div className={`hidden lg:flex items-center gap-6 text-sm font-bold transition-colors ${textColorClass}`}>
-          <Link href="/haqqimizda" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/haqqimizda' ? 'text-accent' : ''}`}>Haqqımızda</Link>
           <Link href="/xidmetler" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname.startsWith('/xidmetler') ? 'text-accent' : ''}`}>Xidmətlər</Link>
+          <Link href="/tecrube" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/tecrube' ? 'text-accent' : ''}`}>Təcrübə Proqramı</Link>
+          <Link href="/qanunvericilik" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/qanunvericilik' ? 'text-accent' : ''}`}>Qanunvericilik</Link>
+          <Link href="/xeberler" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/xeberler' ? 'text-accent' : ''}`}>Xəbərlər</Link>
           <Link href="/vakansiyalar" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/vakansiyalar' ? 'text-accent' : ''}`}>Vakansiyalar</Link>
-          <Link href="/elaqe" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/elaqe' ? 'text-accent' : ''}`}>Suallar</Link>
           <Link href="/cv-yukle" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/cv-yukle' ? 'text-accent' : ''}`}>CV Yüklə</Link>
           <Link 
             href="/elaqe" 
@@ -105,7 +104,7 @@ export default function Navbar() {
                 }} 
                 className="flex items-center gap-3 mx-auto"
               >
-                <div className="relative w-12 h-12 overflow-hidden rounded-full border-2 border-accent bg-white p-1">
+                <div className="relative w-12 h-12 overflow-hidden rounded-full flex items-center justify-center">
                   <Image src="/ProLogo.png" alt="TMHSE Logo" fill className="object-cover rounded-full" />
                 </div>
                 <div className="flex flex-col">
@@ -125,13 +124,14 @@ export default function Navbar() {
               </button>
             </div>
 
-            <div className="flex flex-col gap-6 text-lg font-bold text-white mb-auto text-center mt-8">
-              <Link href="/haqqimizda" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Haqqımızda</Link>
+            <div className="flex flex-col gap-5 text-lg font-bold text-white mb-auto text-center mt-8">
               <Link href="/xidmetler" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Xidmətlər</Link>
+              <Link href="/tecrube" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Təcrübə Proqramı</Link>
+              <Link href="/qanunvericilik" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Qanunvericilik</Link>
+              <Link href="/xeberler" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Xəbərlər</Link>
               <Link href="/vakansiyalar" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Vakansiyalar</Link>
-              <Link href="/elaqe" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Suallar</Link>
-              <Link href="/elaqe" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Əlaqə</Link>
-              <Link href="/cv-yukle" onClick={() => setMobileMenuOpen(false)} className="text-accent border-b border-white/10 pb-3">CV Yüklə</Link>
+              <Link href="/cv-yukle" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">CV Yüklə</Link>
+              <Link href="/elaqe" onClick={() => setMobileMenuOpen(false)} className="text-accent border-b border-white/10 pb-3">Əlaqə</Link>
             </div>
           </motion.div>
         )}

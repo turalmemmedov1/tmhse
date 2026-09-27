@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 
 const faqs = [
   {
@@ -61,7 +62,7 @@ export default function FaqSection() {
           transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           className="w-full lg:w-3/5 flex flex-col gap-4 bg-white p-6 md:p-12 rounded-[2rem] shadow-xl shadow-black/5 border border-dark-bg/5"
         >
-          {faqs.map((faq, idx) => (
+          {faqs.slice(0, 3).map((faq, idx) => (
             <div key={idx} className="border-b border-dark-bg/10 pb-4 last:border-0 last:pb-0">
               <button 
                 onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
@@ -81,6 +82,14 @@ export default function FaqSection() {
               </motion.div>
             </div>
           ))}
+
+          <div className="pt-4 flex justify-center md:justify-start">
+            <Link href="/suallar">
+              <button className="bg-dark-bg text-white px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest hover:bg-accent-hover transition-colors shadow-md">
+                Bütün Suallara Bax (15)
+              </button>
+            </Link>
+          </div>
         </motion.div>
 
       </div>
