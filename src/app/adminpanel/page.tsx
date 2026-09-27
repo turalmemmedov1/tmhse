@@ -12,6 +12,7 @@ import {
 } from "@/app/actions";
 import { uploadToImgbb } from "@/lib/imgbb";
 import { supabase } from "@/lib/supabase";
+import { createClient } from "@supabase/supabase-js";
 
 export default function AdminPanelPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -58,15 +59,20 @@ export default function AdminPanelPage() {
     if (isLoggedIn) {
       loadData();
 
-      // Track Live Visitors
-      const channel = supabase.channel('online-visitors');
+      // Track Live Visitors using a fresh client to avoid singleton channel conflicts
+      const adminSupabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://dummy.supabase.co',
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'dummy'
+      );
+      
+      const channel = adminSupabase.channel('online-visitors');
       channel.on('presence', { event: 'sync' }, () => {
         const state = channel.presenceState();
         setLiveVisitors(Object.keys(state).length);
       }).subscribe();
 
       return () => {
-        supabase.removeChannel(channel);
+        adminSupabase.removeChannel(channel);
       };
     }
   }, [isLoggedIn]);
