@@ -32,15 +32,24 @@ export default function AdminPanelPage() {
   
   const [loading, setLoading] = useState(false);
   const [liveVisitors, setLiveVisitors] = useState(0);
+  const [monthlyVisits, setMonthlyVisits] = useState(0);
 
   const loadData = async () => {
     setLoading(true);
-    const [v, c, n, l, i, sp, sv, s] = await Promise.all([
-      getVacancies(), getCvs(), getNews(), getLegislation(), getInternships(), getServicePdfs(), getServiceVideos(), getSettings()
+    const { getMonthlyVisits } = await import("@/app/actions");
+    const [v, c, n, l, i, sp, sv, s, mVisits] = await Promise.all([
+      getVacancies(), getCvs(), getNews(), getLegislation(), getInternships(), getServicePdfs(), getServiceVideos(), getSettings(), getMonthlyVisits()
     ]);
-    setVacancies(v); setCvs(c); setNews(n); setLegislation(l); setInternships(i); setServicePdfs(sp); setServiceVideos(sv); setSettings(s);
+    setVacancies(v || []); setCvs(c || []); setNews(n || []); setLegislation(l || []); setInternships(i || []); setServicePdfs(sp || []); setServiceVideos(sv || []); setSettings(s || {}); setMonthlyVisits(mVisits || 0);
     setLoading(false);
   };
+
+  useEffect(() => {
+    const isSaved = localStorage.getItem("tmhse_admin_logged_in");
+    if (isSaved === "true") {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -63,10 +72,16 @@ export default function AdminPanelPage() {
     e.preventDefault();
     if (email === "info@tmhse.expert" && password === "Tural2026") {
       setIsLoggedIn(true);
+      localStorage.setItem("tmhse_admin_logged_in", "true");
       setError("");
     } else {
       setError("Email və ya şifrə yanlışdır.");
     }
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem("tmhse_admin_logged_in");
   };
 
   const genericAddWithImage = async (e: React.FormEvent<HTMLFormElement>, addAction: Function) => {
@@ -138,7 +153,7 @@ export default function AdminPanelPage() {
           ))}
         </div>
         <div className="mt-auto p-4 border-t border-white/10">
-          <button onClick={() => setIsLoggedIn(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-white/5 w-full"><LogOut className="w-4 h-4" /> Çıxış Et</button>
+          <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-white/5 w-full"><LogOut className="w-4 h-4" /> Çıxış Et</button>
         </div>
       </div>
 
@@ -162,11 +177,12 @@ export default function AdminPanelPage() {
           <AnimatePresence mode="wait">
             
             {activeTab === 'dashboard' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 md:grid-cols-5 gap-6">
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Vakansiyalar</span><span className="text-4xl font-black text-dark-bg">{vacancies.length}</span></div>
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">CV-lər</span><span className="text-4xl font-black text-dark-bg">{cvs.length}</span></div>
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Xəbərlər</span><span className="text-4xl font-black text-dark-bg">{news.length}</span></div>
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Qanunvericilik</span><span className="text-4xl font-black text-dark-bg">{legislation.length}</span></div>
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-accent/20 bg-accent/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Aylıq Ziyarət</span><span className="text-4xl font-black text-dark-bg">{monthlyVisits}</span></div>
               </motion.div>
             )}
 

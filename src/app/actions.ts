@@ -19,7 +19,7 @@ export async function submitContactMessage(formData: FormData) {
 export async function getVacancies() {
   const { data, error } = await supabase.from("vacancies").select("*").order("created_at", { ascending: false });
   if (error) return [];
-  return data;
+  return data || [];
 }
 
 export async function addVacancy(formData: FormData) {
@@ -46,7 +46,7 @@ export async function deleteVacancy(id: number) {
 export async function getCvs() {
   const { data, error } = await supabase.from("cvs").select("*").order("created_at", { ascending: false });
   if (error) return [];
-  return data;
+  return data || [];
 }
 
 export async function addCv(data: { first_name: string, last_name: string, email: string, phone: string, skills: string, image_url: string, cv_drive_link: string }) {
@@ -65,7 +65,9 @@ export async function getSettings() {
   const { data, error } = await supabase.from("settings").select("*");
   if (error) return {};
   const settingsObj: Record<string, string> = {};
-  data.forEach(item => { settingsObj[item.setting_key] = item.setting_value });
+  if (data) {
+    data.forEach(item => { settingsObj[item.setting_key] = item.setting_value });
+  }
   return settingsObj;
 }
 
@@ -78,7 +80,7 @@ export async function updateSetting(key: string, value: string) {
 export async function getNews() {
   const { data, error } = await supabase.from("news").select("*").order("created_at", { ascending: false });
   if (error) return [];
-  return data;
+  return data || [];
 }
 
 export async function addNews(title: string, content: string, image_url: string) {
@@ -95,7 +97,7 @@ export async function deleteNews(id: number) {
 export async function getLegislation() {
   const { data, error } = await supabase.from("legislation").select("*").order("created_at", { ascending: false });
   if (error) return [];
-  return data;
+  return data || [];
 }
 
 export async function addLegislation(title: string, content: string, image_url: string) {
@@ -112,7 +114,7 @@ export async function deleteLegislation(id: number) {
 export async function getInternships() {
   const { data, error } = await supabase.from("internships").select("*").order("created_at", { ascending: false });
   if (error) return [];
-  return data;
+  return data || [];
 }
 
 export async function addInternship(title: string, content: string, image_url: string) {
@@ -129,7 +131,7 @@ export async function deleteInternship(id: number) {
 export async function getServicePdfs() {
   const { data, error } = await supabase.from("service_pdfs").select("*").order("created_at", { ascending: false });
   if (error) return [];
-  return data;
+  return data || [];
 }
 
 export async function addServicePdf(service_id: string, title: string, drive_link: string) {
@@ -145,7 +147,7 @@ export async function deleteServicePdf(id: number) {
 export async function getServiceVideos() {
   const { data, error } = await supabase.from("service_videos").select("*").order("created_at", { ascending: false });
   if (error) return [];
-  return data;
+  return data || [];
 }
 
 export async function addServiceVideo(service_id: string, title: string, youtube_link: string) {
@@ -156,5 +158,24 @@ export async function addServiceVideo(service_id: string, title: string, youtube
 export async function deleteServiceVideo(id: number) {
   const { error } = await supabase.from("service_videos").delete().eq("id", id);
   return { success: !error };
+}
+
+// --- STATISTICS ---
+export async function recordVisit() {
+  await supabase.from("page_visits").insert([{}]);
+  return { success: true };
+}
+
+export async function getMonthlyVisits() {
+  const startOfMonth = new Date();
+  startOfMonth.setDate(1);
+  startOfMonth.setHours(0,0,0,0);
+  
+  const { count, error } = await supabase.from("page_visits")
+    .select("*", { count: "exact", head: true })
+    .gte("visited_at", startOfMonth.toISOString());
+    
+  if (error) return 0;
+  return count || 0;
 }
 
