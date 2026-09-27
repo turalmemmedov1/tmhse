@@ -8,7 +8,7 @@ import {
   getVacancies, deleteVacancy, getCvs, deleteCv, getSettings, updateSetting, 
   getNews, addNews, deleteNews, getLegislation, addLegislation, deleteLegislation,
   getInternships, addInternship, deleteInternship, getServicePdfs, addServicePdf, deleteServicePdf,
-  getServiceVideos, addServiceVideo, deleteServiceVideo 
+  getServiceVideos, addServiceVideo, deleteServiceVideo, getMonthlyVisits
 } from "@/app/actions";
 import { uploadToImgbb } from "@/lib/imgbb";
 import { supabase } from "@/lib/supabase";
@@ -36,11 +36,14 @@ export default function AdminPanelPage() {
 
   const loadData = async () => {
     setLoading(true);
-    const { getMonthlyVisits } = await import("@/app/actions");
-    const [v, c, n, l, i, sp, sv, s, mVisits] = await Promise.all([
-      getVacancies(), getCvs(), getNews(), getLegislation(), getInternships(), getServicePdfs(), getServiceVideos(), getSettings(), getMonthlyVisits()
-    ]);
-    setVacancies(v || []); setCvs(c || []); setNews(n || []); setLegislation(l || []); setInternships(i || []); setServicePdfs(sp || []); setServiceVideos(sv || []); setSettings(s || {}); setMonthlyVisits(mVisits || 0);
+    try {
+      const [v, c, n, l, i, sp, sv, s, mVisits] = await Promise.all([
+        getVacancies(), getCvs(), getNews(), getLegislation(), getInternships(), getServicePdfs(), getServiceVideos(), getSettings(), getMonthlyVisits()
+      ]);
+      setVacancies(v || []); setCvs(c || []); setNews(n || []); setLegislation(l || []); setInternships(i || []); setServicePdfs(sp || []); setServiceVideos(sv || []); setSettings(s || {}); setMonthlyVisits(mVisits || 0);
+    } catch (e) {
+      console.error("Error loading admin data:", e);
+    }
     setLoading(false);
   };
 
