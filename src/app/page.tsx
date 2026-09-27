@@ -5,7 +5,7 @@ import About from "@/components/About";
 import Services from "@/components/Services";
 import Process from "@/components/Process";
 import Stats from "@/components/Stats";
-import Contact from "@/components/Contact";
+import FaqSection from "@/components/FaqSection";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -18,7 +18,7 @@ export default function Home() {
       <Stats />
       <Services />
       <Process />
-      <Contact />
+      <FaqSection />
       <Footer />
     </main>
   );

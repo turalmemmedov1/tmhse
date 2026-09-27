@@ -59,7 +59,7 @@ export default function Services() {
               <div className="w-12 h-[2px] bg-accent-hover"></div>
               <span className="text-sm uppercase tracking-[0.3em] text-foreground/80 font-bold">Xidmət İstiqamətləri</span>
             </div>
-            <h2 className="text-5xl md:text-7xl font-bold leading-[1.1] text-dark-bg">
+            <h2 className="text-4xl md:text-5xl font-bold leading-[1.1] text-dark-bg">
               Təhlükəsizlik sistemli<br />
               yanaşmadan başlayır.
             </h2>

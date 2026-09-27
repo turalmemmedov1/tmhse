@@ -22,8 +22,8 @@ export default function Stats() {
             transition={{ duration: 0.8, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col items-center gap-2"
           >
-            <span className="text-6xl md:text-7xl font-black tracking-tighter">{stat.num}</span>
-            <span className="text-lg md:text-xl font-bold uppercase tracking-widest text-dark-bg/70">{stat.label}</span>
+            <span className="text-5xl md:text-6xl font-black tracking-tighter">{stat.num}</span>
+            <span className="text-base md:text-lg font-bold uppercase tracking-widest text-dark-bg/70">{stat.label}</span>
           </motion.div>
         ))}
       </div>
