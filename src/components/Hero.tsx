@@ -4,8 +4,18 @@ import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import LedLight from "./LedLight";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { getSettings } from "@/app/actions";
 
 export default function Hero() {
+  const [imgUrl, setImgUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    getSettings().then(res => {
+      if(res?.home_image_1) setImgUrl(res.home_image_1);
+    });
+  }, []);
+
   return (
     <section className="relative w-full px-6 md:px-16 pt-32 pb-16 flex flex-col md:flex-row gap-12 items-center justify-between min-h-[85vh] overflow-hidden">
       <LedLight />
@@ -56,7 +66,11 @@ export default function Hero() {
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           className="absolute inset-0 bg-dark-bg/70 z-0 flex items-center justify-center"
         >
-          <span className="text-white/10 text-lg md:text-xl font-light tracking-widest uppercase">Şəkil Yeri</span>
+          {imgUrl ? (
+            <img src={imgUrl} alt="Hero" className="w-full h-full object-cover" />
+          ) : (
+            <span className="text-white/10 text-lg md:text-xl font-light tracking-widest uppercase">Şəkil Yeri</span>
+          )}
         </motion.div>
 
         <motion.div 

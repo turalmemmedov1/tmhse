@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export default function ServicesPage() {
   return (
-    <main className="flex min-h-screen flex-col w-full max-w-[100vw] overflow-x-hidden overflow-y-auto bg-background text-foreground">
+    <main className="flex min-h-screen flex-col w-full overflow-y-auto bg-background text-foreground">
       <div className="bg-dark-bg">
         <Navbar />
       </div>

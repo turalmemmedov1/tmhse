@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { LayoutDashboard, LogOut, Link as LinkIcon, FileText, Briefcase, FileBadge, Trash2, PlusCircle, Newspaper, Users, BookOpen, Presentation, Video } from "lucide-react";
+import { LayoutDashboard, LogOut, Link as LinkIcon, ImageIcon as ImageIcon, FileText, Briefcase, FileBadge, Trash2, PlusCircle, Newspaper, Users, BookOpen, Presentation, Video } from "lucide-react";
 import Image from "next/image";
 import { 
   getVacancies, deleteVacancy, getCvs, deleteCv, getSettings, updateSetting, 
-  getNews, addNews, deleteNews, getLegislation, addLegislation, deleteLegislation,
-  getInternships, addInternship, deleteInternship, getServicePdfs, addServicePdf, deleteServicePdf,
+  getNews, addNews, deleteNews, updateNews, getLegislation, addLegislation, deleteLegislation, updateLegislation,
+  getInternships, addInternship, deleteInternship, updateInternship, getServicePdfs, addServicePdf, deleteServicePdf,
   getServiceVideos, addServiceVideo, deleteServiceVideo, getMonthlyVisits
 } from "@/app/actions";
 import { uploadToImgbb } from "@/lib/imgbb";
@@ -34,6 +34,26 @@ export default function AdminPanelPage() {
   const [loading, setLoading] = useState(false);
   const [liveVisitors, setLiveVisitors] = useState(0);
   const [monthlyVisits, setMonthlyVisits] = useState(0);
+  const [editingItem, setEditingItem] = useState<any>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editContent, setEditContent] = useState("");
+  const [editTab, setEditTab] = useState("");
+  
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const t = toast.loading("Düzəliş edilir...");
+    try {
+      if (editTab === 'news') await updateNews(editingItem.id, editTitle, editContent);
+      if (editTab === 'legislation') await updateLegislation(editingItem.id, editTitle, editContent);
+      if (editTab === 'internships') await updateInternship(editingItem.id, editTitle, editContent);
+      toast.success("Düzəliş edildi!", { id: t });
+      setEditingItem(null);
+      loadData();
+    } catch(err) {
+      toast.error("Xəta baş verdi", { id: t });
+    }
+  };
+
 
   const loadData = async () => {
     setLoading(true);
@@ -178,7 +198,8 @@ export default function AdminPanelPage() {
             {id:'internships', icon: Presentation, title: 'Təcrübə Proqramı'},
             {id:'services_media', icon: Video, title: 'Xidmət (PDF/Video)'},
             {id:'social', icon: LinkIcon, title: 'Sosial Şəbəkələr'},
-            {id:'menus', icon: LayoutDashboard, title: 'Menyular'}
+            {id:'menus', icon: LayoutDashboard, title: 'Menyular'},
+            {id:'home_images', icon: ImageIcon, title: 'Ana Səhifə Şəkilləri'}
           ].map(item => (
             <button key={item.id} onClick={() => setActiveTab(item.id)} className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${activeTab === item.id ? 'bg-accent text-dark-bg' : 'hover:bg-white/5 text-text-muted hover:text-white'}`}>
               <item.icon className="w-4 h-4" /> {item.title}
@@ -249,16 +270,19 @@ export default function AdminPanelPage() {
                         <div className="flex flex-col">
                           <h4 className="font-bold text-dark-bg line-clamp-2 leading-tight">{item.title}</h4>
                           <span className="text-[10px] text-foreground/50 mt-1">{item.created_at ? new Date(item.created_at).toLocaleDateString() : ""}</span>
-                          <button onClick={async () => { 
-                            if(confirm("Silmək istədiyinizə əminsiniz?")) { 
-                              const loadingToast = toast.loading("Silinir...");
-                              if(activeTab === 'news') await deleteNews(item.id); 
-                              if(activeTab === 'legislation') await deleteLegislation(item.id);
-                              if(activeTab === 'internships') await deleteInternship(item.id);
-                              toast.success("Silindi", { id: loadingToast });
-                              loadData(); 
-                            } 
-                          }} className="text-red-500 text-xs font-bold mt-2 text-left hover:underline">Sil</button>
+                          <div className="flex gap-4 mt-2">
+                            <button onClick={() => { setEditingItem(item); setEditTitle(item.title); setEditContent(item.content); setEditTab(activeTab); }} className="text-blue-500 text-xs font-bold hover:underline text-left">Düzəliş Et</button>
+                            <button onClick={async () => { 
+                              if(confirm("Silmək istədiyinizə əminsiniz?")) { 
+                                const loadingToast = toast.loading("Silinir...");
+                                if(activeTab === 'news') await deleteNews(item.id); 
+                                if(activeTab === 'legislation') await deleteLegislation(item.id);
+                                if(activeTab === 'internships') await deleteInternship(item.id);
+                                toast.success("Silindi", { id: loadingToast });
+                                loadData(); 
+                              } 
+                            }} className="text-red-500 text-xs font-bold text-left hover:underline">Sil</button>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -476,9 +500,69 @@ export default function AdminPanelPage() {
               </motion.div>
             )}
 
+
+            {activeTab === 'home_images' && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5 max-w-xl">
+                <h3 className="font-bold text-lg text-dark-bg mb-6">Ana Səhifə Şəkilləri</h3>
+                
+                <form onSubmit={async (e) => {
+                  e.preventDefault();
+                  const loadingToast = toast.loading("Yüklənir...");
+                  const file = (e.currentTarget.elements.namedItem("image_1") as HTMLInputElement)?.files?.[0];
+                  if (file && file.size > 0) {
+                    const url = await uploadToImgbb(file);
+                    if (url) await updateSetting("home_image_1", url);
+                  }
+                  toast.success("Yadda saxlanıldı", { id: loadingToast });
+                  loadData();
+                }} className="flex flex-col gap-4 mb-8 border-b pb-8">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-bold text-dark-bg">1. "SƏTƏM üzrə peşəkar yanaşma" Şəkli</label>
+                    {settings?.home_image_1 && <img src={settings.home_image_1} className="w-32 h-32 object-cover rounded-xl border mb-2" />}
+                    <input type="file" name="image_1" accept="image/*" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm" />
+                  </div>
+                  <button type="submit" className="bg-dark-bg text-white px-6 py-2 rounded-lg text-sm font-bold w-fit hover:bg-accent-hover transition-colors">Yenilə</button>
+                </form>
+
+                <form onSubmit={async (e) => {
+                  e.preventDefault();
+                  const loadingToast = toast.loading("Yüklənir...");
+                  const file = (e.currentTarget.elements.namedItem("image_2") as HTMLInputElement)?.files?.[0];
+                  if (file && file.size > 0) {
+                    const url = await uploadToImgbb(file);
+                    if (url) await updateSetting("home_image_2", url);
+                  }
+                  toast.success("Yadda saxlanıldı", { id: loadingToast });
+                  loadData();
+                }} className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-bold text-dark-bg">2. "TMHSE" (Haqqımızda) Şəkli</label>
+                    {settings?.home_image_2 && <img src={settings.home_image_2} className="w-32 h-32 object-cover rounded-xl border mb-2" />}
+                    <input type="file" name="image_2" accept="image/*" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm" />
+                  </div>
+                  <button type="submit" className="bg-dark-bg text-white px-6 py-2 rounded-lg text-sm font-bold w-fit hover:bg-accent-hover transition-colors">Yenilə</button>
+                </form>
+              </motion.div>
+            )}
           </div>
         )}
       </div>
+
+      {editingItem && (
+        <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-6">
+          <div className="bg-white rounded-2xl w-full max-w-2xl p-8 flex flex-col gap-4 relative">
+            <h3 className="font-bold text-xl text-dark-bg">Düzəliş Et</h3>
+            <form onSubmit={handleEditSubmit} className="flex flex-col gap-4">
+              <input type="text" required value={editTitle} onChange={e => setEditTitle(e.target.value)} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-3 text-sm focus:border-accent" />
+              <textarea required value={editContent} onChange={e => setEditContent(e.target.value)} rows={10} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-3 text-sm focus:border-accent resize-none"></textarea>
+              <div className="flex gap-4 mt-2">
+                <button type="submit" className="bg-accent-hover text-white px-6 py-2 rounded-lg font-bold">Yadda Saxla</button>
+                <button type="button" onClick={() => setEditingItem(null)} className="bg-gray-200 text-dark-bg px-6 py-2 rounded-lg font-bold">Ləğv Et</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

@@ -179,3 +179,24 @@ export async function getMonthlyVisits() {
   return count || 0;
 }
 
+
+export async function updateNews(id: number, title: string, content: string) {
+  // using imported supabase
+  const { error } = await supabase.from('news').update({ title, content }).eq('id', id);
+  if (error) return { success: false, error: error.message };
+  return { success: true };
+}
+
+export async function updateLegislation(id: number, title: string, content: string) {
+  // using imported supabase
+  const { error } = await supabase.from('legislation').update({ title, content }).eq('id', id);
+  if (error) return { success: false, error: error.message };
+  return { success: true };
+}
+
+export async function updateInternship(id: number, title: string, content: string) {
+  // using imported supabase
+  const { error } = await supabase.from('internships').update({ title, content }).eq('id', id);
+  if (error) return { success: false, error: error.message };
+  return { success: true };
+}
