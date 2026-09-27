@@ -79,7 +79,7 @@ export default function Hero() {
           transition={{ delay: 1, duration: 0.8 }}
           className="absolute top-4 left-4 md:top-6 md:left-6 z-20"
         >
-          <span className="text-[10px] md:text-xs uppercase tracking-widest text-white/90 font-medium bg-black/50 px-3 py-1.5 md:px-4 md:py-2 rounded-full backdrop-blur-md border border-white/10">
+          <span className="text-[10px] md:text-xs uppercase tracking-widest text-white/90 font-medium bg-black px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10">
             İnsan hər şeydən öncə
           </span>
         </motion.div>

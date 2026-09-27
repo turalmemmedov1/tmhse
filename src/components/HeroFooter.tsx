@@ -11,7 +11,7 @@ const items = [
 
 export default function HeroFooter() {
   return (
-    <div className="w-full border-y border-white/10 bg-dark-bg/80 backdrop-blur-md relative z-10 overflow-hidden">
+    <div className="w-full border-y border-white/10 bg-dark-bg relative z-10 overflow-hidden">
       <div className="w-full flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-white/10">
         {items.map((item, index) => {
           const Icon = item.icon;

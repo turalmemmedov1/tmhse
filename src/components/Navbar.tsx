@@ -33,7 +33,7 @@ export default function Navbar() {
   // Həmişə tünd fon (ağ səhifələrdə ən üstdə olanda da yazılar itməsin deyə tam tünd olur)
   const navBgClass = isLightPage 
     ? "bg-dark-bg border-b border-white/10 shadow-lg" 
-    : (scrolled ? "bg-dark-bg/95 backdrop-blur-md shadow-lg border-b border-white/5" : "bg-transparent");
+    : (scrolled ? "bg-dark-bg shadow-lg border-b border-white/5" : "bg-transparent");
 
   const textColorClass = "text-white";
 
