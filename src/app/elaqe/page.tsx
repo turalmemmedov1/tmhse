@@ -4,8 +4,13 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import { Mail, MapPin, Phone } from "lucide-react";
+import { useState } from "react";
+import { submitContactMessage } from "@/app/actions";
 
 export default function ContactPage() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
   return (
     <main className="flex min-h-screen flex-col w-full max-w-[100vw] overflow-x-hidden overflow-y-auto bg-background text-foreground">
       <div className="bg-dark-bg">
@@ -70,26 +75,42 @@ export default function ContactPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
             className="w-full bg-white rounded-[2rem] p-8 shadow-xl shadow-black/5 border border-dark-bg/5 flex flex-col gap-4"
+            onSubmit={async (e) => {
+              e.preventDefault();
+              setIsLoading(true);
+              const formData = new FormData(e.currentTarget);
+              const res = await submitContactMessage(formData);
+              setIsLoading(false);
+              if (res.success) {
+                setSuccess(true);
+                (e.target as HTMLFormElement).reset();
+                setTimeout(() => setSuccess(false), 5000);
+              } else {
+                alert(res.error);
+              }
+            }}
           >
             <h3 className="text-xl font-bold text-dark-bg mb-2">Mesaj Göndər</h3>
             
             <div className="flex flex-col gap-1">
               <label className="text-xs font-bold text-dark-bg">Ad və Soyad</label>
-              <input type="text" className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-accent-hover" placeholder="Adınızı yazın" />
+              <input type="text" name="fullName" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-accent-hover" placeholder="Adınızı yazın" />
             </div>
 
             <div className="flex flex-col gap-1">
               <label className="text-xs font-bold text-dark-bg">E-poçt ünvanı</label>
-              <input type="email" className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-accent-hover" placeholder="nümunə@email.com" />
+              <input type="email" name="email" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-accent-hover" placeholder="nümunə@email.com" />
             </div>
 
             <div className="flex flex-col gap-1">
               <label className="text-xs font-bold text-dark-bg">Mesajınız</label>
-              <textarea rows={4} className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-accent-hover resize-none" placeholder="Sualınızı bura yazın..."></textarea>
+              <textarea rows={4} name="message" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-accent-hover resize-none" placeholder="Sualınızı bura yazın..."></textarea>
             </div>
 
-            <button type="button" className="w-full bg-dark-bg hover:bg-accent-hover text-white font-bold py-3 rounded-lg mt-2 transition-colors duration-300 text-sm">
-              Göndər
+            {success && <span className="text-green-600 text-sm font-bold mt-2">Mesajınız uğurla göndərildi!</span>}
+
+            <button disabled={isLoading} type="submit" className="w-full bg-dark-bg hover:bg-accent-hover text-white font-bold py-3 rounded-lg mt-2 transition-colors duration-300 text-sm disabled:opacity-50">
+              {isLoading ? 'Göndərilir...' : 'Göndər'}
             </button>
           </motion.form>
         </div>
