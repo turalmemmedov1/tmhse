@@ -1,18 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 
 export default function CustomCursor() {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const [isMobile, setIsMobile] = useState(true); // Default true to avoid flash on mobile
-  
-  const springX = useSpring(mouseX, { stiffness: 500, damping: 28 });
-  const springY = useSpring(mouseY, { stiffness: 500, damping: 28 });
+  const mouseX = useMotionValue(-100);
+  const mouseY = useMotionValue(-100);
+  const [isMobile, setIsMobile] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Check if device is touch or small screen
     if (window.matchMedia("(pointer: fine)").matches) {
       setIsMobile(false);
     }
@@ -20,6 +17,7 @@ export default function CustomCursor() {
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
+      if (!isVisible) setIsVisible(true);
     };
 
     if (!isMobile) {
@@ -29,28 +27,31 @@ export default function CustomCursor() {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [mouseX, mouseY, isMobile]);
+  }, [mouseX, mouseY, isMobile, isVisible]);
 
   if (isMobile) return null;
 
   return (
     <>
       <motion.div
-        className="fixed top-0 left-0 w-10 h-10 rounded-full border-2 border-accent pointer-events-none z-[9999] mix-blend-difference hidden md:block"
+        className="fixed w-8 h-8 rounded-full border-2 border-accent pointer-events-none z-[9999] mix-blend-difference hidden md:block"
         style={{
-          x: springX,
-          y: springY,
-          translateX: "-50%",
-          translateY: "-50%"
+          left: mouseX,
+          top: mouseY,
+          x: "-50%",
+          y: "-50%",
+          opacity: isVisible ? 1 : 0
         }}
+        transition={{ type: "tween", ease: "backOut", duration: 0.1 }}
       />
       <motion.div
-        className="fixed top-0 left-0 w-2 h-2 bg-accent rounded-full pointer-events-none z-[9999] mix-blend-difference hidden md:block"
+        className="fixed w-2 h-2 bg-accent rounded-full pointer-events-none z-[9999] mix-blend-difference hidden md:block"
         style={{
-          x: mouseX,
-          y: mouseY,
-          translateX: "-50%",
-          translateY: "-50%"
+          left: mouseX,
+          top: mouseY,
+          x: "-50%",
+          y: "-50%",
+          opacity: isVisible ? 1 : 0
         }}
       />
     </>

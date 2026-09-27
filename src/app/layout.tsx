@@ -9,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "TMHSE | Sağlamlıq, Əməyin Təhlükəsizliyi və Ətraf Mühit",
-  description: "İnsanları qoruyan, riskləri azaldan və ətraf mühitə dəyər verən iş mədəniyyəti birlikdə qurulur.",
+  title: "TMHSE",
+  description: "TMHSE",
 };
 
 export default function RootLayout({
