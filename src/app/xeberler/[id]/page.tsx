@@ -31,7 +31,7 @@ export default async function NewsDetail({ params }: { params: Promise<{ id: str
     <main className="flex min-h-screen flex-col w-full bg-background text-foreground">
       <div className="bg-dark-bg"><Navbar /></div>
       
-      <article className="pt-32 pb-24 px-6 md:px-16 w-full max-w-4xl mx-auto min-h-[70vh] flex flex-col gap-8">
+      <article className="pt-32 pb-24 px-6 md:px-16 w-full max-w-[1400px] mx-auto min-h-[70vh] flex flex-col gap-8">
         <Link href="/xeberler" className="flex items-center gap-2 text-accent-hover hover:underline w-fit font-bold">
           <ArrowLeft className="w-4 h-4" /> Bütün xəbərlərə qayıt
         </Link>

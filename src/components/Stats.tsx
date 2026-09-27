@@ -14,7 +14,7 @@ function Counter({ target, suffix }: { target: number, suffix: string }) {
   const count = useMotionValue(0);
   const rounded = useTransform(count, Math.round);
   const ref = useRef(null);
-  const inView = useInView(ref, { once: false, amount: 0.5 });
+  const inView = useInView(ref, { once: true, amount: 0.5 });
 
   useEffect(() => {
     if (inView) {
@@ -48,7 +48,7 @@ export default function Stats() {
             key={idx}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.5 }}
+            viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.8, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col items-center gap-1"
           >

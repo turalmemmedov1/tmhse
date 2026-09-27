@@ -59,7 +59,7 @@ export default function Services() {
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col gap-4 max-w-2xl"
           >
@@ -77,7 +77,7 @@ export default function Services() {
             <motion.button 
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: false, amount: 0.3 }}
+              viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
               className="text-sm font-bold uppercase tracking-widest text-dark-bg border-b-2 border-dark-bg pb-1 hover:text-accent-hover hover:border-accent-hover transition-colors mt-4 md:mt-0"
             >
@@ -92,7 +92,7 @@ export default function Services() {
               <motion.div 
                 initial={{ opacity: 0, y: 50, scale: 0.95 }}
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: false, amount: 0.3 }}
+                viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 1, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
                 className="bg-white rounded-[2rem] p-8 shadow-lg shadow-black/5 flex flex-col gap-6 group hover:-translate-y-2 transition-transform duration-500 cursor-pointer border border-dark-bg/5"
               >

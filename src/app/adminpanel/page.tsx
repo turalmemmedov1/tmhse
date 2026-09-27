@@ -518,7 +518,19 @@ export default function AdminPanelPage() {
                 }} className="flex flex-col gap-4 mb-8 border-b pb-8">
                   <div className="flex flex-col gap-1">
                     <label className="text-sm font-bold text-dark-bg">1. "SƏTƏM üzrə peşəkar yanaşma" Şəkli</label>
-                    {settings?.home_image_1 && <img src={settings.home_image_1} className="w-32 h-32 object-cover rounded-xl border mb-2" />}
+                    {settings?.home_image_1 && (
+                      <div className="flex items-end gap-4 mb-2">
+                        <img src={settings.home_image_1} className="w-32 h-32 object-cover rounded-xl border" />
+                        <button type="button" onClick={async () => {
+                          if (confirm("Şəkli silmək istəyirsiniz?")) {
+                            const loadingToast = toast.loading("Silinir...");
+                            await updateSetting("home_image_1", "");
+                            toast.success("Silindi", { id: loadingToast });
+                            loadData();
+                          }
+                        }} className="text-red-500 text-sm font-bold hover:underline mb-2">Sil</button>
+                      </div>
+                    )}
                     <input type="file" name="image_1" accept="image/*" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm" />
                   </div>
                   <button type="submit" className="bg-dark-bg text-white px-6 py-2 rounded-lg text-sm font-bold w-fit hover:bg-accent-hover transition-colors">Yenilə</button>
@@ -537,7 +549,19 @@ export default function AdminPanelPage() {
                 }} className="flex flex-col gap-4">
                   <div className="flex flex-col gap-1">
                     <label className="text-sm font-bold text-dark-bg">2. "TMHSE" (Haqqımızda) Şəkli</label>
-                    {settings?.home_image_2 && <img src={settings.home_image_2} className="w-32 h-32 object-cover rounded-xl border mb-2" />}
+                    {settings?.home_image_2 && (
+                      <div className="flex items-end gap-4 mb-2">
+                        <img src={settings.home_image_2} className="w-32 h-32 object-cover rounded-xl border" />
+                        <button type="button" onClick={async () => {
+                          if (confirm("Şəkli silmək istəyirsiniz?")) {
+                            const loadingToast = toast.loading("Silinir...");
+                            await updateSetting("home_image_2", "");
+                            toast.success("Silindi", { id: loadingToast });
+                            loadData();
+                          }
+                        }} className="text-red-500 text-sm font-bold hover:underline mb-2">Sil</button>
+                      </div>
+                    )}
                     <input type="file" name="image_2" accept="image/*" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm" />
                   </div>
                   <button type="submit" className="bg-dark-bg text-white px-6 py-2 rounded-lg text-sm font-bold w-fit hover:bg-accent-hover transition-colors">Yenilə</button>

@@ -20,7 +20,7 @@ export default function HeroFooter() {
               key={index}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.3 }}
+              viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.8, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
               className="flex-1 py-8 px-6 md:p-12 flex items-center justify-start md:justify-center gap-6 md:gap-8 hover:bg-white/5 transition-colors group cursor-default relative overflow-hidden"
             >

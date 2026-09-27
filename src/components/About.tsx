@@ -23,7 +23,7 @@ export default function About() {
         <motion.div 
           initial={{ opacity: 0, scale: 0.9, rotateY: -15 }}
           whileInView={{ opacity: 1, scale: 1, rotateY: 0 }}
-          viewport={{ once: false, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           className="w-full md:w-1/2 aspect-video bg-gradient-to-br from-dark-bg-card to-dark-bg rounded-[2rem] flex flex-col items-center justify-center border border-white/5 shadow-xl relative overflow-hidden"
         >
@@ -38,7 +38,7 @@ export default function About() {
         <motion.div 
           initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: false, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
           className="w-full md:w-1/2 flex flex-col gap-6"
         >

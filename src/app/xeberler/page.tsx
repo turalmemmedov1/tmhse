@@ -30,7 +30,7 @@ export default function XeberlerPage() {
         <Navbar />
       </div>
       
-      <section className="pt-32 pb-24 px-6 md:px-16 w-full max-w-7xl mx-auto min-h-[70vh]">
+      <section className="pt-32 pb-24 px-6 md:px-16 w-full max-w-[1400px] mx-auto min-h-[70vh]">
         <h1 className="text-3xl md:text-5xl font-bold mb-4 text-dark-bg border-b-2 border-dark-bg pb-4">Xəbərlər</h1>
         
         <div className="relative mt-8 mb-8 max-w-xl">
