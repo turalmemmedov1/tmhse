@@ -24,7 +24,7 @@ export default function Footer() {
         >
           <button onClick={scrollToTop} className="flex items-center gap-4 mb-1 text-left hover:opacity-80 transition-opacity">
             <div className="relative w-14 h-14 overflow-hidden rounded-full border border-white/20 bg-white p-1">
-              <Image src="/ProLogo.png" alt="TMHSE Logo" fill className="object-cover rounded-full" />
+              <Image src="/LogoMain1.png" alt="TMHSE Logo" fill className="object-cover rounded-full" />
             </div>
             <span className="font-bold text-xl tracking-wider uppercase text-white">TMHSE</span>
           </button>

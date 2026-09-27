@@ -50,12 +50,12 @@ export default function Navbar() {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
           className="flex items-center gap-3 group"
         >
-          <div className="relative w-14 h-14 rounded-full bg-white flex items-center justify-center p-1 shadow-sm border border-white/20">
+          <div className="relative w-14 h-14 rounded-full flex items-center justify-center">
             <Image 
-              src="/ProLogo.png" 
+              src="/LogoMain1.png" 
               alt="TMHSE Logo" 
               fill 
-              className="object-contain rounded-full p-1"
+              className="object-cover rounded-full"
             />
           </div>
           <div className="flex flex-col">
@@ -113,8 +113,8 @@ export default function Navbar() {
                 }} 
                 className="flex items-center gap-3 mx-auto"
               >
-                <div className="relative w-14 h-14 rounded-full bg-white flex items-center justify-center p-1 shadow-sm border border-white/20">
-                  <Image src="/ProLogo.png" alt="TMHSE Logo" fill className="object-contain rounded-full p-1" />
+                <div className="relative w-14 h-14 rounded-full flex items-center justify-center">
+                  <Image src="/LogoMain1.png" alt="TMHSE Logo" fill className="object-cover rounded-full" />
                 </div>
                 <div className="flex flex-col">
                   <span className="font-black text-xl tracking-[0.2em] uppercase text-white leading-none">

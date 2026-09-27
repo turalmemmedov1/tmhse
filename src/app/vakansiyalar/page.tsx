@@ -4,8 +4,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Building2, MapPin, CheckCircle } from "lucide-react";
-import { addVacancy, getVacancies } from "@/app/actions";
+import { CheckCircle, Briefcase, MapPin, Building2, Plus } from "lucide-react";
+import { getVacancies, addVacancy } from "@/app/actions";
 
 type Vacancy = {
   id: number;
@@ -17,7 +17,7 @@ type Vacancy = {
   contact_email: string;
 };
 
-export default function VacanciesPage() {
+export default function VakansiyalarPage() {
   const [vacancies, setVacancies] = useState<Vacancy[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -41,12 +41,8 @@ export default function VacanciesPage() {
     
     if (res.success) {
       setSubmitted(true);
-      const data = await getVacancies(); // reload real data
+      const data = await getVacancies();
       setVacancies(data);
-      setTimeout(() => {
-        setSubmitted(false);
-      }, 4000);
-      (e.target as HTMLFormElement).reset();
     } else {
       alert(res.error);
     }
@@ -59,8 +55,23 @@ export default function VacanciesPage() {
         <Navbar />
       </div>
       
-      <section className="pt-28 pb-20 px-6 md:px-16 w-full max-w-[1920px] mx-auto min-h-[70vh] flex flex-col lg:flex-row gap-12">
+      <section className="pt-24 pb-20 px-6 md:px-16 w-full max-w-[1400px] mx-auto min-h-[70vh] flex flex-col gap-8">
         
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-4">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold mb-2 text-dark-bg">Aktiv Vakansiyalar</h1>
+            <p className="text-sm text-foreground/70">
+              Şirkətiniz üçün SƏTƏM mütəxəssisi axtarırsınız? Elanınızı pulsuz yerləşdirin.
+            </p>
+          </div>
+          <button 
+            onClick={() => setIsModalOpen(true)} 
+            className="bg-accent hover:bg-accent-hover text-dark-bg font-bold py-3 px-6 rounded-xl transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+          >
+            <Plus className="w-5 h-5" /> Vakansiya Yerləşdir
+          </button>
+        </div>
+
         <AnimatePresence>
           {isModalOpen && (
             <motion.div 
@@ -136,49 +147,40 @@ export default function VacanciesPage() {
           )}
         </AnimatePresence>
 
-        <div className="w-full flex flex-col gap-6">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-2xl font-bold text-dark-bg">Aktiv Vakansiyalar</h2>
-            <button onClick={() => setIsModalOpen(true)} className="bg-accent hover:bg-accent-hover text-dark-bg font-bold py-2 px-6 rounded-lg transition-colors text-sm">
-              + Vakansiya Yerləşdir
-            </button>
-          </div>
-
-          <div className="flex flex-col gap-4">
-            {loading ? (
-              <p className="text-sm text-foreground/70">Yüklənir...</p>
-            ) : vacancies.length === 0 ? (
-              <p className="text-sm text-foreground/70">Hazırda aktiv vakansiya yoxdur.</p>
-            ) : (
-              vacancies.map((vac) => (
-                <motion.div 
-                  key={vac.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col md:flex-row justify-between gap-6 group hover:shadow-md transition-shadow"
-                >
-                  <div className="flex flex-col gap-3 max-w-xl">
-                    <div>
-                      <h3 className="text-xl font-bold text-dark-bg group-hover:text-accent-hover transition-colors">{vac.role}</h3>
-                      <div className="flex items-center gap-2 mt-1 text-sm text-foreground/70 font-medium">
-                        <Building2 className="w-4 h-4 text-accent-hover" /> {vac.company}
-                        <span className="text-dark-bg/20">|</span>
-                        <MapPin className="w-4 h-4 text-accent-hover" /> {vac.location}
-                      </div>
+        <div className="w-full flex flex-col gap-4 mt-4">
+          {loading ? (
+            <p className="text-sm text-foreground/70">Yüklənir...</p>
+          ) : vacancies.length === 0 ? (
+             <p className="text-sm text-foreground/70">Hazırda aktiv vakansiya yoxdur.</p>
+          ) : (
+            vacancies.map((vac) => (
+              <motion.div 
+                key={vac.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col md:flex-row justify-between gap-6 group hover:shadow-md transition-shadow"
+              >
+                <div className="flex flex-col gap-3 max-w-3xl">
+                  <div>
+                    <h3 className="text-xl font-bold text-dark-bg group-hover:text-accent-hover transition-colors">{vac.role}</h3>
+                    <div className="flex items-center gap-2 mt-1 text-sm text-foreground/70 font-medium">
+                      <Building2 className="w-4 h-4 text-accent-hover" /> {vac.company}
+                      <span className="text-dark-bg/20">|</span>
+                      <MapPin className="w-4 h-4 text-accent-hover" /> {vac.location}
                     </div>
-                    <p className="text-sm text-foreground/70 leading-relaxed whitespace-pre-wrap">{vac.description}</p>
-                    <span className="text-xs font-bold bg-dark-bg/5 px-3 py-1 rounded-full w-fit mt-1">{vac.type}</span>
                   </div>
-                  
-                  <div className="flex flex-col items-start md:items-end justify-center shrink-0">
-                    <a href={`mailto:${vac.contact_email}`} className="bg-dark-bg text-white text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-accent-hover transition-colors shadow-md">
-                      Müraciət Et
-                    </a>
-                  </div>
-                </motion.div>
-              ))
-            )}
-          </div>
+                  <p className="text-sm text-foreground/70 leading-relaxed whitespace-pre-wrap">{vac.description}</p>
+                  <span className="text-xs font-bold bg-dark-bg/5 px-3 py-1 rounded-full w-fit mt-1">{vac.type}</span>
+                </div>
+                
+                <div className="flex flex-col items-start md:items-end justify-center shrink-0">
+                  <a href={`mailto:${vac.contact_email}`} className="bg-dark-bg text-white text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-accent-hover transition-colors shadow-md">
+                    Müraciət Et
+                  </a>
+                </div>
+              </motion.div>
+            ))
+          )}
         </div>
 
       </section>
