@@ -188,7 +188,7 @@ export default function AdminPanelPage() {
           <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden"><Image src="/ProLogo.png" alt="Logo" width={40} height={40} /></div>
           <div><span className="font-bold text-sm">TMHSE</span><span className="text-[10px] text-accent block uppercase">Admin Panel</span></div>
         </div>
-        <div className="flex flex-col p-4 gap-2 mt-4 overflow-y-auto pb-20">
+        <div className="flex flex-col p-4 gap-2 mt-4 pb-20">
           {[
             {id:'dashboard', icon: LayoutDashboard, title: 'İcmal'},
             {id:'vacancies', icon: Briefcase, title: 'Vakansiyalar'},
@@ -212,7 +212,7 @@ export default function AdminPanelPage() {
       </div>
 
       {/* Main Content */}
-      <div className="ml-64 w-full p-10 h-screen overflow-y-auto">
+      <div className="ml-64 w-full p-10 h-screen">
         <header className="flex justify-between items-center mb-10 bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5">
           <h2 className="text-2xl font-bold text-dark-bg capitalize">{activeTab.replace('_', ' ')}</h2>
           <div className="flex items-center gap-6">

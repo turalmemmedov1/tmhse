@@ -47,7 +47,7 @@ export default function ServiceDetailPage() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col w-full overflow-y-auto bg-background text-foreground">
+    <main className="flex min-h-screen flex-col w-full bg-background text-foreground">
       <div className="bg-dark-bg">
         <Navbar />
       </div>

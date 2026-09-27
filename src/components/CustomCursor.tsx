@@ -17,9 +17,12 @@ export default function CustomCursor() {
   const springY = useSpring(mouseY, { stiffness: 150, damping: 15, mass: 0.5 });
 
   useEffect(() => {
-    if (window.matchMedia("(pointer: fine)").matches) {
-      setIsMobile(false);
+    // Only enable on fine pointer (desktop)
+    if (!window.matchMedia("(pointer: fine)").matches) {
+      setIsMobile(true);
+      return;
     }
+    setIsMobile(false);
 
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
@@ -27,8 +30,8 @@ export default function CustomCursor() {
       if (!isVisible) setIsVisible(true);
     };
 
-    if (!isMobile && !pathname?.startsWith('/adminpanel')) {
-      window.addEventListener("mousemove", handleMouseMove);
+    if (!pathname?.startsWith('/adminpanel')) {
+      window.addEventListener("mousemove", handleMouseMove, { passive: true });
       document.body.classList.add('hide-cursor');
     }
 
@@ -36,7 +39,7 @@ export default function CustomCursor() {
       window.removeEventListener("mousemove", handleMouseMove);
       document.body.classList.remove('hide-cursor');
     };
-  }, [mouseX, mouseY, isMobile, isVisible, pathname]);
+  }, [mouseX, mouseY, isVisible, pathname]);
 
   if (isMobile || pathname?.startsWith('/adminpanel')) return null;
 

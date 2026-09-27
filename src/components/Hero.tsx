@@ -21,8 +21,8 @@ export default function Hero() {
       <LedLight />
       
       <motion.div 
-        initial={{ opacity: 0, x: -50, scale: 0.95 }}
-        whileInView={{ opacity: 1, x: 0, scale: 1 }}
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         className="w-full md:w-1/2 flex flex-col gap-5 z-10"
@@ -32,7 +32,7 @@ export default function Hero() {
           <span className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-accent font-semibold">SƏTƏM üzrə peşəkar yanaşma</span>
         </div>
         
-        <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight text-white drop-shadow-2xl">
+        <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight text-white">
           Təhlükəsiz iş.<br />
           Sağlam həyat.<br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-accent-hover">Dayanıqlı gələcək.</span>
@@ -55,8 +55,8 @@ export default function Hero() {
       </motion.div>
 
       <motion.div 
-        initial={{ opacity: 0, x: 50, rotate: 2, scale: 0.95 }}
-        whileInView={{ opacity: 1, x: 0, rotate: 0, scale: 1 }}
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
         className="w-full md:w-1/2 relative h-[300px] md:h-[450px] rounded-[2rem] overflow-hidden group shadow-xl z-10 border border-white/10 bg-dark-bg-card flex flex-col items-center justify-center"

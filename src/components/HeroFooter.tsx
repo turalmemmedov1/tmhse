@@ -29,7 +29,7 @@ export default function HeroFooter() {
                 <Icon className="w-48 h-48" strokeWidth={1} />
               </div>
               
-              <div className="text-accent/80 drop-shadow-[0_0_10px_rgba(174,226,132,0.5)] group-hover:drop-shadow-[0_0_20px_rgba(174,226,132,0.9)] group-hover:text-accent group-hover:scale-110 transition-all duration-500 z-10">
+              <div className="text-accent/80 group-hover:text-accent group-hover:scale-110 transition-all duration-500 z-10">
                 <Icon className="w-16 h-16 md:w-20 md:h-20" strokeWidth={1.5} />
               </div>
               
