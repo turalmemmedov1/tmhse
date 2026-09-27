@@ -54,7 +54,7 @@ export default function Hero() {
         <motion.div 
           animate={{ y: [0, -15, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute inset-0 bg-dark-bg/50 backdrop-blur-sm z-0 flex items-center justify-center"
+          className="absolute inset-0 bg-dark-bg/70 z-0 flex items-center justify-center"
         >
           <span className="text-white/10 text-lg md:text-xl font-light tracking-widest uppercase">Şəkil Yeri</span>
         </motion.div>

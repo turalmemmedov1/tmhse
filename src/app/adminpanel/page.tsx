@@ -63,7 +63,8 @@ export default function AdminPanelPage() {
       // Track Live Visitors using a fresh client to avoid singleton channel conflicts
       const adminSupabase = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://dummy.supabase.co',
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'dummy'
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'dummy',
+        { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } }
       );
       
       const channel = adminSupabase.channel('online-visitors');
@@ -134,11 +135,11 @@ export default function AdminPanelPage() {
     loadData();
   };
 
-  const toggleMenu = async (menuKey: string, currentValue: string) => {
-    const newValue = currentValue === "false" ? "true" : "false";
+  const toggleMenu = async (menuKey: string, isActive: boolean) => {
+    const newValue = isActive ? "false" : "true";
+    setSettings(prev => ({ ...prev, [menuKey]: newValue }));
     await updateSetting(menuKey, newValue);
     toast.success("Menyu statusu dəyişdirildi!");
-    loadData();
   };
 
   if (!isLoggedIn) {
@@ -148,8 +149,8 @@ export default function AdminPanelPage() {
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md bg-dark-bg-card p-10 rounded-[2rem] shadow-2xl border border-white/10 flex flex-col items-center">
           <h1 className="text-2xl font-bold mb-8 text-center">İdarəetmə Paneli</h1>
           <form onSubmit={handleLogin} className="w-full flex flex-col gap-4">
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} className="w-full bg-dark-bg border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-accent" placeholder="info@tmhse.expert" />
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-dark-bg border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-accent" placeholder="••••••••" />
+            <input type="email" autoComplete="username" value={email} onChange={e => setEmail(e.target.value)} className="w-full bg-dark-bg border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-accent" placeholder="info@tmhse.expert" />
+            <input type="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-dark-bg border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-accent" placeholder="••••••••" />
             {error && <span className="text-red-400 text-xs">{error}</span>}
             <button type="submit" className="w-full bg-accent text-dark-bg font-bold py-3 rounded-xl mt-4">Daxil Ol</button>
           </form>
@@ -463,7 +464,7 @@ export default function AdminPanelPage() {
                       <div key={menu.key} className="flex items-center justify-between p-4 border rounded-xl">
                         <span className="font-bold text-sm text-dark-bg">{menu.label}</span>
                         <button 
-                          onClick={() => toggleMenu(menu.key, isActive ? "false" : "true")}
+                          onClick={() => toggleMenu(menu.key, isActive)}
                           className={`px-4 py-2 text-xs font-bold rounded-full transition-colors ${isActive ? "bg-red-100 text-red-700 hover:bg-red-200" : "bg-green-100 text-green-700 hover:bg-green-200"}`}
                         >
                           {isActive ? "Gizlət" : "Göstər"}

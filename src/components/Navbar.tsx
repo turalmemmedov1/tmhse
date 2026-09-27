@@ -50,20 +50,20 @@ export default function Navbar() {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
           className="flex items-center gap-3 group"
         >
-          <div className="relative w-12 h-12 overflow-hidden rounded-full flex items-center justify-center">
+          <div className="relative w-14 h-14 rounded-full bg-white flex items-center justify-center p-1 shadow-sm border border-white/20">
             <Image 
               src="/ProLogo.png" 
               alt="TMHSE Logo" 
               fill 
-              className="object-cover rounded-full"
+              className="object-contain rounded-full p-1"
             />
           </div>
           <div className="flex flex-col">
-            <span className={`font-black text-xl tracking-[0.2em] uppercase transition-colors leading-none ${textColorClass}`}>
+            <span className={`font-black text-xl md:text-2xl tracking-[0.2em] uppercase transition-colors leading-none ${textColorClass}`}>
               TMHSE
             </span>
-            <span className={`text-[8px] font-bold tracking-wider uppercase opacity-70 mt-1 transition-colors ${textColorClass} hidden sm:block`}>
-              Tural Məmmədov &bull; Health Safety Environment
+            <span className={`text-[8.5px] md:text-[10px] font-bold tracking-wider uppercase opacity-80 mt-1.5 transition-colors ${textColorClass}`}>
+              Tural Məmmədov &bull; HSE
             </span>
           </div>
         </Link>
@@ -113,14 +113,14 @@ export default function Navbar() {
                 }} 
                 className="flex items-center gap-3 mx-auto"
               >
-                <div className="relative w-12 h-12 overflow-hidden rounded-full flex items-center justify-center">
-                  <Image src="/ProLogo.png" alt="TMHSE Logo" fill className="object-cover rounded-full" />
+                <div className="relative w-14 h-14 rounded-full bg-white flex items-center justify-center p-1 shadow-sm border border-white/20">
+                  <Image src="/ProLogo.png" alt="TMHSE Logo" fill className="object-contain rounded-full p-1" />
                 </div>
                 <div className="flex flex-col">
                   <span className="font-black text-xl tracking-[0.2em] uppercase text-white leading-none">
                     TMHSE
                   </span>
-                  <span className="text-[8px] font-bold tracking-wider uppercase text-white/70 mt-1">
+                  <span className="text-[8.5px] font-bold tracking-wider uppercase text-white/80 mt-1.5">
                     Tural Məmmədov &bull; HSE
                   </span>
                 </div>
