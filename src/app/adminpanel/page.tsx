@@ -981,7 +981,7 @@ export default function AdminPanelPage() {
                           <span className="text-xs bg-dark-bg/5 px-2 py-1 rounded mt-1 inline-block">{t.title.includes("|||") ? t.title.split("|||")[0] : "Digər sənədlər"}</span>
                           <a href={t.file_url} target="_blank" rel="noreferrer" className="text-accent text-xs font-bold hover:underline mt-2 inline-block">Sənədə Bax</a>
                         </div>
-                        <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="absolute top-2 right-2 flex gap-2 transition-opacity">
                             <button onClick={() => { setEditingItem(t); window.scrollTo({top: 0, behavior: 'smooth'}); }} className="bg-blue-500 text-white p-2 rounded-lg shadow-lg hover:bg-blue-600 transition-colors">
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                             </button>

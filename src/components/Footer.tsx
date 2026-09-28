@@ -23,11 +23,11 @@ export default function Footer() {
           className="flex flex-col gap-4 max-w-sm"
         >
           <button onClick={scrollToTop} className="flex items-center gap-4 mb-2 text-left hover:opacity-80 transition-opacity notranslate">
-            <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-full flex items-center justify-center overflow-hidden bg-white/10 border border-white/20 shadow-xl group-hover:scale-105 transition-transform">
+            <div className="relative w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center overflow-hidden bg-white/10 border border-white/20 shadow-xl group-hover:scale-105 transition-transform">
               <Image src="/Logo.png" alt="TM&S Consulting Logo" fill className="object-cover" />
             </div>
             <div className="flex flex-col text-left drop-shadow-md">
-              <span className="font-black text-3xl md:text-4xl uppercase text-white leading-none">
+              <span className="font-black text-2xl md:text-3xl uppercase text-white leading-none">
                 TM&S
               </span>
               <span className="text-xs md:text-sm font-black tracking-[0.25em] uppercase text-white/90 mt-2">

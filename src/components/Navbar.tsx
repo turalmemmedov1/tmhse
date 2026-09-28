@@ -47,11 +47,11 @@ export default function Navbar() {
         className={`w-full flex items-center justify-between py-4 md:py-5 px-6 md:px-16 fixed top-0 left-0 right-0 z-[60] transition-colors duration-500 ${navBgClass}`}
       >
         <Link href="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-4 group notranslate">
-          <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center shadow-md bg-white/5 border border-white/10 group-hover:scale-105 transition-transform">
+          <div className="relative w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow-md bg-white/5 border border-white/10 group-hover:scale-105 transition-transform">
             <Image src="/Logo.png" alt="TM&S Consulting Logo" fill className="object-cover rounded-full" />
           </div>
           <div className="flex flex-col">
-            <span className={`font-black text-2xl md:text-3xl uppercase transition-colors leading-none drop-shadow-sm ${textColorClass}`}>
+            <span className={`font-black text-xl md:text-2xl uppercase transition-colors leading-none drop-shadow-sm ${textColorClass}`}>
               TM&S
             </span>
             <span className={`text-[10px] md:text-xs font-black tracking-[0.2em] uppercase opacity-90 mt-1.5 transition-colors drop-shadow-sm ${textColorClass}`}>
@@ -100,7 +100,7 @@ export default function Navbar() {
           >
             <div className="flex items-center justify-between mb-12 mt-2 w-full">
               <Link href="/" onClick={() => { setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="flex items-center gap-4 mx-auto notranslate">
-                <div className="relative w-20 h-20 rounded-full flex items-center justify-center shadow-md bg-white/5 border border-white/10 group-hover:scale-105 transition-transform">
+                <div className="relative w-14 h-14 rounded-full flex items-center justify-center shadow-md bg-white/5 border border-white/10 group-hover:scale-105 transition-transform">
                   <Image src="/Logo.png" alt="TM&S Consulting Logo" fill className="object-cover rounded-full" />
                 </div>
                 <div className="flex flex-col text-left">
