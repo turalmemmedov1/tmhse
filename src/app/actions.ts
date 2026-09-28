@@ -28,7 +28,15 @@ export async function addVacancy(formData: FormData) {
   const location = formData.get("location") as string;
   const type = formData.get("type") as string;
   const description = formData.get("desc") as string;
-  const contact_email = formData.get("contact") as string;
+  
+  const cEmail = formData.get("contact_email") as string;
+  const cPhone = formData.get("contact_phone") as string;
+  const fallbackContact = formData.get("contact") as string;
+  
+  let contact_email = fallbackContact || "";
+  if (cEmail && cPhone) contact_email = `${cEmail} | ${cPhone}`;
+  else if (cEmail) contact_email = cEmail;
+  else if (cPhone) contact_email = cPhone;
 
   if (!company || !role || !description || !contact_email) return { success: false, error: "Məlumatları tam daxil edin." };
 
@@ -352,9 +360,21 @@ export async function updateAdminCredentials(email: string, pass: string) {
 
 export async function updateVacancy(id: number, formData: FormData) {
   try {
-    const title = formData.get("title") as string;
-    const content = formData.get("content") as string;
-    const { error } = await supabase.from("vacancies").update({ title, content }).eq("id", id);
+    const company = formData.get("company") as string;
+    const role = formData.get("role") as string;
+    const location = formData.get("location") as string;
+    const type = formData.get("type") as string;
+    const description = formData.get("desc") as string;
+    
+    const cEmail = formData.get("contact_email") as string;
+    const cPhone = formData.get("contact_phone") as string;
+    
+    let contact_email = "";
+    if (cEmail && cPhone) contact_email = `${cEmail} | ${cPhone}`;
+    else if (cEmail) contact_email = cEmail;
+    else if (cPhone) contact_email = cPhone;
+
+    const { error } = await supabase.from("vacancies").update({ company, role, location, type, description, contact_email }).eq("id", id);
     if (error) throw new Error(error.message);
     return { success: true };
   } catch (err: any) {

@@ -125,9 +125,16 @@ export default function VakansiyalarPage() {
                       <textarea name="desc" required rows={3} className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm resize-none" placeholder="Vakansiya barədə məlumat..."></textarea>
                     </div>
 
-                    <div className="flex flex-col gap-1">
-                      <label className="text-xs font-bold text-dark-bg">Əlaqə (E-poçt və ya Nömrə) *</label>
-                      <input type="text" name="contact" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="hr@sirket.az və ya +994..." />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="flex flex-col gap-1">
+                        <label className="text-xs font-bold text-dark-bg">Əlaqə E-poçtu</label>
+                        <input type="email" name="contact_email" className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="hr@sirket.az" />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <label className="text-xs font-bold text-dark-bg">Əlaqə Nömrəsi</label>
+                        <input type="text" name="contact_phone" className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="+994..." />
+                      </div>
+                      <p className="text-[10px] text-gray-500 md:col-span-2 -mt-2">E-poçt və ya nömrədən ən azı birini qeyd etməyiniz mütləqdir.</p>
                     </div>
 
                     <button disabled={isSubmitting} type="submit" className="w-full bg-dark-bg hover:bg-accent-hover text-white font-bold py-3 rounded-lg transition-colors duration-300 text-sm mt-2 disabled:opacity-50">
@@ -173,10 +180,25 @@ export default function VakansiyalarPage() {
                   <span className="text-xs font-bold bg-dark-bg/5 px-3 py-1 rounded-full w-fit mt-1">{vac.type}</span>
                 </div>
                 
-                <div className="flex flex-col items-start w-full shrink-0 mt-auto pt-4 border-t border-dark-bg/5">
-                  <a href={vac.contact_email?.includes('@') ? `mailto:${vac.contact_email}` : `tel:${vac.contact_email}`} className="w-full text-center bg-dark-bg text-white text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-accent-hover transition-colors shadow-md">
-                    Müraciət Et
-                  </a>
+                <div className="flex flex-col md:flex-row items-center w-full gap-3 mt-auto pt-4 border-t border-dark-bg/5">
+                  {vac.contact_email?.includes(' | ') ? (
+                    <>
+                      {vac.contact_email.split(' | ')[0] && (
+                        <a href={`mailto:${vac.contact_email.split(' | ')[0]}`} className="w-full text-center bg-dark-bg text-white text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-accent-hover transition-colors shadow-md">
+                          E-poçtla Müraciət
+                        </a>
+                      )}
+                      {vac.contact_email.split(' | ')[1] && (
+                        <a href={`tel:${vac.contact_email.split(' | ')[1]}`} className="w-full text-center bg-gray-100 text-dark-bg text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-gray-200 transition-colors shadow-md">
+                          Zəng Et
+                        </a>
+                      )}
+                    </>
+                  ) : (
+                    <a href={vac.contact_email?.includes('@') ? `mailto:${vac.contact_email}` : `tel:${vac.contact_email}`} className="w-full text-center bg-dark-bg text-white text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-accent-hover transition-colors shadow-md">
+                      Müraciət Et
+                    </a>
+                  )}
                 </div>
               </motion.div>
             ))

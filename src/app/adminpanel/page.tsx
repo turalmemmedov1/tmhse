@@ -35,6 +35,7 @@ export default function AdminPanelPage() {
   
   const [loading, setLoading] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
+  const [selectedStats, setSelectedStats] = useState<{y: string, m: string, cvs: number, vacs: number} | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [liveVisitors, setLiveVisitors] = useState(0);
   const [monthlyVisits, setMonthlyVisits] = useState(0);
@@ -246,10 +247,26 @@ export default function AdminPanelPage() {
                       const [y, m] = val.split('-');
                       const filteredCvs = (cvs||[]).filter(c => c.created_at && c.created_at.startsWith(`${y}-${m}`));
                       const filteredVacs = (vacancies||[]).filter(v => v.created_at && v.created_at.startsWith(`${y}-${m}`));
-                      alert(`${y}-${m} ayı üzrə:\n\nƏlavə edilən CV sayı: ${filteredCvs.length}\nƏlavə edilən Vakansiya sayı: ${filteredVacs.length}`);
+                      setSelectedStats({ y, m, cvs: filteredCvs.length, vacs: filteredVacs.length });
                     }} />
                     <p className="text-sm text-text-muted my-auto">Təqvimlə istədiyiniz ayı seçib o ay ərzində neçə CV və Vakansiya gəldiyini görə bilərsiniz.</p>
                   </div>
+                  {selectedStats && (
+                    <div className="mt-6 p-6 bg-accent/10 border border-accent/20 rounded-xl flex gap-8">
+                        <div className="flex flex-col">
+                            <span className="text-xs font-bold text-gray-500 uppercase">Seçilmiş Ay</span>
+                            <span className="text-lg font-bold text-dark-bg">{selectedStats.y} / {selectedStats.m}</span>
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-xs font-bold text-gray-500 uppercase">Əlavə olunan CV</span>
+                            <span className="text-xl font-bold text-dark-bg">{selectedStats.cvs}</span>
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-xs font-bold text-gray-500 uppercase">Əlavə olunan Vakansiya</span>
+                            <span className="text-xl font-bold text-dark-bg">{selectedStats.vacs}</span>
+                        </div>
+                    </div>
+                  )}
                 </div>
               </motion.div>
             )}
@@ -696,7 +713,7 @@ export default function AdminPanelPage() {
                     const docFile = fd.get('file') as File;
                     let doc_url = "";
                     if(docFile && docFile.size > 0) doc_url = await uploadToImgbb(docFile) || "";
-                    if(!doc_url) { toast.error("Fayl yüklənə bilmədi", { id: t }); setIsSubmitting(false); return; }
+                    // Optional file handling
                     
                     const { addTemplateDirect } = await import("@/app/actions");
                     const res = await addTemplateDirect(fd.get('title') as string, doc_url, image_url);
@@ -719,7 +736,7 @@ export default function AdminPanelPage() {
                     </div>
                     <div className="flex flex-col gap-1 md:col-span-2">
                       <label className="text-xs font-bold text-dark-bg">Sənəd Faylı (PDF, DOCX, DOC) *</label>
-                      <input type="file" name="file" accept=".pdf,.doc,.docx" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
+                      <input type="file" name="file" accept=".pdf,.doc,.docx" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
                     </div>
                     <div className="md:col-span-2">
                       <button disabled={isSubmitting} type="submit" className="bg-dark-bg text-white px-8 py-3 rounded-xl text-sm font-bold w-fit hover:bg-accent-hover transition-colors disabled:opacity-50">
