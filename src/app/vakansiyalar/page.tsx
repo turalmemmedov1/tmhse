@@ -177,7 +177,7 @@ export default function VakansiyalarPage() {
                       <MapPin className="w-4 h-4 text-accent-hover" /> {vac.location}
                     </div>
                   </div>
-                  <div className="text-sm text-foreground/70 leading-relaxed prose prose-sm max-w-none line-clamp-4" dangerouslySetInnerHTML={{ __html: vac.description }} />
+                  <div className="text-sm text-foreground/70 leading-relaxed prose prose-sm max-w-none line-clamp-4 break-words [word-break:break-word]" dangerouslySetInnerHTML={{ __html: vac.description }} />
                   <span className="text-xs font-bold bg-dark-bg/5 px-3 py-1 rounded-full w-fit mt-1">{vac.type}</span>
                 </div>
                 

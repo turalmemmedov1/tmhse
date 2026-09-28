@@ -63,7 +63,7 @@ export default async function NewsDetail({ params }: { params: Promise<{ id: str
           </div>
         </div>
         
-        <div className="text-gray-700 leading-relaxed whitespace-pre-wrap text-lg prose max-w-none">
+        <div className="text-gray-700 leading-relaxed whitespace-pre-wrap text-lg prose max-w-none break-words [word-break:break-word] w-full">
           <div dangerouslySetInnerHTML={{ __html: news.content }} />
         </div>
 

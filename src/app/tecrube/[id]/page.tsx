@@ -41,7 +41,7 @@ export default async function InternshipDetail({ params }: { params: Promise<{ i
           <span className="text-gray-400 font-bold text-sm">{new Date(internship.created_at).toLocaleDateString()}</span>
         </div>
         
-        <div className="text-gray-700 leading-relaxed whitespace-pre-wrap text-lg prose max-w-none">
+        <div className="text-gray-700 leading-relaxed whitespace-pre-wrap text-lg prose max-w-none break-words [word-break:break-word] w-full">
           <div dangerouslySetInnerHTML={{ __html: internship.content }} />
         </div>
       </article>

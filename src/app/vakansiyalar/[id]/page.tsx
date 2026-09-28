@@ -27,7 +27,7 @@ export default async function VacancyDetail({ params }: { params: Promise<{ id: 
           <ChevronLeft className="w-4 h-4" /> Bütün Vakansiyalar
         </Link>
         
-        <div className="bg-white p-8 md:p-10 rounded-2xl shadow-xl border border-gray-200 flex flex-col gap-8">
+        <div className="bg-white p-8 md:p-10 rounded-2xl shadow-xl border border-gray-200 flex flex-col gap-8 w-full overflow-hidden break-words">
           
           <div className="flex flex-col gap-4 border-b border-gray-100 pb-8">
             <h1 className="text-2xl md:text-3xl font-black text-dark-bg">{vac.role}</h1>
@@ -45,9 +45,9 @@ export default async function VacancyDetail({ params }: { params: Promise<{ id: 
             </div>
           </div>
 
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 min-w-0">
             <h2 className="text-xl font-bold text-dark-bg">Vakansiya Haqqında</h2>
-            <div className="text-foreground/80 leading-relaxed text-base md:text-lg prose max-w-none whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: vac.description }} />
+            <div className="text-foreground/80 leading-relaxed text-base md:text-lg prose max-w-none whitespace-pre-wrap break-words [word-break:break-word] w-full" dangerouslySetInnerHTML={{ __html: vac.description }} />
           </div>
           
           <div className="flex flex-col gap-6 mt-6 border-t border-gray-100 pt-8">
