@@ -35,7 +35,7 @@ export default function AdminPanelPage() {
   
   const [loading, setLoading] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
-  const [selectedStats, setSelectedStats] = useState<{y: string, m: string, cvs: number, vacs: number} | null>(null);
+  const [selectedStats, setSelectedStats] = useState<{y: string, m: string, cvs: number, vacs: number, visits: number} | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [liveVisitors, setLiveVisitors] = useState(0);
   const [monthlyVisits, setMonthlyVisits] = useState(0);
@@ -241,13 +241,15 @@ export default function AdminPanelPage() {
                 <div className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5">
                   <h3 className="font-bold text-lg text-dark-bg mb-6">Aylıq CV və Vakansiya Statistikası</h3>
                   <div className="flex flex-col md:flex-row gap-6 mb-6">
-                    <input type="month" className="border px-4 py-2 rounded-lg" onChange={(e) => {
+                    <input type="month" className="border px-4 py-2 rounded-lg" onChange={async (e) => {
                       const val = e.target.value; 
                       if(!val) return;
                       const [y, m] = val.split('-');
                       const filteredCvs = (cvs||[]).filter(c => c.created_at && c.created_at.startsWith(`${y}-${m}`));
                       const filteredVacs = (vacancies||[]).filter(v => v.created_at && v.created_at.startsWith(`${y}-${m}`));
-                      setSelectedStats({ y, m, cvs: filteredCvs.length, vacs: filteredVacs.length });
+                      const { getVisitsForSpecificMonth } = await import("@/app/actions");
+                      const monthVisits = await getVisitsForSpecificMonth(val);
+                      setSelectedStats({ y, m, cvs: filteredCvs.length, vacs: filteredVacs.length, visits: monthVisits });
                     }} />
                     <p className="text-sm text-text-muted my-auto">Təqvimlə istədiyiniz ayı seçib o ay ərzində neçə CV və Vakansiya gəldiyini görə bilərsiniz.</p>
                   </div>
@@ -264,6 +266,10 @@ export default function AdminPanelPage() {
                         <div className="flex flex-col">
                             <span className="text-xs font-bold text-gray-500 uppercase">Əlavə olunan Vakansiya</span>
                             <span className="text-xl font-bold text-dark-bg">{selectedStats.vacs}</span>
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-xs font-bold text-gray-500 uppercase">Sayta Ziyarətçi</span>
+                            <span className="text-xl font-bold text-dark-bg">{selectedStats.visits}</span>
                         </div>
                     </div>
                   )}

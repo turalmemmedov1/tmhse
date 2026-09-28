@@ -440,3 +440,18 @@ export async function updateTemplateDirect(id: number, title: string, file_url: 
     return { success: false, error: err.message };
   }
 }
+
+export async function getVisitsForSpecificMonth(yearMonth: string) {
+  // yearMonth format: "YYYY-MM"
+  const startDate = new Date(`${yearMonth}-01T00:00:00Z`);
+  const endDate = new Date(startDate);
+  endDate.setMonth(endDate.getMonth() + 1);
+  
+  const { count, error } = await supabase.from("page_visits")
+    .select("*", { count: "exact", head: true })
+    .gte("visited_at", startDate.toISOString())
+    .lt("visited_at", endDate.toISOString());
+    
+  if (error) return 0;
+  return count || 0;
+}
