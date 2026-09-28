@@ -70,17 +70,19 @@ export default function Navbar() {
           {menuSettings.menu_vakansiyalar !== "false" && <Link href="/vakansiyalar" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/vakansiyalar' ? 'text-accent' : ''}`}>Vakansiyalar</Link>}
           {menuSettings.menu_sablonlar !== "false" && <Link href="/sablonlar" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/sablonlar' ? 'text-accent' : ''}`}>Şablonlar</Link>}
           {menuSettings.menu_cv !== "false" && <Link href="/cv-yukle" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/cv-yukle' ? 'text-accent' : ''}`}>CV Yüklə</Link>}
-          <div className="ml-2"><LanguageSwitcher /></div>
           
         </div>
 
-        {/* Mobile Hamburger Toggle */}
-        <button 
-          className={`lg:hidden p-2 transition-colors ${textColorClass}`}
-          onClick={() => setMobileMenuOpen(true)}
-        >
-          <Menu className="w-7 h-7" />
-        </button>
+        <div className="flex items-center gap-2 lg:gap-4 ml-4">
+          <LanguageSwitcher />
+          {/* Mobile Hamburger Toggle */}
+          <button 
+            className={`lg:hidden p-2 transition-colors ${textColorClass}`}
+            onClick={() => setMobileMenuOpen(true)}
+          >
+            <Menu className="w-7 h-7" />
+          </button>
+        </div>
       </motion.nav>
 
       {/* Mobile Menu Overlay */}

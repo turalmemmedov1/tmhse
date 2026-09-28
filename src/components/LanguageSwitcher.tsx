@@ -17,11 +17,27 @@ export default function LanguageSwitcher() {
   const [currentLang, setCurrentLang] = useState("AZ");
 
   useEffect(() => {
-    // Check initial language from cookie
     const googtrans = getCookie("googtrans") as string;
+    const hasChosen = getCookie("has_chosen_lang");
+    
     if (googtrans) {
       const current = googtrans.split("/").pop()?.toUpperCase() || "AZ";
       setCurrentLang(current);
+    } else if (!hasChosen) {
+      // Heç bir dil seçilməyibsə və ilk dəfədirsə, IP ilə təyin et
+      fetch("https://ipapi.co/json/")
+        .then(res => res.json())
+        .then(data => {
+            const country = data.country_code;
+            if (country === 'RU') changeLanguage('ru', 'RU', true);
+            else if (country === 'TR') changeLanguage('tr', 'TR', true);
+            else if (country === 'US' || country === 'GB' || country === 'CA' || country === 'EU') changeLanguage('en', 'EN', true);
+            else {
+              // AZ və ya digər - heç nə etmə, sadəcə qeyd et ki yoxlanıldı
+              setCookie("has_chosen_lang", "true", { maxAge: 31536000 });
+            }
+        })
+        .catch(() => {});
     }
 
     if (!document.getElementById("google-translate-script")) {
@@ -45,10 +61,12 @@ export default function LanguageSwitcher() {
     }
   }, []);
 
-  const changeLanguage = (langCode: string, langName: string) => {
+  const changeLanguage = (langCode: string, langName: string, isAutoDetect = false) => {
     setCurrentLang(langName);
     setIsOpen(false);
     
+    setCookie("has_chosen_lang", "true", { maxAge: 31536000 });
+
     if (langCode === 'az') {
       deleteCookie("googtrans");
       deleteCookie("googtrans", { domain: window.location.hostname });
@@ -62,16 +80,16 @@ export default function LanguageSwitcher() {
 
   return (
     <div className="relative z-[90]">
-      {/* Gizli div - tam display:none etmirik ki, load olsun, sadəcə gizlədirik */}
+      {/* Gizli div */}
       <div id="google_translate_element" className="absolute top-[-9999px] left-[-9999px] opacity-0 pointer-events-none"></div>
       
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 text-white font-bold text-xs bg-white/5 hover:bg-white/10 px-3 py-2 rounded-full border border-white/10 transition-colors"
       >
-        <Globe className="w-3.5 h-3.5" />
-        {currentLang}
-        <ChevronDown className="w-3.5 h-3.5 opacity-70" />
+        <Globe className="w-5 h-5 md:w-3.5 md:h-3.5" />
+        <span className="hidden md:inline">{currentLang}</span>
+        <ChevronDown className="w-3.5 h-3.5 opacity-70 hidden md:block" />
       </button>
 
       <AnimatePresence>
