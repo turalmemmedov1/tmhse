@@ -13,7 +13,7 @@ export default function ServicesPage() {
         <Navbar />
       </div>
       
-      <section className="pt-32 pb-24 px-6 md:px-16 w-full max-w-[1920px] mx-auto">
+      <section className="pt-40 pb-24 px-6 md:px-16 w-full max-w-[1920px] mx-auto">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

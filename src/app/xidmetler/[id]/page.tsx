@@ -52,7 +52,7 @@ export default function ServiceDetailPage() {
         <Navbar />
       </div>
       
-      <section className="pt-28 pb-20 px-6 md:px-16 w-full max-w-[1920px] mx-auto min-h-[70vh]">
+      <section className="pt-40 pb-20 px-6 md:px-16 w-full max-w-[1920px] mx-auto min-h-[70vh]">
         <Link href="/xidmetler" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-text-muted hover:text-accent-hover mb-6 transition-colors">
           <ArrowLeft className="w-4 h-4" /> Bütün xidmətlər
         </Link>

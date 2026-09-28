@@ -33,7 +33,7 @@ export default function SuallarPage() {
         <Navbar />
       </div>
       
-      <section className="pt-28 pb-20 px-6 md:px-16 w-full max-w-[1920px] mx-auto min-h-[70vh] flex flex-col items-center">
+      <section className="pt-40 pb-20 px-6 md:px-16 w-full max-w-[1920px] mx-auto min-h-[70vh] flex flex-col items-center">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

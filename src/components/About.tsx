@@ -4,16 +4,9 @@ import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getSettings } from "@/app/actions";
 
-export default function About() {
-  const [imgUrl, setImgUrl] = useState<string | null>(null);
+export default function About({ bgImage }: { bgImage?: string }) {
 
-  useEffect(() => {
-    getSettings().then(res => {
-      if(res?.home_image_2) setImgUrl(res.home_image_2);
-    });
-  }, []);
 
   return (
     <section className="w-full bg-dark-bg text-white py-24 px-6 md:px-16 border-b border-white/10 relative overflow-hidden">
@@ -28,8 +21,8 @@ export default function About() {
           className="w-full md:w-1/2 aspect-video bg-gradient-to-br from-dark-bg-card to-dark-bg rounded-[2rem] flex flex-col items-center justify-center border border-white/5 shadow-xl relative overflow-hidden"
         >
           <div className="absolute inset-0 bg-dark-bg-card opacity-50 z-0"></div>
-          {imgUrl ? (
-            <img src={imgUrl} alt="About" className="w-full h-full object-cover relative z-10" />
+          {bgImage ? (
+            <img src={bgImage} fetchPriority="high" loading="eager" alt="About" className="w-full h-full object-cover relative z-10" />
           ) : (
             <span className="text-white/10 text-xl font-light tracking-widest z-10 uppercase">Şəkil Yeri</span>
           )}

@@ -22,7 +22,7 @@ export default function ContactPage() {
         <Navbar />
       </div>
       
-      <section className="pt-28 pb-20 px-6 md:px-16 w-full max-w-[1920px] mx-auto min-h-[70vh]">
+      <section className="pt-40 pb-20 px-6 md:px-16 w-full max-w-[1920px] mx-auto min-h-[70vh]">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

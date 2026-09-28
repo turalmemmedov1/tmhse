@@ -55,7 +55,7 @@ export default function VakansiyalarPage() {
         <Navbar />
       </div>
       
-      <section className="pt-24 pb-20 px-6 md:px-16 w-full max-w-[1400px] mx-auto min-h-[70vh] flex flex-col gap-8">
+      <section className="pt-40 pb-20 px-6 md:px-16 w-full max-w-[1400px] mx-auto min-h-[70vh] flex flex-col gap-8">
         
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-4">
           <div>
