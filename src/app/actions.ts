@@ -324,3 +324,15 @@ export async function deleteTemplate(id: number) {
   const { error } = await supabase.from("templates").delete().eq("id", id);
   return { success: !error };
 }
+
+// --- MESSAGES (Əlaqə Mesajları) ---
+export async function getMessages() {
+  const { data, error } = await supabase.from("messages").select("*").order("created_at", { ascending: false });
+  if (error) return [];
+  return data || [];
+}
+
+export async function deleteMessage(id: number) {
+  const { error } = await supabase.from("messages").delete().eq("id", id);
+  return { success: !error };
+}

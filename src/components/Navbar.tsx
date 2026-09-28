@@ -49,7 +49,7 @@ export default function Navbar() {
 
         {/* Desktop Menu */}
         <div className={`hidden lg:flex items-center gap-6 text-sm font-bold transition-colors ${textColorClass}`}>
-          <Link href="/" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/' ? 'text-accent' : ''}`}>Ana Səhifə</Link>
+          
           {menuSettings.menu_xidmetler !== "false" && <Link href="/xidmetler" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname.startsWith('/xidmetler') ? 'text-accent' : ''}`}>Xidmətlər</Link>}
           {menuSettings.menu_tecrube !== "false" && <Link href="/tecrube" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/tecrube' ? 'text-accent' : ''}`}>Təcrübə Proqramı</Link>}
           {menuSettings.menu_qanunvericilik !== "false" && <Link href="/qanunvericilik" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/qanunvericilik' ? 'text-accent' : ''}`}>Qanunvericilik</Link>}
@@ -57,13 +57,7 @@ export default function Navbar() {
           {menuSettings.menu_vakansiyalar !== "false" && <Link href="/vakansiyalar" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/vakansiyalar' ? 'text-accent' : ''}`}>Vakansiyalar</Link>}
           <Link href="/sablonlar" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/sablonlar' ? 'text-accent' : ''}`}>Şablonlar</Link>
           <Link href="/cv-yukle" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/cv-yukle' ? 'text-accent' : ''}`}>CV Yüklə</Link>
-          <Link 
-            href="/elaqe" 
-            className="flex items-center gap-2 bg-accent/10 border border-accent/50 text-accent px-5 py-2.5 rounded-full hover:bg-accent hover:text-dark-bg transition-all duration-300 hover:scale-105 ml-2"
-          >
-            Əlaqə
-            <ArrowUpRight className="w-4 h-4" />
-          </Link>
+          
         </div>
 
         {/* Mobile Hamburger Toggle */}
@@ -96,7 +90,7 @@ export default function Navbar() {
             </div>
 
             <div className="flex flex-col gap-5 text-lg font-bold text-white mb-auto text-center mt-8">
-              <Link href="/" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Ana Səhifə</Link>
+              
               {menuSettings.menu_xidmetler !== "false" && <Link href="/xidmetler" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Xidmətlər</Link>}
               {menuSettings.menu_tecrube !== "false" && <Link href="/tecrube" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Təcrübə Proqramı</Link>}
               {menuSettings.menu_qanunvericilik !== "false" && <Link href="/qanunvericilik" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Qanunvericilik</Link>}
@@ -104,7 +98,7 @@ export default function Navbar() {
               {menuSettings.menu_vakansiyalar !== "false" && <Link href="/vakansiyalar" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Vakansiyalar</Link>}
               <Link href="/sablonlar" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Şablonlar</Link>
               <Link href="/cv-yukle" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">CV Yüklə</Link>
-              <Link href="/elaqe" onClick={() => setMobileMenuOpen(false)} className="text-accent border-b border-white/10 pb-3">Əlaqə</Link>
+              
             </div>
           </motion.div>
         )}
