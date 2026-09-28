@@ -433,26 +433,104 @@ export default function AdminPanelPage() {
             )}
             
             {activeTab === 'vacancies' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-4">
-                <h3 className="font-bold text-lg text-dark-bg">Vakansiyalar</h3>
-                <div className="bg-white rounded-2xl shadow-sm border border-dark-bg/5 overflow-hidden">
-                  <table className="w-full text-left text-sm">
-                    <thead className="bg-dark-bg/5 text-dark-bg font-bold uppercase text-xs">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-8">
+                <div className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5">
+                  <h3 className="font-bold text-lg text-dark-bg mb-4 flex items-center gap-2">
+                    <PlusCircle className="w-5 h-5 text-accent"/> {editingItem && activeTab === 'vacancies' ? 'Vakansiyanı Redaktə Et' : 'Yeni Vakansiya Əlavə Et'}
+                  </h3>
+                  <form onSubmit={async (e) => {
+                    e.preventDefault();
+                    setIsSubmitting(true);
+                    const t = toast.loading("Saxlanılır...");
+                    const fd = new FormData(e.currentTarget);
+                    const { addVacancy, updateVacancy } = await import("@/app/actions");
+                    
+                    let res;
+                    if(editingItem && activeTab === 'vacancies') {
+                        res = await updateVacancy(editingItem.id, fd);
+                    } else {
+                        res = await addVacancy(fd);
+                    }
+                    
+                    if(res.success) {
+                        toast.success("Saxlanıldı!", { id: t });
+                        setEditingItem(null);
+                        e.target.reset();
+                        loadData();
+                    } else {
+                        toast.error(res.error || "Xəta baş verdi", { id: t });
+                    }
+                    setIsSubmitting(false);
+                  }} className="flex flex-col gap-4 max-w-2xl">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="flex flex-col gap-1">
+                          <label className="text-xs font-bold text-dark-bg">Vəzifə (Rol) *</label>
+                          <input type="text" name="role" defaultValue={editingItem?.role || ""} required className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                          <label className="text-xs font-bold text-dark-bg">Şirkət *</label>
+                          <input type="text" name="company" defaultValue={editingItem?.company || ""} required className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                          <label className="text-xs font-bold text-dark-bg">Ünvan / Şəhər *</label>
+                          <input type="text" name="location" defaultValue={editingItem?.location || ""} required className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                          <label className="text-xs font-bold text-dark-bg">İş qrafiki *</label>
+                          <select name="type" defaultValue={editingItem?.type || "Tam ştat"} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent">
+                            <option>Tam ştat</option>
+                            <option>Yarım ştat</option>
+                            <option>Təcrübə proqramı</option>
+                            <option>Müqavilə əsasında</option>
+                          </select>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                          <label className="text-xs font-bold text-dark-bg">Əlaqə E-poçtu</label>
+                          <input type="email" name="contact_email" defaultValue={editingItem?.contact_email?.includes(' | ') ? editingItem.contact_email.split(' | ')[0] : (editingItem?.contact_email?.includes('@') ? editingItem.contact_email : "")} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                          <label className="text-xs font-bold text-dark-bg">Əlaqə Nömrəsi</label>
+                          <input type="text" name="contact_phone" defaultValue={editingItem?.contact_email?.includes(' | ') ? editingItem.contact_email.split(' | ')[1] : (!editingItem?.contact_email?.includes('@') ? editingItem?.contact_email : "")} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-col gap-1">
+                        <label className="text-xs font-bold text-dark-bg">Tələblər / Təsvir *</label>
+                        <textarea name="desc" defaultValue={editingItem?.description || ""} required rows={5} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent resize-none"></textarea>
+                    </div>
+                    
+                    <div className="flex gap-4">
+                      <button type="submit" disabled={isSubmitting} className="bg-dark-bg text-white px-6 py-2.5 rounded-lg text-sm font-bold w-fit hover:bg-accent-hover transition-colors disabled:opacity-50">
+                        {isSubmitting ? "Saxlanılır..." : "Saxla"}
+                      </button>
+                      {editingItem && activeTab === 'vacancies' && (
+                        <button type="button" onClick={() => { setEditingItem(null); }} className="bg-gray-100 text-dark-bg px-6 py-2.5 rounded-lg text-sm font-bold w-fit hover:bg-gray-200 transition-colors">Ləğv Et</button>
+                      )}
+                    </div>
+                  </form>
+                </div>
+                
+                <div className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5 overflow-x-auto">
+                  <table className="w-full text-sm text-left">
+                    <thead className="bg-dark-bg/5 text-dark-bg">
                       <tr><th className="p-4">Şirkət</th><th className="p-4">Vəzifə</th><th className="p-4 text-right">Əməliyyat</th></tr>
                     </thead>
                     <tbody>
                       {vacancies?.map(v => (
                         <tr key={v.id} className="border-b border-dark-bg/5">
-                          <td className="p-4">{v.company}</td><td className="p-4">{v.role}</td>
-                          <td className="p-4 text-right">
+                          <td className="p-4 font-bold">{v.company}</td>
+                          <td className="p-4">{v.role}</td>
+                          <td className="p-4 text-right flex justify-end gap-3">
+                            <button onClick={() => { setEditingItem(v); window.scrollTo({top:0, behavior:'smooth'}); }} className="text-blue-500 hover:text-blue-700 font-bold">Redaktə</button>
                             <button onClick={async () => { 
                               if(confirm("Silmək istədiyinizə əminsiniz?")) { 
+                                const { deleteVacancy } = await import("@/app/actions");
                                 const t = toast.loading("Silinir...");
                                 await deleteVacancy(v.id); 
                                 toast.success("Silindi", { id: t });
                                 loadData(); 
                               } 
-                            }} className="text-red-500 hover:text-red-700">Sil</button>
+                            }} className="text-red-500 hover:text-red-700 font-bold">Sil</button>
                           </td>
                         </tr>
                       ))}
@@ -463,27 +541,91 @@ export default function AdminPanelPage() {
             )}
 
             {activeTab === 'cvs' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-4">
-                <h3 className="font-bold text-lg text-dark-bg">CV-lər</h3>
-                <div className="bg-white rounded-2xl shadow-sm border border-dark-bg/5 overflow-hidden">
-                  <table className="w-full text-left text-sm">
-                    <thead className="bg-dark-bg/5 text-dark-bg font-bold uppercase text-xs">
-                      <tr><th className="p-4">Ad Soyad</th><th className="p-4">İxtisas</th><th className="p-4 text-right">Əməliyyat</th></tr>
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-8">
+                
+                <div className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5">
+                  <h3 className="font-bold text-lg text-dark-bg mb-4 flex items-center gap-2">
+                    <PlusCircle className="w-5 h-5 text-accent"/> {editingItem && activeTab === 'cvs' ? 'CV Redaktə Et' : 'Yeni CV Əlavə Et'}
+                  </h3>
+                  <form onSubmit={async (e) => {
+                    e.preventDefault();
+                    setIsSubmitting(true);
+                    const t = toast.loading("Saxlanılır...");
+                    const fd = new FormData(e.currentTarget);
+                    
+                    const cvFile = fd.get('cv_file') as File;
+                    if(cvFile && cvFile.size > 0) {
+                        const { uploadToImgbb } = await import("@/lib/imgbb");
+                        const fileUrl = await uploadToImgbb(cvFile);
+                        if(fileUrl) fd.append("cv_drive_link", fileUrl);
+                    } else if (editingItem && editingItem.cv_drive_link) {
+                        fd.append("cv_drive_link", editingItem.cv_drive_link);
+                    }
+
+                    const { addCvAdmin, updateCv } = await import("@/app/actions");
+                    let res;
+                    if(editingItem && activeTab === 'cvs') {
+                        res = await updateCv(editingItem.id, fd);
+                    } else {
+                        res = await addCvAdmin(fd);
+                    }
+                    
+                    if(res.success) {
+                        toast.success("Saxlanıldı!", { id: t });
+                        setEditingItem(null);
+                        e.target.reset();
+                        loadData();
+                    } else {
+                        toast.error(res.error || "Xəta baş verdi", { id: t });
+                    }
+                    setIsSubmitting(false);
+                  }} className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
+                    <input type="text" name="first_name" defaultValue={editingItem?.first_name || ""} required placeholder="Ad" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
+                    <input type="text" name="last_name" defaultValue={editingItem?.last_name || ""} required placeholder="Soyad" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
+                    <input type="email" name="email" defaultValue={editingItem?.email || ""} required placeholder="E-poçt" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
+                    <input type="text" name="phone" defaultValue={editingItem?.phone || ""} required placeholder="Telefon" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
+                    <textarea name="skills" defaultValue={editingItem?.skills || ""} required placeholder="İxtisas / Təcrübə" className="w-full md:col-span-2 bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent resize-none"></textarea>
+                    
+                    <div className="flex flex-col gap-1 md:col-span-2">
+                      <label className="text-xs font-bold text-dark-bg">CV Faylı (Mövcudu dəyişmək/yükləmək üçün)</label>
+                      <input type="file" name="cv_file" accept=".pdf,.doc,.docx" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
+                    </div>
+
+                    <div className="flex gap-4 md:col-span-2 mt-2">
+                      <button type="submit" disabled={isSubmitting} className="bg-dark-bg text-white px-6 py-2.5 rounded-lg text-sm font-bold w-fit hover:bg-accent-hover transition-colors disabled:opacity-50">
+                        {isSubmitting ? "Saxlanılır..." : "Saxla"}
+                      </button>
+                      {editingItem && activeTab === 'cvs' && (
+                        <button type="button" onClick={() => { setEditingItem(null); }} className="bg-gray-100 text-dark-bg px-6 py-2.5 rounded-lg text-sm font-bold w-fit hover:bg-gray-200 transition-colors">Ləğv Et</button>
+                      )}
+                    </div>
+                  </form>
+                </div>
+
+                <div className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5 overflow-x-auto">
+                  <table className="w-full text-sm text-left">
+                    <thead className="bg-dark-bg/5 text-dark-bg">
+                      <tr><th className="p-4">Ad Soyad</th><th className="p-4">İxtisas</th><th className="p-4">CV</th><th className="p-4 text-right">Əməliyyat</th></tr>
                     </thead>
                     <tbody>
                       {cvs?.map(c => (
                         <tr key={c.id} className="border-b border-dark-bg/5">
                           <td className="p-4 font-bold">{c.first_name} {c.last_name}</td>
                           <td className="p-4">{c.skills?.substring(0,30)}...</td>
-                          <td className="p-4 text-right">
+                          <td className="p-4">
+                            {c.cv_drive_link && <a href={c.cv_drive_link} target="_blank" className="text-blue-500 hover:underline">Bax</a>}
+                          </td>
+                          <td className="p-4 text-right flex justify-end gap-3">
+                            <button onClick={() => { setEditingItem(c); window.scrollTo({top:0, behavior:'smooth'}); }} className="text-blue-500 hover:text-blue-700 font-bold">Redaktə</button>
                             <button onClick={async () => { 
                               if(confirm("Silmək istədiyinizə əminsiniz?")) { 
+                                const { deleteCv } = await import("@/app/actions");
                                 const t = toast.loading("Silinir...");
                                 await deleteCv(c.id); 
                                 toast.success("Silindi", { id: t });
                                 loadData(); 
                               } 
-                            }} className="text-red-500 hover:text-red-700">Sil</button>
+                            }} className="text-red-500 hover:text-red-700 font-bold">Sil</button>
                           </td>
                         </tr>
                       ))}
@@ -492,8 +634,7 @@ export default function AdminPanelPage() {
                 </div>
               </motion.div>
             )}
-            
-            
+
             {activeTab === 'account' && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5 max-w-xl">
                 <h3 className="font-bold text-lg text-dark-bg mb-6">Giriş Məlumatlarını Yenilə</h3>
