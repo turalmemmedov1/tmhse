@@ -62,9 +62,7 @@ export default function QanunvericilikPage() {
                 
                 {expandedId === item.id && (
                   <div className="px-6 pb-6 pt-2 border-t border-gray-100">
-                    <div className="text-gray-700 leading-relaxed whitespace-pre-wrap text-justify text-sm md:text-base">
-                      {item.content}
-                    </div>
+                    <div className="text-gray-700 leading-relaxed text-justify text-sm md:text-base prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: item.content }} />
                     <div className="mt-6 pt-4 border-t border-gray-100 text-xs font-bold text-gray-400">
                       Dərc edilmə tarixi: {new Date(item.created_at).toLocaleDateString()}
                     </div>
