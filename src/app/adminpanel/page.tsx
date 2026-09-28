@@ -15,6 +15,15 @@ import { uploadToImgbb } from "@/lib/imgbb";
 import { createClient } from "@supabase/supabase-js";
 import toast, { Toaster } from "react-hot-toast";
 
+
+const TEMPLATE_CATEGORIES = [
+  "Təlimatlar", "Təqdimatlar", "Jurnallar, Cədvəllər", "Risk dəyərləndirilməsi",
+  "İşin Metodu", "Mülki Müdafiə haqqında", "SƏTƏM həftəlik və aylıq hesabatlar və yoxlamalar",
+  "Təhlükəsizlik nişanları", "FMV standartları", "Siyasət", "Aktlar", "Nizamnamələr",
+  "Planlar", "Əmrlər", "Protokollar", "Raportlar", "Ərizələr", "Qaydalar",
+  "Arayışlar, Məktublar", "Əsasnamələr, qaydalar", "Digər sənədlər"
+];
+
 export default function AdminPanelPage() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -903,9 +912,11 @@ export default function AdminPanelPage() {
                     const { addTemplateDirect, updateTemplateDirect } = await import("@/app/actions");
                     let res;
                     if(editingItem && activeTab === 'templates') {
-                        res = await updateTemplateDirect(editingItem.id, fd.get('title') as string, doc_url, image_url);
+                        const finalTitle = fd.get('category') + '|||' + fd.get('title');
+                        res = await updateTemplateDirect(editingItem.id, finalTitle, doc_url, image_url);
                     } else {
-                        res = await addTemplateDirect(fd.get('title') as string, doc_url, image_url);
+                        const finalTitle = fd.get('category') + '|||' + fd.get('title');
+                        res = await addTemplateDirect(finalTitle, doc_url, image_url);
                     }
                     
                     if (res.success) {
@@ -918,10 +929,18 @@ export default function AdminPanelPage() {
                     }
                     setIsSubmitting(false);
                   }} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="flex flex-col gap-1 md:col-span-2">
-                      <label className="text-xs font-bold text-dark-bg">Şablonun Adı *</label>
-                      <input type="text" name="title" defaultValue={editingItem?.title || ""} required className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" placeholder="Məs: Risk Qiymətləndirmə Forması" />
+                    
+                    <div className="flex flex-col gap-1 md:col-span-1">
+                      <label className="text-xs font-bold text-dark-bg">Bölmə *</label>
+                      <select name="category" defaultValue={editingItem?.title?.includes('|||') ? editingItem.title.split('|||')[0] : "Digər sənədlər"} required className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent">
+                        {TEMPLATE_CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                      </select>
                     </div>
+                    <div className="flex flex-col gap-1 md:col-span-1">
+                      <label className="text-xs font-bold text-dark-bg">Şablonun Adı *</label>
+                      <input type="text" name="title" defaultValue={editingItem?.title?.includes('|||') ? editingItem.title.split('|||')[1] : (editingItem?.title || "")} required className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" placeholder="Məs: Risk Qiymətləndirmə Forması" />
+                    </div>
+
                     <div className="flex flex-col gap-1">
                       <label className="text-xs font-bold text-dark-bg">Şəkil Yüklə (Mövcudu dəyişmək/yükləmək üçün)</label>
                       <input type="file" name="image_file" accept="image/*" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
@@ -958,7 +977,8 @@ export default function AdminPanelPage() {
                           </div>
                         )}
                         <div>
-                          <h4 className="font-bold text-dark-bg text-sm line-clamp-2">{t.title}</h4>
+                          <h4 className="font-bold text-dark-bg text-sm line-clamp-2">{t.title.includes("|||") ? t.title.split("|||")[1] : t.title}</h4>
+                          <span className="text-xs bg-dark-bg/5 px-2 py-1 rounded mt-1 inline-block">{t.title.includes("|||") ? t.title.split("|||")[0] : "Digər sənədlər"}</span>
                           <a href={t.file_url} target="_blank" rel="noreferrer" className="text-accent text-xs font-bold hover:underline mt-2 inline-block">Sənədə Bax</a>
                         </div>
                         <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
