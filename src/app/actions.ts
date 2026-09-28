@@ -188,9 +188,10 @@ export async function getMonthlyVisits() {
 }
 
 
-export async function updateNews(id: number, title: string, content: string) {
-  // using imported supabase
-  const { error } = await supabase.from('news').update({ title, content }).eq('id', id);
+export async function updateNews(id: number, title: string, content: string, image_url?: string) {
+  const updateData: any = { title, content };
+  if (image_url) updateData.image_url = image_url;
+  const { error } = await supabase.from('news').update(updateData).eq('id', id);
   if (error) return { success: false, error: error.message };
   return { success: true };
 }
@@ -202,9 +203,10 @@ export async function updateLegislation(id: number, title: string, content: stri
   return { success: true };
 }
 
-export async function updateInternship(id: number, title: string, content: string) {
-  // using imported supabase
-  const { error } = await supabase.from('internships').update({ title, content }).eq('id', id);
+export async function updateInternship(id: number, title: string, content: string, image_url?: string) {
+  const updateData: any = { title, content };
+  if (image_url) updateData.image_url = image_url;
+  const { error } = await supabase.from('internships').update(updateData).eq('id', id);
   if (error) return { success: false, error: error.message };
   return { success: true };
 }

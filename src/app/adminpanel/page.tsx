@@ -44,22 +44,7 @@ export default function AdminPanelPage() {
   const [editContent, setEditContent] = useState("");
   const [editTab, setEditTab] = useState("");
   
-  const handleEditSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const t = toast.loading("Düzəliş edilir...");
-    try {
-      if (editTab === 'news') await updateNews(editingItem.id, editTitle, editContent);
-      if (editTab === 'legislation') await updateLegislation(editingItem.id, editTitle, editContent);
-      if (editTab === 'internships') await updateInternship(editingItem.id, editTitle, editContent);
-      toast.success("Düzəliş edildi!", { id: t });
-      setEditingItem(null);
-      loadData();
-    } catch(err) {
-      toast.error("Xəta baş verdi", { id: t });
-    }
-  };
-
-
+  
   const loadData = async () => {
     setLoading(true);
     try {
@@ -280,36 +265,86 @@ export default function AdminPanelPage() {
 
             {(activeTab === 'news' || activeTab === 'legislation' || activeTab === 'internships') && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-8">
+                
                 <div className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5">
-                  <h3 className="font-bold text-lg text-dark-bg mb-4 flex items-center gap-2"><PlusCircle className="w-5 h-5 text-accent"/> Yeni Əlavə Et</h3>
-                  <form onSubmit={(e) => genericAddWithImage(e, activeTab === 'news' ? addNews : activeTab === 'legislation' ? addLegislation : addInternship)} className="flex flex-col gap-4 max-w-xl">
-                    <input type="text" name="title" required placeholder="Başlıq" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
-                    <textarea name="content" required placeholder="Məzmun..." rows={6} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent resize-none"></textarea>
+                  <h3 className="font-bold text-lg text-dark-bg mb-4 flex items-center gap-2">
+                    <PlusCircle className="w-5 h-5 text-accent"/> {editingItem && (activeTab === 'news' || activeTab === 'legislation' || activeTab === 'internships') ? 'Düzəliş Et' : 'Yeni Əlavə Et'}
+                  </h3>
+                  <form onSubmit={async (e) => {
+                    e.preventDefault();
+                    setIsSubmitting(true);
+                    const t = toast.loading("Gözləyin...");
+                    const fd = new FormData(e.currentTarget);
+                    const title = fd.get('title') as string;
+                    const content = fd.get('content') as string;
+                    
+                    let image_url = editingItem?.image_url || "";
+                    if(activeTab !== 'legislation') {
+                      const imgFile = fd.get('image_file') as File;
+                      if(imgFile && imgFile.size > 0) {
+                          const { uploadToImgbb } = await import("@/lib/imgbb");
+                          const fileUrl = await uploadToImgbb(imgFile);
+                          if(fileUrl) image_url = fileUrl;
+                      }
+                    }
+
+                    try {
+                      if(editingItem && (activeTab === 'news' || activeTab === 'legislation' || activeTab === 'internships')) {
+                          if (activeTab === 'news') await updateNews(editingItem.id, title, content, image_url);
+                          if (activeTab === 'legislation') await updateLegislation(editingItem.id, title, content);
+                          if (activeTab === 'internships') await updateInternship(editingItem.id, title, content, image_url);
+                      } else {
+                          if (activeTab === 'news') await addNews(title, content, image_url);
+                          if (activeTab === 'legislation') await addLegislation(title, content, "");
+                          if (activeTab === 'internships') await addInternship(title, content, image_url);
+                      }
+                      
+                      toast.success("Uğurla yadda saxlanıldı!", { id: t });
+                      if(editingItem) setEditingItem(null);
+                      e.target.reset();
+                      loadData();
+                    } catch(err) {
+                      toast.error("Xəta baş verdi", { id: t });
+                    }
+                    setIsSubmitting(false);
+                  }} className="flex flex-col gap-4 max-w-3xl">
+                    <input type="text" name="title" defaultValue={editingItem?.title || ""} required placeholder="Başlıq" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
+                    
+                    <QuillInput name="content" defaultValue={editingItem?.content || ""} placeholder="Məzmun..." />
                     
                     {activeTab !== 'legislation' && (
-                      <div className="flex flex-col gap-1">
-                        <label className="text-xs font-bold text-dark-bg">Şəkil Seçin</label>
-                        <input type="file" name="image" accept="image/*" className="text-sm" />
+                      <div className="flex flex-col gap-1 mt-2">
+                        <label className="text-xs font-bold text-dark-bg">Şəkil Seçin (Dəyişmək/Əlavə etmək üçün)</label>
+                        <input type="file" name="image_file" accept="image/*" className="text-sm" />
                       </div>
                     )}
 
-                    <button type="submit" className="bg-dark-bg text-white px-6 py-2 rounded-lg text-sm font-bold w-fit mt-2 hover:bg-accent-hover transition-colors">Dərc Et</button>
+                    <div className="flex gap-4 mt-2">
+                      <button type="submit" disabled={isSubmitting} className="bg-dark-bg text-white px-8 py-3 rounded-xl text-sm font-bold w-fit hover:bg-accent-hover transition-colors disabled:opacity-50">
+                        {isSubmitting ? "Saxlanılır..." : "Saxla"}
+                      </button>
+                      {editingItem && (activeTab === 'news' || activeTab === 'legislation' || activeTab === 'internships') && (
+                        <button type="button" onClick={() => setEditingItem(null)} className="bg-gray-100 text-dark-bg px-8 py-3 rounded-xl text-sm font-bold w-fit hover:bg-gray-200 transition-colors">
+                          Ləğv Et
+                        </button>
+                      )}
+                    </div>
                   </form>
                 </div>
 
-                <div>
-                  <h3 className="font-bold text-lg text-dark-bg mb-4">Mövcud Paylaşım</h3>
+                <div className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5">
+                  <h3 className="font-bold text-lg text-dark-bg mb-4">Mövcud Paylaşımlar</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {(activeTab === 'news' ? news : activeTab === 'legislation' ? legislation : internships)?.map(item => (
-                      <div key={item.id} className="bg-white p-4 rounded-xl border border-dark-bg/10 flex gap-4 items-start">
+                      <div key={item.id} className="bg-white p-4 rounded-xl border border-dark-bg/10 flex gap-4 items-start shadow-sm">
                         {(activeTab !== 'legislation') && (
                           item.image_url ? <img src={item.image_url} alt="" className="w-20 h-20 object-cover rounded-lg shrink-0" /> : <div className="w-20 h-20 bg-background rounded-lg shrink-0 flex items-center justify-center text-xs text-center p-2 text-foreground/50">Şəkil yoxdur</div>
                         )}
-                        <div className="flex flex-col">
+                        <div className="flex flex-col w-full">
                           <h4 className="font-bold text-dark-bg line-clamp-2 leading-tight">{item.title}</h4>
                           <span className="text-[10px] text-foreground/50 mt-1">{item.created_at ? new Date(item.created_at).toLocaleDateString() : ""}</span>
-                          <div className="flex gap-4 mt-2">
-                            <button onClick={() => { setEditingItem(item); setEditTitle(item.title); setEditContent(item.content); setEditTab(activeTab); }} className="text-blue-500 text-xs font-bold hover:underline text-left">Düzəliş Et</button>
+                          <div className="flex gap-4 mt-3 pt-3 border-t border-dark-bg/5">
+                            <button onClick={() => { setEditingItem(item); window.scrollTo({top:0, behavior:'smooth'}); }} className="text-blue-500 text-xs font-bold hover:underline flex-1 text-left">Düzəliş Et</button>
                             <button onClick={async () => { 
                               if(confirm("Silmək istədiyinizə əminsiniz?")) { 
                                 const loadingToast = toast.loading("Silinir...");
@@ -319,7 +354,7 @@ export default function AdminPanelPage() {
                                 toast.success("Silindi", { id: loadingToast });
                                 loadData(); 
                               } 
-                            }} className="text-red-500 text-xs font-bold text-left hover:underline">Sil</button>
+                            }} className="text-red-500 text-xs font-bold text-right hover:underline">Sil</button>
                           </div>
                         </div>
                       </div>
@@ -955,21 +990,7 @@ export default function AdminPanelPage() {
         )}
       </div>
 
-      {editingItem && (
-        <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-6">
-          <div className="bg-white rounded-2xl w-full max-w-2xl p-8 flex flex-col gap-4 relative">
-            <h3 className="font-bold text-xl text-dark-bg">Düzəliş Et</h3>
-            <form onSubmit={handleEditSubmit} className="flex flex-col gap-4">
-              <input type="text" required value={editTitle} onChange={e => setEditTitle(e.target.value)} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-3 text-sm focus:border-accent" />
-              <textarea required value={editContent} onChange={e => setEditContent(e.target.value)} rows={10} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-3 text-sm focus:border-accent resize-none"></textarea>
-              <div className="flex gap-4 mt-2">
-                <button type="submit" className="bg-accent-hover text-white px-6 py-2 rounded-lg font-bold">Yadda Saxla</button>
-                <button type="button" onClick={() => setEditingItem(null)} className="bg-gray-200 text-dark-bg px-6 py-2 rounded-lg font-bold">Ləğv Et</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      
     </main>
   );
 }
