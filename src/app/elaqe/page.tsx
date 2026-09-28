@@ -70,7 +70,7 @@ export default function ContactPage() {
               </div>
               <div className="flex flex-col gap-1 mt-1">
                 <span className="text-sm font-bold text-dark-bg uppercase tracking-widest">WhatsApp / Zəng</span>
-                <a href={`tel:${settings.contact_phone || "+994500000000"}`} className="text-foreground/70 font-medium hover:text-accent-hover transition-colors text-sm">{settings.contact_phone || "+994 50 000 00 00"}</a>
+                <a href={`https://wa.me/${(settings.contact_phone || "+994500000000").replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="text-foreground/70 font-medium hover:text-accent-hover transition-colors text-sm">{settings.contact_phone || "+994 50 000 00 00"}</a>
               </div>
             </div>
           </motion.div>

@@ -18,19 +18,19 @@ export default function Footer() {
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: false, amount: 0.3 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col gap-4 max-w-sm"
         >
           <button onClick={scrollToTop} className="flex items-center gap-4 mb-2 text-left hover:opacity-80 transition-opacity">
-            <div className="relative w-16 h-16 rounded-full flex items-center justify-center overflow-hidden bg-white">
-              <Image src="/Logo.png" alt="TM&S Consulting Logo" fill className="object-contain" />
+            <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-full flex items-center justify-center overflow-hidden bg-white/10 border border-white/20 shadow-xl group-hover:scale-105 transition-transform">
+              <Image src="/Logo.png" alt="TM&S Consulting Logo" fill className="object-cover" />
             </div>
-            <div className="flex flex-col text-left">
-              <span className="font-black text-xl uppercase text-white leading-none">
+            <div className="flex flex-col text-left drop-shadow-md">
+              <span className="font-black text-3xl md:text-4xl uppercase text-white leading-none">
                 TM&S
               </span>
-              <span className="text-[10px] font-bold tracking-widest uppercase text-white/80 mt-1">
+              <span className="text-xs md:text-sm font-black tracking-[0.25em] uppercase text-white/90 mt-2">
                 Consulting
               </span>
             </div>
@@ -48,7 +48,7 @@ export default function Footer() {
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: false, amount: 0.3 }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col gap-4"
           >
@@ -62,7 +62,7 @@ export default function Footer() {
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: false, amount: 0.3 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col gap-4"
           >
@@ -78,7 +78,7 @@ export default function Footer() {
       <motion.div 
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
+        viewport={{ once: false }}
         transition={{ duration: 1, delay: 0.3 }}
         className="w-full pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-sm relative z-10"
       >

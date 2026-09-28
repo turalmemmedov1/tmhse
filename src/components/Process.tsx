@@ -38,7 +38,7 @@ export default function Process() {
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: false, amount: 0.3 }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col gap-4 max-w-3xl"
           >
@@ -59,7 +59,7 @@ export default function Process() {
               key={step.title}
               initial={{ opacity: 0, y: 50, scale: 0.95 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.3 }}
+              viewport={{ once: false, amount: 0.3 }}
               transition={{ duration: 1, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col group cursor-default"
             >
@@ -67,7 +67,7 @@ export default function Process() {
                 <motion.div 
                   initial={{ x: "-100%" }}
                   whileInView={{ x: "0%" }}
-                  viewport={{ once: true, amount: 0.3 }}
+                  viewport={{ once: false, amount: 0.3 }}
                   transition={{ duration: 1.5, delay: 0.2 + index * 0.15, ease: [0.16, 1, 0.3, 1] }}
                   className="absolute inset-0 bg-accent"
                 />

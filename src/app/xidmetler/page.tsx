@@ -34,7 +34,7 @@ export default function ServicesPage() {
               <motion.div 
                 initial={{ opacity: 0, y: 50, scale: 0.95 }}
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, amount: 0.2 }}
+                viewport={{ once: false, amount: 0.2 }}
                 transition={{ duration: 0.8, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
                 className="bg-white rounded-[2rem] p-8 md:p-10 shadow-lg shadow-black/5 flex flex-col gap-6 border border-dark-bg/5 hover:border-accent-hover transition-colors duration-500 group h-full cursor-pointer"
               >

@@ -38,7 +38,7 @@ export default function FaqSection() {
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: false, amount: 0.3 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col gap-4 lg:gap-6 w-full lg:w-2/5 lg:sticky top-32"
         >
@@ -58,7 +58,7 @@ export default function FaqSection() {
         <motion.div 
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: false, amount: 0.3 }}
           transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           className="w-full lg:w-3/5 flex flex-col gap-4 bg-white p-6 md:p-12 rounded-[2rem] shadow-xl shadow-black/5 border border-dark-bg/5"
         >

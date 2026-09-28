@@ -189,13 +189,13 @@ export default function VakansiyalarPage() {
                         </a>
                       )}
                       {vac.contact_email.split(' | ')[1] && (
-                        <a href={`tel:${vac.contact_email.split(' | ')[1]}`} className="w-full text-center bg-gray-100 text-dark-bg text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-gray-200 transition-colors shadow-md">
-                          Zəng Et
+                        <a href={`https://wa.me/${vac.contact_email.split(' | ')[1].replace(/[^0-9]/g, '')}`} target="_blank" className="w-full text-center bg-gray-100 text-dark-bg text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-gray-200 transition-colors shadow-md">
+                          WhatsApp-a Yaz
                         </a>
                       )}
                     </>
                   ) : (
-                    <a href={vac.contact_email?.includes('@') ? `mailto:${vac.contact_email}` : `tel:${vac.contact_email}`} className="w-full text-center bg-dark-bg text-white text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-accent-hover transition-colors shadow-md">
+                    <a href={vac.contact_email?.includes('@') ? `mailto:${vac.contact_email}` : `https://wa.me/${vac.contact_email.replace(/[^0-9]/g, '')}`} target="_blank" className="w-full text-center bg-dark-bg text-white text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-accent-hover transition-colors shadow-md">
                       Müraciət Et
                     </a>
                   )}

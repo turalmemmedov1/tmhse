@@ -197,7 +197,7 @@ export default function CvYuklePage() {
                     <Mail className="w-3.5 h-3.5" /> <a href={`mailto:${cv.email}`} className="hover:text-accent-hover truncate">{cv.email}</a>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-foreground/60">
-                    <Phone className="w-3.5 h-3.5" /> <a href={`tel:${cv.phone}`} className="hover:text-accent-hover">{cv.phone}</a>
+                    <Phone className="w-3.5 h-3.5" /> <a href={`https://wa.me/${cv.phone.replace(/[^0-9]/g, '')}`} target="_blank" className="hover:text-accent-hover">{cv.phone}</a>
                   </div>
                   {cv.cv_drive_link && (
                     <div className="flex items-center gap-2 text-xs text-foreground/60 mt-1">

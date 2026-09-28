@@ -73,14 +73,17 @@ export default function Navbar() {
           
         </div>
 
-        <div className="flex items-center gap-2 lg:gap-4 ml-4">
+        <div className="flex items-center gap-3 lg:gap-5 ml-4">
           <LanguageSwitcher />
+          <Link href="/elaqe" className="hidden lg:flex items-center justify-center bg-accent text-dark-bg font-bold text-xs px-5 py-2.5 rounded-full hover:bg-accent-hover hover:text-white transition-all shadow-md">
+            Bizimlə Əlaqə
+          </Link>
           {/* Mobile Hamburger Toggle */}
           <button 
             className={`lg:hidden p-2 transition-colors ${textColorClass}`}
             onClick={() => setMobileMenuOpen(true)}
           >
-            <Menu className="w-7 h-7" />
+            <Menu className="w-8 h-8" />
           </button>
         </div>
       </motion.nav>

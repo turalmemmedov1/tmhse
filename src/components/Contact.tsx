@@ -12,7 +12,7 @@ export default function Contact() {
         <motion.div 
           initial={{ opacity: 0, y: 100, rotate: -5 }}
           whileInView={{ opacity: 1, y: 0, rotate: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: false, amount: 0.3 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col gap-8 w-full md:w-3/5"
         >
@@ -29,7 +29,7 @@ export default function Contact() {
         <motion.div 
           initial={{ opacity: 0, x: 100, scale: 0.8 }}
           whileInView={{ opacity: 1, x: 0, scale: 1 }}
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: false, amount: 0.3 }}
           transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           className="w-full md:w-2/5 flex flex-col gap-8 bg-white p-12 rounded-[2rem] shadow-2xl shadow-black/5 border border-dark-bg/5 relative"
         >
