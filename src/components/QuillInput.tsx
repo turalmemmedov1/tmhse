@@ -14,6 +14,10 @@ interface QuillInputProps {
 
 export default function QuillInput({ name, defaultValue = "", placeholder }: QuillInputProps) {
   const [value, setValue] = useState(defaultValue);
+
+  useEffect(() => {
+    setValue(defaultValue);
+  }, [defaultValue]);
   
   const modules = {
     toolbar: [

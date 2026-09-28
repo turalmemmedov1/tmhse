@@ -150,7 +150,7 @@ export default function AdminPanelPage() {
         <Toaster position="top-center" />
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md bg-dark-bg-card p-10 rounded-[2rem] shadow-2xl border border-white/10 flex flex-col items-center">
           <h1 className="text-2xl font-bold mb-8 text-center">İdarəetmə Paneli</h1>
-          <form onSubmit={handleLogin} className="w-full flex flex-col gap-4">
+          <form key={editingItem?.id || 'new'} onSubmit={handleLogin} className="w-full flex flex-col gap-4">
             <input type="email" autoComplete="username" value={email} onChange={e => setEmail(e.target.value)} className="w-full bg-dark-bg border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-accent" placeholder="info@hsetms.com" />
             <input type="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-dark-bg border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-accent" placeholder="••••••••" />
             {error && <span className="text-red-400 text-xs">{error}</span>}
@@ -270,7 +270,7 @@ export default function AdminPanelPage() {
                   <h3 className="font-bold text-lg text-dark-bg mb-4 flex items-center gap-2">
                     <PlusCircle className="w-5 h-5 text-accent"/> {editingItem && (activeTab === 'news' || activeTab === 'legislation' || activeTab === 'internships') ? 'Düzəliş Et' : 'Yeni Əlavə Et'}
                   </h3>
-                  <form onSubmit={async (e) => {
+                  <form key={editingItem?.id || 'new'} onSubmit={async (e) => {
                     e.preventDefault();
                     setIsSubmitting(true);
                     const t = toast.loading("Gözləyin...");
@@ -371,7 +371,7 @@ export default function AdminPanelPage() {
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Add PDF */}
-                    <form onSubmit={async(e)=>{
+                    <form key={editingItem?.id || 'new'} onSubmit={async(e)=>{
                       e.preventDefault(); 
                       const fd=new FormData(e.currentTarget); 
                       const t = toast.loading("PDF Sistemə Yüklənir...");
@@ -400,7 +400,7 @@ export default function AdminPanelPage() {
                     </form>
 
                     {/* Add Video */}
-                    <form onSubmit={async(e)=>{
+                    <form key={editingItem?.id || 'new'} onSubmit={async(e)=>{
                       e.preventDefault(); 
                       const fd=new FormData(e.currentTarget); 
                       const t = toast.loading("Əlavə edilir...");
@@ -474,7 +474,7 @@ export default function AdminPanelPage() {
                   <h3 className="font-bold text-lg text-dark-bg mb-4 flex items-center gap-2">
                     <PlusCircle className="w-5 h-5 text-accent"/> {editingItem && activeTab === 'vacancies' ? 'Vakansiyanı Redaktə Et' : 'Yeni Vakansiya Əlavə Et'}
                   </h3>
-                  <form onSubmit={async (e) => {
+                  <form key={editingItem?.id || 'new'} onSubmit={async (e) => {
                     e.preventDefault();
                     setIsSubmitting(true);
                     const t = toast.loading("Saxlanılır...");
@@ -583,7 +583,7 @@ export default function AdminPanelPage() {
                   <h3 className="font-bold text-lg text-dark-bg mb-4 flex items-center gap-2">
                     <PlusCircle className="w-5 h-5 text-accent"/> {editingItem && activeTab === 'cvs' ? 'CV Redaktə Et' : 'Yeni CV Əlavə Et'}
                   </h3>
-                  <form onSubmit={async (e) => {
+                  <form key={editingItem?.id || 'new'} onSubmit={async (e) => {
                     e.preventDefault();
                     setIsSubmitting(true);
                     const t = toast.loading("Saxlanılır...");
@@ -674,7 +674,7 @@ export default function AdminPanelPage() {
             {activeTab === 'account' && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5 max-w-xl">
                 <h3 className="font-bold text-lg text-dark-bg mb-6">Giriş Məlumatlarını Yenilə</h3>
-                <form onSubmit={async (e) => {
+                <form key={editingItem?.id || 'new'} onSubmit={async (e) => {
                   e.preventDefault();
                   const fd = new FormData(e.currentTarget);
                   const newEmail = fd.get("new_email");
@@ -708,7 +708,7 @@ export default function AdminPanelPage() {
 {activeTab === 'social' && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5 max-w-xl">
                 <h3 className="font-bold text-lg text-dark-bg mb-6">Əlaqə və Sosial Media</h3>
-                <form onSubmit={async (e) => {
+                <form key={editingItem?.id || 'new'} onSubmit={async (e) => {
                   e.preventDefault();
                   const formData = new FormData(e.currentTarget);
                   const loadingToast = toast.loading("Yadda saxlanılır...");
@@ -780,7 +780,7 @@ export default function AdminPanelPage() {
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5 max-w-xl">
                 <h3 className="font-bold text-lg text-dark-bg mb-6">Ana Səhifə Şəkilləri</h3>
                 
-                <form onSubmit={async (e) => {
+                <form key={editingItem?.id || 'new'} onSubmit={async (e) => {
                   e.preventDefault();
                   const loadingToast = toast.loading("Yüklənir...");
                   const file = (e.currentTarget.elements.namedItem("image_1") as HTMLInputElement)?.files?.[0];
@@ -811,7 +811,7 @@ export default function AdminPanelPage() {
                   <button type="submit" className="bg-dark-bg text-white px-6 py-2 rounded-lg text-sm font-bold w-fit hover:bg-accent-hover transition-colors">Yenilə</button>
                 </form>
 
-                <form onSubmit={async (e) => {
+                <form key={editingItem?.id || 'new'} onSubmit={async (e) => {
                   e.preventDefault();
                   const loadingToast = toast.loading("Yüklənir...");
                   const file = (e.currentTarget.elements.namedItem("image_2") as HTMLInputElement)?.files?.[0];
@@ -842,7 +842,7 @@ export default function AdminPanelPage() {
                   <button type="submit" className="bg-dark-bg text-white px-6 py-2 rounded-lg text-sm font-bold w-fit hover:bg-accent-hover transition-colors">Yenilə</button>
                 </form>
 
-                <form onSubmit={async (e) => {
+                <form key={editingItem?.id || 'new'} onSubmit={async (e) => {
                   e.preventDefault();
                   const loadingToast = toast.loading("Yüklənir...");
                   const file = (e.currentTarget.elements.namedItem("image_3") as HTMLInputElement)?.files?.[0];
@@ -882,7 +882,7 @@ export default function AdminPanelPage() {
                   <h3 className="font-bold text-lg text-dark-bg mb-6 flex items-center gap-2">
                     <PlusCircle className="w-5 h-5 text-accent"/> {editingItem && activeTab === 'templates' ? 'Şablonu Redaktə Et' : 'Yeni Şablon Əlavə Et'}
                   </h3>
-                  <form onSubmit={async (e) => {
+                  <form key={editingItem?.id || 'new'} onSubmit={async (e) => {
                     e.preventDefault();
                     setIsSubmitting(true);
                     const t = toast.loading("Saxlanılır...");
