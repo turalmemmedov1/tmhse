@@ -8,7 +8,7 @@ import {
   getVacancies, deleteVacancy, getCvs, deleteCv, getSettings, updateSetting, 
   getNews, addNews, deleteNews, updateNews, getLegislation, addLegislation, deleteLegislation, updateLegislation,
   getInternships, addInternship, deleteInternship, updateInternship, getServicePdfs, addServicePdf, addServicePdfWithFile, deleteServicePdf,
-  getServiceVideos, addServiceVideo, deleteServiceVideo, getMonthlyVisits, getTemplates, addTemplateWithFile, deleteTemplate, getMessages, deleteMessage
+  getServiceVideos, addServiceVideo, deleteServiceVideo, getMonthlyVisits, getTemplates, addTemplateWithFile, deleteTemplate, verifyAdmin, updateAdminCredentials
 } from "@/app/actions";
 import { uploadToImgbb } from "@/lib/imgbb";
 import { createClient } from "@supabase/supabase-js";
@@ -30,8 +30,7 @@ export default function AdminPanelPage() {
   const [servicePdfs, setServicePdfs] = useState<any[]>([]);
   const [serviceVideos, setServiceVideos] = useState<any[]>([]);
   const [templates, setTemplates] = useState<any[]>([]);
-  const [messages, setMessages] = useState<any[]>([]);
-  const [settings, setSettings] = useState<Record<string, string>>({});
+    const [settings, setSettings] = useState<Record<string, string>>({});
   
   const [loading, setLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -102,9 +101,10 @@ export default function AdminPanelPage() {
     }
   }, [isLoggedIn]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email === "info@tmhse.expert" && password === "Tural2026") {
+    const isValid = await verifyAdmin(email, password);
+    if (isValid) {
       setIsLoggedIn(true);
       localStorage.setItem("tmhse_admin_logged_in", "true");
       setError("");
@@ -190,8 +190,7 @@ export default function AdminPanelPage() {
             {id:'news', icon: Newspaper, title: 'Xəbərlər'},
             {id:'legislation', icon: BookOpen, title: 'Qanunvericilik'},
             {id:'templates', icon: FileText, title: 'Şablonlar'},
-            {id:'messages', icon: MessageSquare, title: 'Gələn Mesajlar'},
-            {id:'internships', icon: Presentation, title: 'Təcrübə Proqramı'},
+                        {id:'internships', icon: Presentation, title: 'Təcrübə Proqramı'},
             {id:'services_media', icon: Video, title: 'Xidmət (PDF/Video)'},
             {id:'social', icon: Phone, title: 'Əlaqə və Tənzimləmələr'},
             {id:'menus', icon: LayoutDashboard, title: 'Menyular'},
@@ -704,37 +703,7 @@ export default function AdminPanelPage() {
             )}
 
 
-            {activeTab === 'messages' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-6">
-                <div className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5">
-                  <h3 className="font-bold text-lg text-dark-bg mb-6">Saytdan Gələn Mesajlar</h3>
-                  <div className="flex flex-col gap-4">
-                    {messages.length === 0 ? <p className="text-sm text-gray-500">Heç bir mesaj yoxdur.</p> : messages.map(m => (
-                      <div key={m.id} className="border border-dark-bg/10 rounded-xl p-6 flex flex-col gap-3 relative group">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <h4 className="font-bold text-dark-bg">{m.full_name}</h4>
-                            <a href={`mailto:${m.email}`} className="text-accent text-sm font-medium hover:underline">{m.email}</a>
-                          </div>
-                          <span className="text-xs text-gray-400">{new Date(m.created_at).toLocaleString('az-AZ')}</span>
-                        </div>
-                        <div className="bg-background p-4 rounded-lg text-sm text-foreground/80 mt-2 whitespace-pre-wrap">
-                          {m.content}
-                        </div>
-                        <button onClick={async () => {
-                          if(confirm("Silmək istədiyinizə əminsiniz?")) {
-                            await deleteMessage(m.id);
-                            loadData();
-                          }
-                        }} className="absolute top-4 right-4 bg-red-500 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-sm hover:bg-red-600">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            )}
+            
 
           </div>
         )}

@@ -73,3 +73,29 @@ body {
 .goog-te-spinner-pos {
   display: none !important;
 }
+
+/* Force hide all Google Translate UI elements */
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate,
+.goog-te-gadget-icon,
+.goog-te-gadget-simple,
+#goog-gt-tt,
+.goog-te-balloon-frame,
+div#goog-gt-tt,
+.goog-tooltip,
+.goog-tooltip:hover {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.goog-text-highlight {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+body {
+  top: 0px !important;
+  position: static !important;
+}

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Globe, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { getCookie, setCookie } from "cookies-next";
+import { getCookie, setCookie, deleteCookie } from "cookies-next";
 
 const languages = [
   { code: "az", name: "AZ" },
@@ -49,11 +49,14 @@ export default function LanguageSwitcher() {
     setCurrentLang(langName);
     setIsOpen(false);
     
-    // Set Google Translate cookie
-    setCookie("googtrans", `/az/${langCode}`);
-    setCookie("googtrans", `/az/${langCode}`, { domain: window.location.hostname });
+    if (langCode === 'az') {
+      deleteCookie("googtrans");
+      deleteCookie("googtrans", { domain: window.location.hostname });
+    } else {
+      setCookie("googtrans", `/az/${langCode}`);
+      setCookie("googtrans", `/az/${langCode}`, { domain: window.location.hostname });
+    }
     
-    // Reload page to apply translation safely without bugs
     window.location.reload();
   };
 

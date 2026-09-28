@@ -66,7 +66,7 @@ export async function getSettings() {
   if (error) return {};
   const settingsObj: Record<string, string> = {};
   if (data) {
-    data.forEach(item => { settingsObj[item.setting_key] = item.setting_value });
+    data.forEach(item => { if(item.setting_key !== "admin_credentials") { settingsObj[item.setting_key] = item.setting_value } });
   }
   return settingsObj;
 }
@@ -335,4 +335,17 @@ export async function getMessages() {
 export async function deleteMessage(id: number) {
   const { error } = await supabase.from("messages").delete().eq("id", id);
   return { success: !error };
+}
+
+export async function verifyAdmin(email: string, pass: string) {
+  const { data } = await supabase.from("settings").select("setting_value").eq("setting_key", "admin_credentials").single();
+  const creds = data?.setting_value || "info@tmhse.expert:Tural2026";
+  const [dbEmail, dbPass] = creds.split(":");
+  return email === dbEmail && pass === dbPass;
+}
+
+export async function updateAdminCredentials(email: string, pass: string) {
+  const creds = `${email}:${pass}`;
+  const { error } = await supabase.from("settings").upsert({ setting_key: "admin_credentials", setting_value: creds }, { onConflict: 'setting_key' });
+  return !error;
 }

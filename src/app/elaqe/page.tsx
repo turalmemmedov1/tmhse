@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { useState } from "react";
-import { submitContactMessage, getSettings } from "@/app/actions";
+import { getSettings } from "@/app/actions";
 import { useEffect } from "react";
 
 export default function ContactPage() {
@@ -85,12 +85,9 @@ export default function ContactPage() {
               setIsLoading(true);
               const formData = new FormData(e.currentTarget);
               
-              // 1. Save to Database (Admin Panel)
-              const res = await submitContactMessage(formData);
               
-              // 2. Send Email via FormSubmit
               try {
-                await fetch("https://formsubmit.co/ajax/info@hsetms.com", {
+                const response = await fetch("https://formsubmit.co/ajax/info@hsetms.com", {
                     method: "POST",
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify({
@@ -99,17 +96,18 @@ export default function ContactPage() {
                         message: formData.get("message")
                     })
                 });
-              } catch (err) {
-                console.error("Email API xətası:", err);
-              }
-              
-              setIsLoading(false);
-              if (res.success) {
-                setSuccess(true);
-                (e.target as HTMLFormElement).reset();
-                setTimeout(() => setSuccess(false), 5000);
-              } else {
-                alert(res.error);
+                
+                setIsLoading(false);
+                if (response.ok) {
+                  setSuccess(true);
+                  (e.target as HTMLFormElement).reset();
+                  setTimeout(() => setSuccess(false), 5000);
+                } else {
+                  alert("Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.");
+                }
+              } catch (error) {
+                setIsLoading(false);
+                alert("Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.");
               }
             }}
           >
