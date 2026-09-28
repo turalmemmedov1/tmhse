@@ -179,7 +179,7 @@ export default function AdminPanelPage() {
       {/* Sidebar */}
       <div className="w-64 bg-dark-bg text-white flex flex-col fixed inset-y-0 left-0 z-20 border-r border-white/10">
         <div className="p-6 flex items-center gap-3 border-b border-white/10">
-          <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden"><Image src="/LogoMain.jpeg" alt="Logo" width={40} height={40} /></div>
+          <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden"><Image src="/Logo.png" alt="Logo" width={40} height={40} /></div>
           <div><span className="font-bold text-sm">TMHSE</span><span className="text-[10px] text-accent block uppercase">Admin Panel</span></div>
         </div>
         <div className="flex flex-col p-4 gap-2 mt-4 pb-20">
@@ -309,12 +309,13 @@ export default function AdminPanelPage() {
                     }} className="flex flex-col gap-4">
                       <h4 className="text-sm font-bold text-dark-bg border-b pb-2">PDF Yüklə</h4>
                       <select name="service_id" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent">
-                        <option value="emeyin-muhafizesi">Əməyin Mühafizəsi</option>
-                        <option value="yanqina-qarsi-mubarize">Yanğına Qarşı Mübarizə</option>
-                        <option value="hundurlukde-is">Hündürlükdə İş</option>
-                        <option value="etraf-muhitin-muhafizesi">Ətraf Mühitin Mühafizəsi</option>
-                        <option value="texniki-tehlukesizlik">Texniki Təhlükəsizlik</option>
-                        <option value="ilk-yardim">İlk Yardım</option>
+                        <option value="emeyin-muhafizesi">Əməyin mühafizəsi</option>
+                        <option value="risklerin-qiymetlendirilmesi">Risklərin qiymətləndirilməsi</option>
+                        <option value="setem-telimleri">SƏTƏM təlimləri</option>
+                        <option value="audit-ve-monitorinq">Audit və monitorinq</option>
+                        <option value="etraf-muhitin-muhafizesi">Ətraf mühitin mühafizəsi</option>
+                        <option value="setem-senedlesmesi">SƏTƏM sənədləşməsi</option>
+                        <option value="texniki-tehlukesizlik">Texniki təhlükəsizlik</option>
                       </select>
                       <input type="text" name="title" required placeholder="PDF Adı (məs: Təlimat)" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
                       <input type="file" name="pdf_file" accept=".pdf,.doc,.docx" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
@@ -333,12 +334,13 @@ export default function AdminPanelPage() {
                     }} className="flex flex-col gap-4">
                       <h4 className="text-sm font-bold text-dark-bg border-b pb-2">Video (YouTube) Əlavə Et</h4>
                       <select name="service_id" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent">
-                        <option value="emeyin-muhafizesi">Əməyin Mühafizəsi</option>
-                        <option value="yanqina-qarsi-mubarize">Yanğına Qarşı Mübarizə</option>
-                        <option value="hundurlukde-is">Hündürlükdə İş</option>
-                        <option value="etraf-muhitin-muhafizesi">Ətraf Mühitin Mühafizəsi</option>
-                        <option value="texniki-tehlukesizlik">Texniki Təhlükəsizlik</option>
-                        <option value="ilk-yardim">İlk Yardım</option>
+                        <option value="emeyin-muhafizesi">Əməyin mühafizəsi</option>
+                        <option value="risklerin-qiymetlendirilmesi">Risklərin qiymətləndirilməsi</option>
+                        <option value="setem-telimleri">SƏTƏM təlimləri</option>
+                        <option value="audit-ve-monitorinq">Audit və monitorinq</option>
+                        <option value="etraf-muhitin-muhafizesi">Ətraf mühitin mühafizəsi</option>
+                        <option value="setem-senedlesmesi">SƏTƏM sənədləşməsi</option>
+                        <option value="texniki-tehlukesizlik">Texniki təhlükəsizlik</option>
                       </select>
                       <input type="text" name="title" required placeholder="Videonun Adı" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
                       <input type="url" name="youtube_link" required placeholder="YouTube Linki (https://youtube...)" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
@@ -495,12 +497,13 @@ export default function AdminPanelPage() {
                 <h3 className="font-bold text-lg text-dark-bg mb-6">Menyuların İdarə Edilməsi (Aktiv/Deaktiv)</h3>
                 <div className="flex flex-col gap-4">
                   {[
-                    { key: "menu_xidmetler", label: "Xidmətlərimiz" },
+                    { key: "menu_xidmetler", label: "Xidmətlər" },
                     { key: "menu_tecrube", label: "Təcrübə Proqramı" },
                     { key: "menu_qanunvericilik", label: "Qanunvericilik" },
                     { key: "menu_xeberler", label: "Xəbərlər" },
                     { key: "menu_vakansiyalar", label: "Vakansiyalar" },
-                    { key: "menu_suallar", label: "Suallar" },
+                    { key: "menu_sablonlar", label: "Şablonlar" },
+                    { key: "menu_cv", label: "CV Yüklə" },
                   ].map(menu => {
                     const isActive = settings?.[menu.key] !== "false";
                     return (

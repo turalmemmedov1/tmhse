@@ -61,3 +61,15 @@ html {
 .hide-cursor, .hide-cursor * {
   cursor: none !important;
 }
+
+/* Google Translate Fixes */
+body {
+  top: 0 !important;
+}
+.skiptranslate > iframe {
+  display: none !important;
+  visibility: hidden !important;
+}
+.goog-te-spinner-pos {
+  display: none !important;
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ShieldCheck, TriangleAlert, GraduationCap, ClipboardCheck, Leaf, FileText } from "lucide-react";
+import { ShieldCheck, TriangleAlert, GraduationCap, ClipboardCheck, Leaf, FileText, Settings } from "lucide-react";
 import Link from "next/link";
 
 export const servicesData = [
@@ -46,6 +46,13 @@ export const servicesData = [
     title: "SƏTƏM sənədləşməsi",
     desc: "Aydın, işlək və müəssisənin fəaliyyətinə uyğun təhlükəsizlik sənədlərinin hazırlanması.",
     icon: <FileText className="w-8 h-8 md:w-10 md:h-10" />
+  },
+  {
+    id: "texniki-tehlukesizlik",
+    num: "07",
+    title: "Texniki təhlükəsizlik",
+    desc: "Avadanlıqların pasportlarının hazırlanması və reyestrə salınması xidmətləri.",
+    icon: <Settings className="w-8 h-8 md:w-10 md:h-10" />
   }
 ];
 

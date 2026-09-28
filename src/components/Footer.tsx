@@ -22,6 +22,19 @@ export default function Footer() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col gap-4 max-w-sm"
         >
+          <button onClick={scrollToTop} className="flex items-center gap-4 mb-2 text-left hover:opacity-80 transition-opacity">
+            <div className="relative w-16 h-16 rounded-full flex items-center justify-center">
+              <Image src="/Logo.png" alt="TM&S Consulting Logo" fill className="object-contain" />
+            </div>
+            <div className="flex flex-col text-left">
+              <span className="font-black text-xl uppercase text-white leading-none">
+                TM&S
+              </span>
+              <span className="text-[10px] font-bold tracking-widest uppercase text-white/80 mt-1">
+                Consulting
+              </span>
+            </div>
+          </button>
           
           <p className="text-accent text-base font-medium leading-relaxed italic border-l-2 border-accent pl-4">
             "Təhlükəsizlik qaydadan daha böyük dəyərdir."

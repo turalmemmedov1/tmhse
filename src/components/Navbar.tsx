@@ -7,6 +7,7 @@ import Image from "next/image";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { getSettings } from "@/app/actions";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -47,7 +48,7 @@ export default function Navbar() {
       >
         <Link href="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-3 group">
           <div className="relative w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center">
-            <Image src="/LogoMain.jpeg" alt="TM&S Consulting Logo" fill className="object-cover rounded-full" />
+            <Image src="/Logo.png" alt="TM&S Consulting Logo" fill className="object-cover rounded-full" />
           </div>
           <div className="flex flex-col">
             <span className={`font-black text-lg md:text-xl uppercase transition-colors leading-none ${textColorClass}`}>
@@ -67,8 +68,9 @@ export default function Navbar() {
           {menuSettings.menu_qanunvericilik !== "false" && <Link href="/qanunvericilik" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/qanunvericilik' ? 'text-accent' : ''}`}>Qanunvericilik</Link>}
           {menuSettings.menu_xeberler !== "false" && <Link href="/xeberler" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/xeberler' ? 'text-accent' : ''}`}>Xəbərlər</Link>}
           {menuSettings.menu_vakansiyalar !== "false" && <Link href="/vakansiyalar" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/vakansiyalar' ? 'text-accent' : ''}`}>Vakansiyalar</Link>}
-          <Link href="/sablonlar" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/sablonlar' ? 'text-accent' : ''}`}>Şablonlar</Link>
-          <Link href="/cv-yukle" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/cv-yukle' ? 'text-accent' : ''}`}>CV Yüklə</Link>
+          {menuSettings.menu_sablonlar !== "false" && <Link href="/sablonlar" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/sablonlar' ? 'text-accent' : ''}`}>Şablonlar</Link>}
+          {menuSettings.menu_cv !== "false" && <Link href="/cv-yukle" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/cv-yukle' ? 'text-accent' : ''}`}>CV Yüklə</Link>}
+          <div className="ml-2"><LanguageSwitcher /></div>
           
         </div>
 
@@ -94,7 +96,7 @@ export default function Navbar() {
             <div className="flex items-center justify-between mb-12 mt-2 w-full">
               <Link href="/" onClick={() => { setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="flex items-center gap-3 mx-auto">
                 <div className="relative w-12 h-12 rounded-full flex items-center justify-center">
-                  <Image src="/LogoMain.jpeg" alt="TM&S Consulting Logo" fill className="object-cover rounded-full" />
+                  <Image src="/Logo.png" alt="TM&S Consulting Logo" fill className="object-cover rounded-full" />
                 </div>
                 <div className="flex flex-col text-left">
                   <span className="font-black text-lg uppercase text-white leading-none">
@@ -120,8 +122,8 @@ export default function Navbar() {
               {menuSettings.menu_qanunvericilik !== "false" && <Link href="/qanunvericilik" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Qanunvericilik</Link>}
               {menuSettings.menu_xeberler !== "false" && <Link href="/xeberler" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Xəbərlər</Link>}
               {menuSettings.menu_vakansiyalar !== "false" && <Link href="/vakansiyalar" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Vakansiyalar</Link>}
-              <Link href="/sablonlar" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Şablonlar</Link>
-              <Link href="/cv-yukle" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">CV Yüklə</Link>
+              {menuSettings.menu_sablonlar !== "false" && <Link href="/sablonlar" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Şablonlar</Link>}
+              {menuSettings.menu_cv !== "false" && <Link href="/cv-yukle" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">CV Yüklə</Link>}
               
             </div>
           </motion.div>
