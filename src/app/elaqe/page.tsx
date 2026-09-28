@@ -5,9 +5,14 @@ import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { useState } from "react";
-import { submitContactMessage } from "@/app/actions";
+import { submitContactMessage, getSettings } from "@/app/actions";
+import { useEffect } from "react";
 
 export default function ContactPage() {
+  const [settings, setSettings] = useState<Record<string, string>>({});
+  useEffect(() => {
+    getSettings().then(s => setSettings(s || {}));
+  }, []);
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -55,7 +60,7 @@ export default function ContactPage() {
               </div>
               <div className="flex flex-col gap-1 mt-1">
                 <span className="text-sm font-bold text-dark-bg uppercase tracking-widest">E-poçt</span>
-                <a href="mailto:info@tmhse.expert" className="text-accent-hover font-medium hover:underline text-sm">info@tmhse.expert</a>
+                <a href={`mailto:${settings.contact_email || 'info@tmhse.expert'}`} className="text-accent-hover font-medium hover:underline text-sm">{settings.contact_email || 'info@tmhse.expert'}</a>
               </div>
             </div>
 
@@ -65,7 +70,7 @@ export default function ContactPage() {
               </div>
               <div className="flex flex-col gap-1 mt-1">
                 <span className="text-sm font-bold text-dark-bg uppercase tracking-widest">WhatsApp / Zəng</span>
-                <a href="tel:+994500000000" className="text-foreground/70 font-medium hover:text-accent-hover transition-colors text-sm">+994 50 000 00 00</a>
+                <a href={`tel:${settings.contact_phone || "+994500000000"}`} className="text-foreground/70 font-medium hover:text-accent-hover transition-colors text-sm">{settings.contact_phone || "+994 50 000 00 00"}</a>
               </div>
             </div>
           </motion.div>

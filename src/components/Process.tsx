@@ -2,25 +2,26 @@
 
 import { motion } from "framer-motion";
 import LedLight from "./LedLight";
+import { Search, ClipboardCheck, GraduationCap, TrendingUp } from "lucide-react";
 
 const steps = [
   {
-    id: "01",
+    icon: Search,
     title: "Tanışlıq və təhlil",
     desc: "Fəaliyyətin, iş mühitinin və ilkin ehtiyacların öyrənilməsi."
   },
   {
-    id: "02",
+    icon: ClipboardCheck,
     title: "Planlaşdırma",
     desc: "Prioritetlərin və tətbiq ediləcək təhlükəsizlik tədbirlərinin müəyyənləşdirilməsi."
   },
   {
-    id: "03",
+    icon: GraduationCap,
     title: "Tətbiq və təlim",
     desc: "Razılaşdırılmış tədbirlərin həyata keçirilməsi və komandanın məlumatlandırılması."
   },
   {
-    id: "04",
+    icon: TrendingUp,
     title: "İzləmə və inkişaf",
     desc: "Nəticələrin nəzərdən keçirilməsi və yanaşmanın davamlı təkmilləşdirilməsi."
   }
@@ -55,7 +56,7 @@ export default function Process() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-12">
           {steps.map((step, index) => (
             <motion.div 
-              key={step.id}
+              key={step.title}
               initial={{ opacity: 0, y: 50, scale: 0.95 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, amount: 0.3 }}
@@ -71,7 +72,9 @@ export default function Process() {
                   className="absolute inset-0 bg-accent"
                 />
               </div>
-              <span className="text-accent font-bold text-xl mb-4 group-hover:scale-110 origin-left transition-transform duration-500">{step.id}</span>
+              <div className="text-accent mb-4 group-hover:scale-110 origin-left transition-transform duration-500">
+                <step.icon className="w-8 h-8" />
+              </div>
               <h3 className="text-2xl font-bold mb-4 text-white group-hover:text-accent transition-colors duration-300">{step.title}</h3>
               <p className="text-text-muted text-base leading-relaxed font-light">
                 {step.desc}

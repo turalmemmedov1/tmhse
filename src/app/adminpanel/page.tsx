@@ -8,7 +8,7 @@ import {
   getVacancies, deleteVacancy, getCvs, deleteCv, getSettings, updateSetting, 
   getNews, addNews, deleteNews, updateNews, getLegislation, addLegislation, deleteLegislation, updateLegislation,
   getInternships, addInternship, deleteInternship, updateInternship, getServicePdfs, addServicePdf, addServicePdfWithFile, deleteServicePdf,
-  getServiceVideos, addServiceVideo, deleteServiceVideo, getMonthlyVisits
+  getServiceVideos, addServiceVideo, deleteServiceVideo, getMonthlyVisits, getTemplates, addTemplateWithFile, deleteTemplate
 } from "@/app/actions";
 import { uploadToImgbb } from "@/lib/imgbb";
 import { createClient } from "@supabase/supabase-js";
@@ -29,6 +29,7 @@ export default function AdminPanelPage() {
   const [internships, setInternships] = useState<any[]>([]);
   const [servicePdfs, setServicePdfs] = useState<any[]>([]);
   const [serviceVideos, setServiceVideos] = useState<any[]>([]);
+  const [templates, setTemplates] = useState<any[]>([]);
   const [settings, setSettings] = useState<Record<string, string>>({});
   
   const [loading, setLoading] = useState(false);
@@ -144,16 +145,7 @@ export default function AdminPanelPage() {
     }
   };
 
-  const handleSaveSocial = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const loadingToast = toast.loading("Yadda saxlanılır...");
-    await updateSetting("facebook_url", formData.get("facebook") as string);
-    await updateSetting("instagram_url", formData.get("instagram") as string);
-    await updateSetting("linkedin_url", formData.get("linkedin") as string);
-    toast.success("Yadda saxlanıldı!", { id: loadingToast });
-    loadData();
-  };
+  
 
   const toggleMenu = async (menuKey: string, isActive: boolean) => {
     const newValue = isActive ? "false" : "true";
@@ -197,7 +189,7 @@ export default function AdminPanelPage() {
             {id:'legislation', icon: BookOpen, title: 'Qanunvericilik'},
             {id:'internships', icon: Presentation, title: 'Təcrübə Proqramı'},
             {id:'services_media', icon: Video, title: 'Xidmət (PDF/Video)'},
-            {id:'social', icon: LinkIcon, title: 'Sosial Şəbəkələr'},
+            {id:'social', icon: LinkIcon, title: 'Ümumi Tənzimləmələr'},
             {id:'menus', icon: LayoutDashboard, title: 'Menyular'},
             {id:'home_images', icon: ImageIcon, title: 'Ana Səhifə Şəkilləri'}
           ].map(item => (
@@ -321,7 +313,7 @@ export default function AdminPanelPage() {
                         <option value="ilk-yardim">İlk Yardım</option>
                       </select>
                       <input type="text" name="title" required placeholder="PDF Adı (məs: Təlimat)" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
-                      <input type="file" name="pdf_file" accept=".pdf" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
+                      <input type="file" name="pdf_file" accept=".pdf,.doc,.docx" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
                       <button type="submit" className="bg-dark-bg text-white px-6 py-2 rounded-lg text-sm font-bold mt-2">Yüklə və Yadda Saxla</button>
                     </form>
 
@@ -456,9 +448,28 @@ export default function AdminPanelPage() {
             
             {activeTab === 'social' && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5 max-w-xl">
-                <h3 className="font-bold text-lg text-dark-bg mb-6">Sosial Media Linkləri</h3>
-                <form onSubmit={handleSaveSocial} className="flex flex-col gap-4">
+                <h3 className="font-bold text-lg text-dark-bg mb-6">Əlaqə və Sosial Media</h3>
+                <form onSubmit={async (e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  const loadingToast = toast.loading("Yadda saxlanılır...");
+                  await updateSetting("facebook_url", formData.get("facebook") as string);
+                  await updateSetting("instagram_url", formData.get("instagram") as string);
+                  await updateSetting("linkedin_url", formData.get("linkedin") as string);
+                  await updateSetting("contact_email", formData.get("email") as string);
+                  await updateSetting("contact_phone", formData.get("phone") as string);
+                  toast.success("Yadda saxlanıldı", { id: loadingToast });
+                  loadData();
+                }} className="flex flex-col gap-4">
                   <div className="flex flex-col gap-1">
+                    <label className="text-xs font-bold text-dark-bg">Əlaqə E-poçtu (Email)</label>
+                    <input type="email" name="email" defaultValue={settings?.contact_email || ""} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" placeholder="info@tmhse.expert" />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-bold text-dark-bg">Əlaqə Nömrəsi (Telefon)</label>
+                    <input type="text" name="phone" defaultValue={settings?.contact_phone || ""} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" placeholder="+994 50 123 45 67" />
+                  </div>
+                  <div className="flex flex-col gap-1 mt-4">
                     <label className="text-xs font-bold text-dark-bg">Facebook Linki</label>
                     <input type="text" name="facebook" defaultValue={settings?.facebook_url || ""} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
                   </div>

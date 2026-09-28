@@ -132,7 +132,7 @@ export default function CvYuklePage() {
 
                     <div className="flex flex-col gap-1">
                       <label className="text-xs font-bold text-dark-bg">CV Yüklə (PDF)</label>
-                      <input type="file" name="pdf_file" accept=".pdf" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" />
+                      <input type="file" name="pdf_file" accept=".pdf,.doc,.docx" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" />
                     </div>
 
                     <div className="flex flex-col gap-1">

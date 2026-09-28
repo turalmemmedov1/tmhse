@@ -22,12 +22,7 @@ export default function Footer() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col gap-4 max-w-sm"
         >
-          <button onClick={scrollToTop} className="flex items-center gap-4 mb-1 text-left hover:opacity-80 transition-opacity">
-            <div className="relative w-14 h-14 overflow-hidden rounded-full border border-white/20 bg-white p-1">
-              <Image src="/LogoMain1.png" alt="TMHSE Logo" fill className="object-cover rounded-full" />
-            </div>
-            <span className="font-bold text-xl tracking-wider uppercase text-white">TMHSE</span>
-          </button>
+          
           <p className="text-accent text-base font-medium leading-relaxed italic border-l-2 border-accent pl-4">
             "Təhlükəsizlik qaydadan daha böyük dəyərdir."
           </p>
@@ -60,7 +55,7 @@ export default function Footer() {
           >
             <h4 className="text-accent font-bold uppercase tracking-widest text-xs mb-1">Əlaqə</h4>
             <Link href="/elaqe" className="text-white hover:text-accent text-sm font-bold underline underline-offset-4 mb-1">Əlaqə Səhifəsinə Keçid</Link>
-            <a href="mailto:info@tmhse.expert" className="text-text-muted hover:text-white transition-colors w-fit text-sm font-medium">info@tmhse.expert</a>
+            
             <p className="text-text-muted text-xs">Bakı şəhəri, Azərbaycan</p>
           </motion.div>
         </div>

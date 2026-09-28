@@ -125,7 +125,7 @@ export default function ServiceDetailPage() {
                   const ytId = getYTId(vid.youtube_link);
                   return (
                   <div key={idx} className="flex flex-col gap-2">
-                    <div className="w-full max-w-sm aspect-video bg-background mx-auto md:mx-0 rounded-xl overflow-hidden shadow-sm border border-dark-bg/10">
+                    <div className="w-full max-w-[260px] aspect-video bg-background mx-auto md:mx-0 rounded-xl overflow-hidden shadow-sm border border-dark-bg/10">
                       {ytId ? (
                         <iframe 
                           width="100%" height="100%" 

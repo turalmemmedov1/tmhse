@@ -14,7 +14,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuSettings, setMenuSettings] = useState<Record<string, string>>({});
 
-  const isLightPage = ["/xidmetler", "/elaqe", "/cv-yukle", "/vakansiyalar", "/siyasetler", "/tecrube", "/qanunvericilik", "/xeberler", "/suallar"].some(p => pathname.startsWith(p));
+  const isLightPage = ["/xidmetler", "/elaqe", "/cv-yukle", "/vakansiyalar", "/sablonlar", "/siyasetler", "/tecrube", "/qanunvericilik", "/xeberler", "/suallar"].some(p => pathname.startsWith(p));
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -45,36 +45,17 @@ export default function Navbar() {
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         className={`w-full flex items-center justify-between py-3 px-6 md:px-16 fixed top-0 left-0 right-0 z-[60] transition-colors duration-500 ${navBgClass}`}
       >
-        <Link 
-          href="/" 
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
-          className="flex items-center gap-3 group"
-        >
-          <div className="relative w-14 h-14 rounded-full flex items-center justify-center">
-            <Image 
-              src="/LogoMain1.png" 
-              alt="TMHSE Logo" 
-              fill 
-              className="object-cover rounded-full"
-            />
-          </div>
-          <div className="flex flex-col">
-            <span className={`font-black text-xl md:text-2xl tracking-[0.2em] uppercase transition-colors leading-none ${textColorClass}`}>
-              TMHSE
-            </span>
-            <span className={`text-[8.5px] md:text-[10px] font-bold tracking-wider uppercase opacity-80 mt-1.5 transition-colors ${textColorClass}`}>
-              Tural Məmmədov &bull; HSE
-            </span>
-          </div>
-        </Link>
+        <div className="flex-1"></div>
 
         {/* Desktop Menu */}
         <div className={`hidden lg:flex items-center gap-6 text-sm font-bold transition-colors ${textColorClass}`}>
+          <Link href="/" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/' ? 'text-accent' : ''}`}>Ana Səhifə</Link>
           {menuSettings.menu_xidmetler !== "false" && <Link href="/xidmetler" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname.startsWith('/xidmetler') ? 'text-accent' : ''}`}>Xidmətlər</Link>}
           {menuSettings.menu_tecrube !== "false" && <Link href="/tecrube" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/tecrube' ? 'text-accent' : ''}`}>Təcrübə Proqramı</Link>}
           {menuSettings.menu_qanunvericilik !== "false" && <Link href="/qanunvericilik" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/qanunvericilik' ? 'text-accent' : ''}`}>Qanunvericilik</Link>}
           {menuSettings.menu_xeberler !== "false" && <Link href="/xeberler" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/xeberler' ? 'text-accent' : ''}`}>Xəbərlər</Link>}
           {menuSettings.menu_vakansiyalar !== "false" && <Link href="/vakansiyalar" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/vakansiyalar' ? 'text-accent' : ''}`}>Vakansiyalar</Link>}
+          <Link href="/sablonlar" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/sablonlar' ? 'text-accent' : ''}`}>Şablonlar</Link>
           <Link href="/cv-yukle" className={`transition-all duration-300 hover:text-accent hover:scale-105 ${pathname === '/cv-yukle' ? 'text-accent' : ''}`}>CV Yüklə</Link>
           <Link 
             href="/elaqe" 
@@ -105,26 +86,7 @@ export default function Navbar() {
             className="fixed inset-0 z-[70] bg-dark-bg flex flex-col w-full h-full p-6 lg:hidden overflow-y-auto"
           >
             <div className="flex items-center justify-between mb-12 mt-2 w-full">
-              <Link 
-                href="/" 
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }} 
-                className="flex items-center gap-3 mx-auto"
-              >
-                <div className="relative w-14 h-14 rounded-full flex items-center justify-center">
-                  <Image src="/LogoMain1.png" alt="TMHSE Logo" fill className="object-cover rounded-full" />
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-black text-xl tracking-[0.2em] uppercase text-white leading-none">
-                    TMHSE
-                  </span>
-                  <span className="text-[8.5px] font-bold tracking-wider uppercase text-white/80 mt-1.5">
-                    Tural Məmmədov &bull; HSE
-                  </span>
-                </div>
-              </Link>
+              <div></div>
               <button 
                 className="text-white p-2 absolute right-6 top-8"
                 onClick={() => setMobileMenuOpen(false)}
@@ -134,11 +96,13 @@ export default function Navbar() {
             </div>
 
             <div className="flex flex-col gap-5 text-lg font-bold text-white mb-auto text-center mt-8">
+              <Link href="/" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Ana Səhifə</Link>
               {menuSettings.menu_xidmetler !== "false" && <Link href="/xidmetler" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Xidmətlər</Link>}
               {menuSettings.menu_tecrube !== "false" && <Link href="/tecrube" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Təcrübə Proqramı</Link>}
               {menuSettings.menu_qanunvericilik !== "false" && <Link href="/qanunvericilik" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Qanunvericilik</Link>}
               {menuSettings.menu_xeberler !== "false" && <Link href="/xeberler" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Xəbərlər</Link>}
               {menuSettings.menu_vakansiyalar !== "false" && <Link href="/vakansiyalar" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Vakansiyalar</Link>}
+              <Link href="/sablonlar" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Şablonlar</Link>
               <Link href="/cv-yukle" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">CV Yüklə</Link>
               <Link href="/elaqe" onClick={() => setMobileMenuOpen(false)} className="text-accent border-b border-white/10 pb-3">Əlaqə</Link>
             </div>

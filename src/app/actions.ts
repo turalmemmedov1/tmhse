@@ -283,3 +283,44 @@ export async function addServicePdfWithFile(formData: FormData) {
     return { success: false, error: err.message || "Xəta baş verdi" };
   }
 }
+
+// --- TEMPLATES (Şablonlar) ---
+export async function getTemplates() {
+  const { data, error } = await supabase.from("templates").select("*").order("created_at", { ascending: false });
+  if (error) return [];
+  return data || [];
+}
+
+export async function addTemplateWithFile(formData: FormData) {
+  try {
+    const file = formData.get("file") as File | null;
+    const title = formData.get("title") as string;
+    const image_url = formData.get("image_url") as string;
+
+    if (!file || file.size === 0) {
+      return { success: false, error: "Sənəd faylı seçilməyib!" };
+    }
+    
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const safeTitle = title.replace(/[^a-zA-Z0-9]/g, "_");
+    const fileName = `template_${safeTitle}_${file.name}`;
+    const link = await uploadFileToSupabase(buffer, fileName, file.type);
+    
+    if (!link) {
+      return { success: false, error: "Sənəd yüklənərkən xəta baş verdi." };
+    }
+
+    const { error } = await supabase.from("templates").insert([{ title, image_url, file_url: link }]);
+    if (error) throw new Error(error.message);
+    
+    return { success: true };
+  } catch (err: any) {
+    console.error("addTemplate error:", err);
+    return { success: false, error: err.message || "Xəta baş verdi" };
+  }
+}
+
+export async function deleteTemplate(id: number) {
+  const { error } = await supabase.from("templates").delete().eq("id", id);
+  return { success: !error };
+}
