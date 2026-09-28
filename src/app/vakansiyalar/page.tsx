@@ -147,7 +147,7 @@ export default function VakansiyalarPage() {
           )}
         </AnimatePresence>
 
-        <div className="w-full flex flex-col gap-4 mt-4">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
           {loading ? (
             <p className="text-sm text-foreground/70">Yüklənir...</p>
           ) : vacancies.length === 0 ? (
@@ -158,7 +158,7 @@ export default function VakansiyalarPage() {
                 key={vac.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col md:flex-row justify-between gap-6 group hover:shadow-md transition-shadow"
+                className="bg-white p-6 rounded-3xl shadow-sm border border-dark-bg/5 flex flex-col justify-between gap-6 group hover:shadow-md transition-shadow relative overflow-hidden h-full min-h-[300px]"
               >
                 <div className="flex flex-col gap-3 max-w-3xl">
                   <div>
@@ -173,8 +173,8 @@ export default function VakansiyalarPage() {
                   <span className="text-xs font-bold bg-dark-bg/5 px-3 py-1 rounded-full w-fit mt-1">{vac.type}</span>
                 </div>
                 
-                <div className="flex flex-col items-start md:items-end justify-center shrink-0">
-                  <a href={`mailto:${vac.contact_email}`} className="bg-dark-bg text-white text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-accent-hover transition-colors shadow-md">
+                <div className="flex flex-col items-start w-full shrink-0 mt-auto pt-4 border-t border-dark-bg/5">
+                  <a href={`mailto:${vac.contact_email}`} className="w-full text-center bg-dark-bg text-white text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-accent-hover transition-colors shadow-md">
                     Müraciət Et
                   </a>
                 </div>

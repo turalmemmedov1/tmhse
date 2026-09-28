@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getInternships } from "@/app/actions";
 import { Search } from "lucide-react";
+import Link from "next/link";
 
 export default function TecrubePage() {
   const [data, setData] = useState<any[]>([]);
@@ -50,14 +51,17 @@ export default function TecrubePage() {
         ) : (
           <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
             {filteredData.map(item => (
-              <div key={item.id} className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200 flex flex-col md:flex-row">
+              <Link href={`/tecrube/${item.id}`} key={item.id} className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200 flex flex-col md:flex-row group hover:shadow-md transition-shadow">
                 {item.image_url && <img src={item.image_url} alt={item.title} className="w-full md:w-48 h-48 md:h-auto object-cover" />}
                 <div className="p-6 flex flex-col flex-1">
-                  <h2 className="text-xl font-bold text-dark-bg mb-2">{item.title}</h2>
-                  <p className="text-gray-600 text-sm mb-4 flex-1 whitespace-pre-wrap">{item.content}</p>
-                  <span className="text-xs font-bold text-gray-400 mt-auto">{new Date(item.created_at).toLocaleDateString()}</span>
+                  <h2 className="text-xl font-bold text-dark-bg mb-2 group-hover:text-accent-hover transition-colors">{item.title}</h2>
+                  <p className="text-gray-600 text-sm mb-4 flex-1 line-clamp-3">{item.content}</p>
+                  <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-100">
+                    <span className="text-xs font-bold text-gray-400">{new Date(item.created_at).toLocaleDateString()}</span>
+                    <span className="text-xs font-bold text-accent group-hover:underline">Ətraflı oxu</span>
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}

@@ -15,6 +15,7 @@ import { createClient } from "@supabase/supabase-js";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function AdminPanelPage() {
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,10 +34,10 @@ export default function AdminPanelPage() {
     const [settings, setSettings] = useState<Record<string, string>>({});
   
   const [loading, setLoading] = useState(false);
+  const [editingItem, setEditingItem] = useState<any>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [liveVisitors, setLiveVisitors] = useState(0);
   const [monthlyVisits, setMonthlyVisits] = useState(0);
-  const [editingItem, setEditingItem] = useState<any>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
   const [editTab, setEditTab] = useState("");
@@ -177,7 +178,8 @@ export default function AdminPanelPage() {
     <main className="flex min-h-screen bg-background text-foreground">
       <Toaster position="top-right" />
       {/* Sidebar */}
-      <div className="w-64 bg-dark-bg text-white flex flex-col fixed inset-y-0 left-0 z-20 border-r border-white/10">
+      <button className="md:hidden fixed top-6 left-6 z-50 p-2 bg-dark-bg text-white rounded-xl shadow-lg" onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}><LayoutDashboard className="w-6 h-6" /></button>
+   <div className={`w-64 bg-dark-bg text-white flex flex-col fixed inset-y-0 left-0 z-40 border-r border-white/10 transition-transform duration-300 ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         <div className="p-6 flex items-center gap-3 border-b border-white/10">
           <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden"><Image src="/Logo.png" alt="Logo" width={40} height={40} /></div>
           <div><span className="font-bold text-sm">TM&S</span><span className="text-[10px] text-accent block uppercase">Admin Panel</span></div>
@@ -208,7 +210,7 @@ export default function AdminPanelPage() {
       </div>
 
       {/* Main Content */}
-      <div className="ml-64 w-full p-10 h-screen">
+      <div className="w-full md:ml-64 p-4 md:p-10 min-h-screen mt-16 md:mt-0 overflow-x-hidden">
         <header className="flex justify-between items-center mb-10 bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5">
           <h2 className="text-2xl font-bold text-dark-bg capitalize">{activeTab.replace('_', ' ')}</h2>
           <div className="flex items-center gap-6">
@@ -227,12 +229,28 @@ export default function AdminPanelPage() {
           <div className="flex flex-col gap-6 w-full">
             
             {activeTab === 'dashboard' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 md:grid-cols-5 gap-6">
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Vakansiyalar</span><span className="text-4xl font-black text-dark-bg">{vacancies?.length || 0}</span></div>
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">CV-lər</span><span className="text-4xl font-black text-dark-bg">{cvs?.length || 0}</span></div>
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Xəbərlər</span><span className="text-4xl font-black text-dark-bg">{news?.length || 0}</span></div>
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Qanunvericilik</span><span className="text-4xl font-black text-dark-bg">{legislation?.length || 0}</span></div>
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-accent/20 bg-accent/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Aylıq Ziyarət</span><span className="text-4xl font-black text-dark-bg">{monthlyVisits || 0}</span></div>
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+                  <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Vakansiyalar</span><span className="text-4xl font-black text-dark-bg">{vacancies?.length || 0}</span></div>
+                  <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">CV-lər</span><span className="text-4xl font-black text-dark-bg">{cvs?.length || 0}</span></div>
+                  <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Xəbərlər</span><span className="text-4xl font-black text-dark-bg">{news?.length || 0}</span></div>
+                  <div className="bg-white p-6 rounded-2xl shadow-sm border border-dark-bg/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Qanunvericilik</span><span className="text-4xl font-black text-dark-bg">{legislation?.length || 0}</span></div>
+                  <div className="bg-white p-6 rounded-2xl shadow-sm border border-accent/20 bg-accent/5 flex flex-col gap-2"><span className="text-xs font-bold text-foreground/60 uppercase">Aylıq Ziyarət</span><span className="text-4xl font-black text-dark-bg">{monthlyVisits || 0}</span></div>
+                </div>
+                <div className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5">
+                  <h3 className="font-bold text-lg text-dark-bg mb-6">Aylıq CV və Vakansiya Statistikası</h3>
+                  <div className="flex flex-col md:flex-row gap-6 mb-6">
+                    <input type="month" className="border px-4 py-2 rounded-lg" onChange={(e) => {
+                      const val = e.target.value; 
+                      if(!val) return;
+                      const [y, m] = val.split('-');
+                      const filteredCvs = (cvs||[]).filter(c => c.created_at && c.created_at.startsWith(`${y}-${m}`));
+                      const filteredVacs = (vacancies||[]).filter(v => v.created_at && v.created_at.startsWith(`${y}-${m}`));
+                      alert(`${y}-${m} ayı üzrə:\n\nƏlavə edilən CV sayı: ${filteredCvs.length}\nƏlavə edilən Vakansiya sayı: ${filteredVacs.length}`);
+                    }} />
+                    <p className="text-sm text-text-muted my-auto">Təqvimlə istədiyiniz ayı seçib o ay ərzində neçə CV və Vakansiya gəldiyini görə bilərsiniz.</p>
+                  </div>
+                </div>
               </motion.div>
             )}
 
@@ -675,7 +693,13 @@ export default function AdminPanelPage() {
                     }
                     fd.append('image_url', image_url);
 
-                    const res = await addTemplateWithFile(fd);
+                    const docFile = fd.get('file') as File;
+                    let doc_url = "";
+                    if(docFile && docFile.size > 0) doc_url = await uploadToImgbb(docFile) || "";
+                    if(!doc_url) { toast.error("Fayl yüklənə bilmədi", { id: t }); setIsSubmitting(false); return; }
+                    
+                    const { addTemplateDirect } = await import("@/app/actions");
+                    const res = await addTemplateDirect(fd.get('title') as string, doc_url, image_url);
                     if (res.success) {
                       toast.success("Şablon əlavə edildi!", { id: t });
                       (e.target as any).reset();

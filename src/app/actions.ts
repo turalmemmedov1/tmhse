@@ -349,3 +349,64 @@ export async function updateAdminCredentials(email: string, pass: string) {
   const { error } = await supabase.from("settings").upsert({ setting_key: "admin_credentials", setting_value: creds }, { onConflict: 'setting_key' });
   return !error;
 }
+
+export async function updateVacancy(id: number, formData: FormData) {
+  try {
+    const title = formData.get("title") as string;
+    const content = formData.get("content") as string;
+    const { error } = await supabase.from("vacancies").update({ title, content }).eq("id", id);
+    if (error) throw new Error(error.message);
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err.message };
+  }
+}
+
+export async function updateCv(id: number, formData: FormData) {
+  try {
+    const first_name = formData.get("first_name") as string;
+    const last_name = formData.get("last_name") as string;
+    const email = formData.get("email") as string;
+    const phone = formData.get("phone") as string;
+    const skills = formData.get("skills") as string;
+    const cv_drive_link = formData.get("cv_drive_link") as string;
+    
+    const updateData: any = { first_name, last_name, email, phone, skills };
+    if (cv_drive_link) updateData.cv_drive_link = cv_drive_link;
+
+    const { error } = await supabase.from("cvs").update(updateData).eq("id", id);
+    if (error) throw new Error(error.message);
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err.message };
+  }
+}
+
+export async function addCvAdmin(formData: FormData) {
+  try {
+    const first_name = formData.get("first_name") as string;
+    const last_name = formData.get("last_name") as string;
+    const email = formData.get("email") as string;
+    const phone = formData.get("phone") as string;
+    const skills = formData.get("skills") as string;
+    const cv_drive_link = formData.get("cv_drive_link") as string;
+
+    const { error } = await supabase.from("cvs").insert([{
+      first_name, last_name, email, phone, skills, cv_drive_link
+    }]);
+    if (error) throw new Error(error.message);
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err.message };
+  }
+}
+
+export async function addTemplateDirect(title: string, file_url: string, image_url: string) {
+  try {
+    const { error } = await supabase.from("templates").insert([{ title, image_url, file_url }]);
+    if (error) throw new Error(error.message);
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err.message };
+  }
+}
