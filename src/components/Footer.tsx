@@ -70,7 +70,7 @@ export default function Footer() {
         className="w-full pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-sm relative z-10"
       >
         <div className="text-text-muted text-[10px] md:text-xs text-center md:text-left leading-relaxed">
-          &copy; {new Date().getFullYear()} TMHSE. Bütün hüquqlar qorunur. <br className="md:hidden" />
+          &copy; {new Date().getFullYear()} TM&S Consulting. Bütün hüquqlar qorunur. <br className="md:hidden" />
           <span className="md:ml-2 text-white/50">Saytın təsisçisi və icraçısı: <span className="text-white font-medium">Tural Məmmədov</span></span>
         </div>
 

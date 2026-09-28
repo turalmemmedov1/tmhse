@@ -10,8 +10,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "TMHSE",
-  description: "TMHSE",
+  title: "TM&S Consulting",
+  description: "TM&S Consulting - SƏTƏM Xidmətləri",
 };
 
 export default function RootLayout({

@@ -43,9 +43,21 @@ export default function Navbar() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        className={`w-full flex items-center justify-between py-3 px-6 md:px-16 fixed top-0 left-0 right-0 z-[60] transition-colors duration-500 ${navBgClass}`}
+        className={`w-full flex items-center justify-between py-4 md:py-5 px-6 md:px-16 fixed top-0 left-0 right-0 z-[60] transition-colors duration-500 ${navBgClass}`}
       >
-        <div className="flex-1"></div>
+        <Link href="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-3 group">
+          <div className="relative w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center">
+            <Image src="/LogoMain.jpeg" alt="TM&S Consulting Logo" fill className="object-cover rounded-full" />
+          </div>
+          <div className="flex flex-col">
+            <span className={`font-black text-lg md:text-xl uppercase transition-colors leading-none ${textColorClass}`}>
+              TM&S
+            </span>
+            <span className={`text-[9px] md:text-[10px] font-bold tracking-widest uppercase opacity-80 mt-1 transition-colors ${textColorClass}`}>
+              Consulting
+            </span>
+          </div>
+        </Link>
 
         {/* Desktop Menu */}
         <div className={`hidden lg:flex items-center gap-6 text-sm font-bold transition-colors ${textColorClass}`}>
@@ -80,7 +92,19 @@ export default function Navbar() {
             className="fixed inset-0 z-[70] bg-dark-bg flex flex-col w-full h-full p-6 lg:hidden overflow-y-auto"
           >
             <div className="flex items-center justify-between mb-12 mt-2 w-full">
-              <div></div>
+              <Link href="/" onClick={() => { setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="flex items-center gap-3 mx-auto">
+                <div className="relative w-12 h-12 rounded-full flex items-center justify-center">
+                  <Image src="/LogoMain.jpeg" alt="TM&S Consulting Logo" fill className="object-cover rounded-full" />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className="font-black text-lg uppercase text-white leading-none">
+                    TM&S
+                  </span>
+                  <span className="text-[9px] font-bold tracking-widest uppercase text-white/80 mt-1">
+                    Consulting
+                  </span>
+                </div>
+              </Link>
               <button 
                 className="text-white p-2 absolute right-6 top-8"
                 onClick={() => setMobileMenuOpen(false)}
