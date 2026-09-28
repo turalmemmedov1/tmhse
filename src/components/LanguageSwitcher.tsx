@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Globe, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { getCookie, setCookie } from "cookies-next";
 
 const languages = [
   { code: "az", name: "AZ" },
@@ -16,6 +17,13 @@ export default function LanguageSwitcher() {
   const [currentLang, setCurrentLang] = useState("AZ");
 
   useEffect(() => {
+    // Check initial language from cookie
+    const googtrans = getCookie("googtrans") as string;
+    if (googtrans) {
+      const current = googtrans.split("/").pop()?.toUpperCase() || "AZ";
+      setCurrentLang(current);
+    }
+
     if (!document.getElementById("google-translate-script")) {
       const script = document.createElement("script");
       script.id = "google-translate-script";
@@ -28,6 +36,7 @@ export default function LanguageSwitcher() {
           {
             pageLanguage: "az",
             includedLanguages: "az,en,ru,tr",
+            layout: (window as any).google.translate.TranslateElement.InlineLayout.SIMPLE,
             autoDisplay: false,
           },
           "google_translate_element"
@@ -40,18 +49,18 @@ export default function LanguageSwitcher() {
     setCurrentLang(langName);
     setIsOpen(false);
     
-    // Google Translate gizli select elementini tapırıq
-    const select = document.querySelector(".goog-te-combo") as HTMLSelectElement;
-    if (select) {
-      select.value = langCode;
-      select.dispatchEvent(new Event("change"));
-    }
+    // Set Google Translate cookie
+    setCookie("googtrans", `/az/${langCode}`);
+    setCookie("googtrans", `/az/${langCode}`, { domain: window.location.hostname });
+    
+    // Reload page to apply translation safely without bugs
+    window.location.reload();
   };
 
   return (
     <div className="relative z-[90]">
-      {/* Gizli Google Translate div-i */}
-      <div id="google_translate_element" className="hidden"></div>
+      {/* Gizli div - tam display:none etmirik ki, load olsun, sadəcə gizlədirik */}
+      <div id="google_translate_element" className="absolute top-[-9999px] left-[-9999px] opacity-0 pointer-events-none"></div>
       
       <button 
         onClick={() => setIsOpen(!isOpen)}

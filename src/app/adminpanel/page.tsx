@@ -588,10 +588,39 @@ export default function AdminPanelPage() {
                   </div>
                   <button type="submit" className="bg-dark-bg text-white px-6 py-2 rounded-lg text-sm font-bold w-fit hover:bg-accent-hover transition-colors">Yenilə</button>
                 </form>
+
+                <form onSubmit={async (e) => {
+                  e.preventDefault();
+                  const loadingToast = toast.loading("Yüklənir...");
+                  const file = (e.currentTarget.elements.namedItem("image_3") as HTMLInputElement)?.files?.[0];
+                  if (file && file.size > 0) {
+                    const url = await uploadToImgbb(file);
+                    if (url) await updateSetting("about_image", url);
+                  }
+                  toast.success("Yadda saxlanıldı", { id: loadingToast });
+                  loadData();
+                }} className="flex flex-col gap-4 mt-8 pt-8 border-t">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-bold text-dark-bg">3. Haqqımızda Səhifəsi Şəkli</label>
+                    {settings?.about_image && (
+                      <div className="flex items-end gap-4 mb-2">
+                        <img src={settings.about_image} className="w-32 h-32 object-cover rounded-xl border" />
+                        <button type="button" onClick={async () => {
+                          if (confirm("Şəkli silmək istəyirsiniz?")) {
+                            const loadingToast = toast.loading("Silinir...");
+                            await updateSetting("about_image", "");
+                            toast.success("Silindi", { id: loadingToast });
+                            loadData();
+                          }
+                        }} className="text-red-500 text-sm font-bold hover:underline mb-2">Sil</button>
+                      </div>
+                    )}
+                    <input type="file" name="image_3" accept="image/*" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm" />
+                  </div>
+                  <button type="submit" className="bg-dark-bg text-white px-6 py-2 rounded-lg text-sm font-bold w-fit hover:bg-accent-hover transition-colors">Yenilə</button>
+                </form>
               </motion.div>
             )}
-
-            
 
             {activeTab === 'templates' && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-8">

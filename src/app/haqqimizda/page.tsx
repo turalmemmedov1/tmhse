@@ -3,8 +3,14 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { getSettings } from "@/app/actions";
 
 export default function AboutPage() {
+  const [settings, setSettings] = useState<Record<string, string>>({});
+  useEffect(() => {
+    getSettings().then(s => setSettings(s || {}));
+  }, []);
   return (
     <main className="flex min-h-screen flex-col overflow-x-hidden bg-dark-bg text-white">
       <Navbar />
@@ -41,8 +47,14 @@ export default function AboutPage() {
             className="w-full md:w-1/2 aspect-square bg-dark-bg-card rounded-[3rem] p-12 flex items-center justify-center border border-white/5 shadow-2xl relative overflow-hidden"
           >
             {/* Şəkil və ya Video üçün boş yer */}
-            <div className="absolute inset-0 bg-white/5 z-0"></div>
-            <span className="text-white/20 text-2xl font-light tracking-widest z-10 uppercase">Şəkil Yeri</span>
+            {settings.about_image ? (
+              <img src={settings.about_image} alt="Haqqımızda" className="absolute inset-0 w-full h-full object-cover z-0 opacity-80" />
+            ) : (
+              <>
+                <div className="absolute inset-0 bg-white/5 z-0"></div>
+                <span className="text-white/20 text-2xl font-light tracking-widest z-10 uppercase">Şəkil Yeri</span>
+              </>
+            )}
           </motion.div>
         </div>
       </section>

@@ -29,12 +29,12 @@ const steps = [
 
 export default function Process() {
   return (
-    <section className="w-full bg-dark-bg text-white py-24 px-6 md:px-16 border-t border-white/5 relative overflow-hidden">
+    <section className="w-full bg-dark-bg text-white py-12 md:py-16 px-6 md:px-16 border-t border-white/5 relative overflow-hidden">
       <LedLight />
       
       <div className="w-full flex flex-col relative z-10">
         
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-10 mb-20">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-12">
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}

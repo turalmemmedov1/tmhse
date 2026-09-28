@@ -23,7 +23,7 @@ export default function Footer() {
           className="flex flex-col gap-4 max-w-sm"
         >
           <button onClick={scrollToTop} className="flex items-center gap-4 mb-2 text-left hover:opacity-80 transition-opacity">
-            <div className="relative w-16 h-16 rounded-full flex items-center justify-center">
+            <div className="relative w-16 h-16 rounded-full flex items-center justify-center overflow-hidden bg-white">
               <Image src="/Logo.png" alt="TM&S Consulting Logo" fill className="object-contain" />
             </div>
             <div className="flex flex-col text-left">

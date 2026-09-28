@@ -124,6 +124,7 @@ export default function Navbar() {
               {menuSettings.menu_vakansiyalar !== "false" && <Link href="/vakansiyalar" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Vakansiyalar</Link>}
               {menuSettings.menu_sablonlar !== "false" && <Link href="/sablonlar" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">Şablonlar</Link>}
               {menuSettings.menu_cv !== "false" && <Link href="/cv-yukle" onClick={() => setMobileMenuOpen(false)} className="border-b border-white/10 pb-3 active:text-accent">CV Yüklə</Link>}
+              <Link href="/elaqe" onClick={() => setMobileMenuOpen(false)} className="text-accent border-b border-white/10 pb-3">Əlaqə</Link>
               
             </div>
           </motion.div>
