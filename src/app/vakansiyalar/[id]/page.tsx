@@ -5,9 +5,11 @@ import Footer from "@/components/Footer";
 import { Building2, MapPin, Briefcase, Mail, Phone, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
-export default async function VacancyDetail({ params }: { params: { id: string } }) {
+export default async function VacancyDetail({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
+  const paramsId = resolvedParams.id;
   const vacancies = await getVacancies();
-  const vac = vacancies.find(v => v.id.toString() === params.id);
+  const vac = vacancies.find(v => v.id.toString() === paramsId);
 
   if (!vac) {
     notFound();
