@@ -62,10 +62,10 @@ export default function AdminPanelPage() {
   const loadData = async () => {
     setLoading(true);
     try {
-      const [v, c, n, l, i, sp, sv, s, mVisits] = await Promise.all([
-        getVacancies(), getCvs(), getNews(), getLegislation(), getInternships(), getServicePdfs(), getServiceVideos(), getSettings(), getMonthlyVisits()
+      const [v, c, n, l, i, sp, sv, s, mVisits, tData] = await Promise.all([
+        getVacancies(), getCvs(), getNews(), getLegislation(), getInternships(), getServicePdfs(), getServiceVideos(), getSettings(), getMonthlyVisits(), getTemplates()
       ]);
-      setVacancies(v || []); setCvs(c || []); setNews(n || []); setLegislation(l || []); setInternships(i || []); setServicePdfs(sp || []); setServiceVideos(sv || []); setSettings(s || {}); setMonthlyVisits(mVisits || 0);
+      setVacancies(v || []); setCvs(c || []); setNews(n || []); setLegislation(l || []); setInternships(i || []); setServicePdfs(sp || []); setServiceVideos(sv || []); setSettings(s || {}); setMonthlyVisits(mVisits || 0); setTemplates(tData || []);
     } catch (e) {
       console.error("Error loading admin data:", e);
       toast.error("Məlumatları yükləyərkən xəta baş verdi");
@@ -696,29 +696,38 @@ export default function AdminPanelPage() {
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-8">
                 
                 <div className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5">
-                  <h3 className="font-bold text-lg text-dark-bg mb-6 flex items-center gap-2"><PlusCircle className="w-5 h-5 text-accent"/> Yeni Şablon Əlavə Et</h3>
+                  <h3 className="font-bold text-lg text-dark-bg mb-6 flex items-center gap-2">
+                    <PlusCircle className="w-5 h-5 text-accent"/> {editingItem && activeTab === 'templates' ? 'Şablonu Redaktə Et' : 'Yeni Şablon Əlavə Et'}
+                  </h3>
                   <form onSubmit={async (e) => {
                     e.preventDefault();
                     setIsSubmitting(true);
-                    const t = toast.loading("Şablon yüklənir...");
+                    const t = toast.loading("Saxlanılır...");
                     const fd = new FormData(e.currentTarget);
                     
                     const imgFile = fd.get('image_file') as File;
-                    let image_url = "";
+                    let image_url = editingItem?.image_url || "";
                     if(imgFile && imgFile.size > 0) {
                       image_url = await uploadToImgbb(imgFile) || "";
                     }
-                    fd.append('image_url', image_url);
 
                     const docFile = fd.get('file') as File;
-                    let doc_url = "";
-                    if(docFile && docFile.size > 0) doc_url = await uploadToImgbb(docFile) || "";
-                    // Optional file handling
+                    let doc_url = editingItem?.file_url || "";
+                    if(docFile && docFile.size > 0) {
+                        doc_url = await uploadToImgbb(docFile) || "";
+                    }
                     
-                    const { addTemplateDirect } = await import("@/app/actions");
-                    const res = await addTemplateDirect(fd.get('title') as string, doc_url, image_url);
+                    const { addTemplateDirect, updateTemplateDirect } = await import("@/app/actions");
+                    let res;
+                    if(editingItem && activeTab === 'templates') {
+                        res = await updateTemplateDirect(editingItem.id, fd.get('title') as string, doc_url, image_url);
+                    } else {
+                        res = await addTemplateDirect(fd.get('title') as string, doc_url, image_url);
+                    }
+                    
                     if (res.success) {
-                      toast.success("Şablon əlavə edildi!", { id: t });
+                      toast.success("Saxlanıldı!", { id: t });
+                      if(editingItem) setEditingItem(null);
                       (e.target as any).reset();
                       loadData();
                     } else {
@@ -726,22 +735,27 @@ export default function AdminPanelPage() {
                     }
                     setIsSubmitting(false);
                   }} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-1 md:col-span-2">
                       <label className="text-xs font-bold text-dark-bg">Şablonun Adı *</label>
-                      <input type="text" name="title" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" placeholder="Məs: Risk Qiymətləndirmə Forması" />
+                      <input type="text" name="title" defaultValue={editingItem?.title || ""} required className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" placeholder="Məs: Risk Qiymətləndirmə Forması" />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="text-xs font-bold text-dark-bg">Şəkil Yüklə (İstəyə bağlı)</label>
+                      <label className="text-xs font-bold text-dark-bg">Şəkil Yüklə (Mövcudu dəyişmək/yükləmək üçün)</label>
                       <input type="file" name="image_file" accept="image/*" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
                     </div>
-                    <div className="flex flex-col gap-1 md:col-span-2">
-                      <label className="text-xs font-bold text-dark-bg">Sənəd Faylı (PDF, DOCX, DOC) *</label>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs font-bold text-dark-bg">Sənəd Faylı (Mövcudu dəyişmək/yükləmək üçün)</label>
                       <input type="file" name="file" accept=".pdf,.doc,.docx" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" />
                     </div>
-                    <div className="md:col-span-2">
+                    <div className="md:col-span-2 flex gap-4 mt-2">
                       <button disabled={isSubmitting} type="submit" className="bg-dark-bg text-white px-8 py-3 rounded-xl text-sm font-bold w-fit hover:bg-accent-hover transition-colors disabled:opacity-50">
-                        {isSubmitting ? 'Yüklənir...' : 'Əlavə Et'}
+                        {isSubmitting ? 'Saxlanılır...' : 'Saxla'}
                       </button>
+                      {editingItem && activeTab === 'templates' && (
+                        <button type="button" onClick={() => setEditingItem(null)} className="bg-gray-100 text-dark-bg px-8 py-3 rounded-xl text-sm font-bold w-fit hover:bg-gray-200 transition-colors">
+                            Ləğv Et
+                        </button>
+                      )}
                     </div>
                   </form>
                 </div>
@@ -764,14 +778,21 @@ export default function AdminPanelPage() {
                           <h4 className="font-bold text-dark-bg text-sm line-clamp-2">{t.title}</h4>
                           <a href={t.file_url} target="_blank" rel="noreferrer" className="text-accent text-xs font-bold hover:underline mt-2 inline-block">Sənədə Bax</a>
                         </div>
-                        <button onClick={async () => {
-                          if(confirm("Silmək istədiyinizə əminsiniz?")) {
-                            await deleteTemplate(t.id);
-                            loadData();
-                          }
-                        }} className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button onClick={() => { setEditingItem(t); window.scrollTo({top: 0, behavior: 'smooth'}); }} className="bg-blue-500 text-white p-2 rounded-lg shadow-lg hover:bg-blue-600 transition-colors">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                            </button>
+                            <button onClick={async () => {
+                              if(confirm("Silmək istədiyinizə əminsiniz?")) {
+                                const tst = toast.loading("Silinir...");
+                                await deleteTemplate(t.id);
+                                toast.success("Silindi", {id: tst});
+                                loadData();
+                              }
+                            }} className="bg-red-500 text-white p-2 rounded-lg shadow-lg hover:bg-red-600 transition-colors">
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                        </div>
                       </div>
                     ))}
                   </div>

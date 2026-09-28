@@ -430,3 +430,13 @@ export async function addTemplateDirect(title: string, file_url: string, image_u
     return { success: false, error: err.message };
   }
 }
+
+export async function updateTemplateDirect(id: number, title: string, file_url: string, image_url: string) {
+  try {
+    const { error } = await supabase.from("templates").update({ title, image_url, file_url }).eq("id", id);
+    if (error) throw new Error(error.message);
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err.message };
+  }
+}
