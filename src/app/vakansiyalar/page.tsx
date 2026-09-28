@@ -61,7 +61,7 @@ export default function VakansiyalarPage() {
           <div>
             <h1 className="text-3xl md:text-4xl font-bold mb-2 text-dark-bg">Aktiv Vakansiyalar</h1>
             <p className="text-sm text-foreground/70">
-              Şirkətiniz üçün SƏTƏM mütəxəssisi axtarırsınız? Elanınızı pulsuz yerləşdirin.
+              Şirkətiniz üçün SƏTƏM mütəxəssisi axtarırsınız? Vakansiyanızı pulsuz yerləşdirin.
             </p>
           </div>
           <button 
@@ -126,19 +126,19 @@ export default function VakansiyalarPage() {
                     </div>
 
                     <div className="flex flex-col gap-1">
-                      <label className="text-xs font-bold text-dark-bg">Əlaqə E-poçtu *</label>
-                      <input type="email" name="contact" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="hr@sirket.az" />
+                      <label className="text-xs font-bold text-dark-bg">Əlaqə (E-poçt və ya Nömrə) *</label>
+                      <input type="text" name="contact" required className="w-full bg-background border border-dark-bg/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-hover text-sm" placeholder="hr@sirket.az və ya +994..." />
                     </div>
 
                     <button disabled={isSubmitting} type="submit" className="w-full bg-dark-bg hover:bg-accent-hover text-white font-bold py-3 rounded-lg transition-colors duration-300 text-sm mt-2 disabled:opacity-50">
-                      {isSubmitting ? "Yüklənir..." : "Elan Əlavə Et"}
+                      {isSubmitting ? "Yüklənir..." : "Vakansiyanı Yerləşdir"}
                     </button>
                   </form>
                 ) : (
                   <div className="flex flex-col items-center justify-center text-center gap-4 py-8">
                     <CheckCircle className="w-12 h-12 text-green-500" />
                     <h2 className="text-xl font-bold text-dark-bg">Uğurla Yerləşdirildi!</h2>
-                    <p className="text-sm text-foreground/70">Elanınız vakansiyalar siyahısına əlavə olundu.</p>
+                    <p className="text-sm text-foreground/70">Vakansiyanız siyahıya əlavə olundu.</p>
                     <button onClick={() => { setSubmitted(false); setIsModalOpen(false); }} className="mt-4 bg-dark-bg text-white px-6 py-2 rounded-lg">Bağla</button>
                   </div>
                 )}
@@ -174,7 +174,7 @@ export default function VakansiyalarPage() {
                 </div>
                 
                 <div className="flex flex-col items-start w-full shrink-0 mt-auto pt-4 border-t border-dark-bg/5">
-                  <a href={`mailto:${vac.contact_email}`} className="w-full text-center bg-dark-bg text-white text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-accent-hover transition-colors shadow-md">
+                  <a href={vac.contact_email?.includes('@') ? `mailto:${vac.contact_email}` : `tel:${vac.contact_email}`} className="w-full text-center bg-dark-bg text-white text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-accent-hover transition-colors shadow-md">
                     Müraciət Et
                   </a>
                 </div>
