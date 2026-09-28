@@ -179,7 +179,7 @@ export default function AdminPanelPage() {
       {/* Sidebar */}
       <div className="w-64 bg-dark-bg text-white flex flex-col fixed inset-y-0 left-0 z-20 border-r border-white/10">
         <div className="p-6 flex items-center gap-3 border-b border-white/10">
-          <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden"><Image src="/LogoMain1.png" alt="Logo" width={40} height={40} /></div>
+          <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden"><Image src="/LogoMain.jpeg" alt="Logo" width={40} height={40} /></div>
           <div><span className="font-bold text-sm">TMHSE</span><span className="text-[10px] text-accent block uppercase">Admin Panel</span></div>
         </div>
         <div className="flex flex-col p-4 gap-2 mt-4 pb-20">
