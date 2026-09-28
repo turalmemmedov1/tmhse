@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
+import Link from "next/link";
 import Footer from "@/components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
@@ -176,29 +177,14 @@ export default function VakansiyalarPage() {
                       <MapPin className="w-4 h-4 text-accent-hover" /> {vac.location}
                     </div>
                   </div>
-                  <div className="text-sm text-foreground/70 leading-relaxed prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: vac.description }} />
+                  <div className="text-sm text-foreground/70 leading-relaxed prose prose-sm max-w-none line-clamp-4" dangerouslySetInnerHTML={{ __html: vac.description }} />
                   <span className="text-xs font-bold bg-dark-bg/5 px-3 py-1 rounded-full w-fit mt-1">{vac.type}</span>
                 </div>
                 
-                <div className="flex flex-col md:flex-row items-center w-full gap-3 mt-auto pt-4 border-t border-dark-bg/5">
-                  {vac.contact_email?.includes(' | ') ? (
-                    <>
-                      {vac.contact_email.split(' | ')[0] && (
-                        <a href={`mailto:${vac.contact_email.split(' | ')[0]}`} className="w-full text-center bg-dark-bg text-white text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-accent-hover transition-colors shadow-md">
-                          E-poçtla Müraciət
-                        </a>
-                      )}
-                      {vac.contact_email.split(' | ')[1] && (
-                        <a href={`https://wa.me/${vac.contact_email.split(' | ')[1].replace(/[^0-9]/g, '')}`} target="_blank" className="w-full text-center bg-gray-100 text-dark-bg text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-gray-200 transition-colors shadow-md">
-                          WhatsApp-a Yaz
-                        </a>
-                      )}
-                    </>
-                  ) : (
-                    <a href={vac.contact_email?.includes('@') ? `mailto:${vac.contact_email}` : `https://wa.me/${vac.contact_email.replace(/[^0-9]/g, '')}`} target="_blank" className="w-full text-center bg-dark-bg text-white text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-accent-hover transition-colors shadow-md">
-                      Müraciət Et
-                    </a>
-                  )}
+                <div className="flex flex-col w-full gap-3 mt-auto pt-4 border-t border-dark-bg/5">
+                  <Link href={`/vakansiyalar/${vac.id}`} className="w-full text-center bg-dark-bg text-white text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl hover:bg-accent-hover transition-colors shadow-md">
+                    Daha Ətraflı & Müraciət Et
+                  </Link>
                 </div>
               </motion.div>
             ))
