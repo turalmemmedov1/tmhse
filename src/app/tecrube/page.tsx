@@ -55,7 +55,7 @@ export default function TecrubePage() {
                 {item.image_url && <img src={item.image_url} alt={item.title} className="w-full md:w-48 h-48 md:h-auto object-cover" />}
                 <div className="p-6 flex flex-col flex-1">
                   <h2 className="text-xl font-bold text-dark-bg mb-2 group-hover:text-accent-hover transition-colors">{item.title}</h2>
-                  <p className="text-gray-600 text-sm mb-4 flex-1 line-clamp-3">{item.content}</p>
+                  <div className="text-gray-600 text-sm mb-4 flex-1 line-clamp-3 prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: item.content }} />
                   <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-100">
                     <span className="text-xs font-bold text-gray-400">{new Date(item.created_at).toLocaleDateString()}</span>
                     <span className="text-xs font-bold text-accent group-hover:underline">Ətraflı oxu</span>

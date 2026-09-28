@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import QuillInput from "@/components/QuillInput";
 import { LayoutDashboard, MessageSquare, Phone, Settings,  LogOut, Link as LinkIcon, ImageIcon as ImageIcon, Folder as FolderIcon, FileText, Briefcase, FileBadge, Trash2, PlusCircle, Newspaper, Users, BookOpen, Presentation, Video } from "lucide-react";
 import Image from "next/image";
 import { 
@@ -496,7 +497,7 @@ export default function AdminPanelPage() {
                     
                     <div className="flex flex-col gap-1">
                         <label className="text-xs font-bold text-dark-bg">Tələblər / Təsvir *</label>
-                        <textarea name="desc" defaultValue={editingItem?.description || ""} required rows={5} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent resize-none"></textarea>
+                        <QuillInput name="desc" defaultValue={editingItem?.description || ""} placeholder="Tələblər / Təsvir *" />
                     </div>
                     
                     <div className="flex gap-4">

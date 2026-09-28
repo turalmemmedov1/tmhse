@@ -22,7 +22,7 @@ export default function Footer() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col gap-4 max-w-sm"
         >
-          <button onClick={scrollToTop} className="flex items-center gap-4 mb-2 text-left hover:opacity-80 transition-opacity">
+          <button onClick={scrollToTop} className="flex items-center gap-4 mb-2 text-left hover:opacity-80 transition-opacity notranslate">
             <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-full flex items-center justify-center overflow-hidden bg-white/10 border border-white/20 shadow-xl group-hover:scale-105 transition-transform">
               <Image src="/Logo.png" alt="TM&S Consulting Logo" fill className="object-cover" />
             </div>

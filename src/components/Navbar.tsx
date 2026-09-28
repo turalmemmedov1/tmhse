@@ -75,7 +75,7 @@ export default function Navbar() {
 
         <div className="flex items-center gap-3 lg:gap-5 ml-4">
           <LanguageSwitcher />
-          <Link href="/elaqe" className="hidden lg:flex items-center justify-center bg-accent text-dark-bg font-bold text-xs px-5 py-2.5 rounded-full hover:bg-accent-hover hover:text-white transition-all shadow-md">
+          <Link href="/elaqe" className="hidden lg:flex items-center justify-center bg-accent text-dark-bg font-bold text-sm px-5 py-2.5 rounded-full hover:bg-accent-hover hover:text-white transition-all shadow-md">
             Bizimlə Əlaqə
           </Link>
           {/* Mobile Hamburger Toggle */}
