@@ -1,28 +1,38 @@
+import { createClient } from "@supabase/supabase-js";
+
 export async function uploadToImgbb(file: File): Promise<string | null> {
-  const apiKey = process.env.NEXT_PUBLIC_IMGBB_API_KEY || "20abda44a0d3884534125abafccaf556";
-  if (!apiKey) {
-    console.error("ImgBB API key is missing");
-    return null;
-  }
-
-  const formData = new FormData();
-  formData.append("image", file);
-
   try {
-    const res = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
-      method: "POST",
-      body: formData,
-    });
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
     
-    const data = await res.json();
-    if (data.success) {
-      return data.data.url;
-    } else {
-      console.error("ImgBB upload failed:", data);
+    if (!supabaseUrl || !supabaseKey) {
+      console.error("Supabase credentials missing for image upload");
       return null;
     }
-  } catch (error) {
-    console.error("ImgBB fetch error:", error);
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const timestamp = Date.now();
+    const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, "_");
+    // Upload into 'pdfs' bucket which we already configured for public access
+    const filePath = `images/${timestamp}_${safeName}`;
+
+    const { data, error } = await supabase.storage
+      .from('pdfs')
+      .upload(filePath, file, {
+        contentType: file.type,
+        upsert: false
+      });
+
+    if (error) {
+      console.error("Supabase Image Upload Error:", error);
+      return null;
+    }
+
+    const { data: publicUrlData } = supabase.storage.from('pdfs').getPublicUrl(filePath);
+    return publicUrlData.publicUrl;
+  } catch (err) {
+    console.error("Upload error", err);
     return null;
   }
 }
