@@ -21,7 +21,7 @@ const allFaqs = [
   { q: "SƏTƏM sənədləşməsi nədir?", a: "Qanunvericiliyin tələb etdiyi bütün daxili əmrlər, təlimatlar, jurnallar və hesabat formalarının sıfırdan hazırlanmasıdır." },
   { q: "Müəssisədə bədbəxt hadisə baş verdikdə nə edirsiniz?", a: "İnsidentin kök səbəblərinin araşdırılması (RCA), düzəldici tədbirlərin görülməsi və rəsmi qurumlar üçün hesabatın hazırlanmasında iştirak edirik." },
   { q: "Təlimlərin sonunda sertifikat verilirmi?", a: "Bəli, təlimi uğurla başa vuran bütün iştirakçılara rəsmi və beynəlxalq səviyyədə tanınan sertifikatlar təqdim olunur." },
-  { q: "Sizinlə necə əlaqə saxlamaq olar?", a: "Saytımızın Əlaqə bölməsindən, WhatsApp nömrəmizdən və ya info@tmhse.expert ünvanından bizə yaza bilərsiniz." }
+  { q: "Sizinlə necə əlaqə saxlamaq olar?", a: "Saytımızın Əlaqə bölməsindən, WhatsApp nömrəmizdən və ya info@hsetms.com ünvanından bizə yaza bilərsiniz." }
 ];
 
 export default function SuallarPage() {

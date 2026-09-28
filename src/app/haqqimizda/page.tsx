@@ -29,7 +29,7 @@ export default function AboutPage() {
             </h2>
             <div className="text-lg text-text-muted flex flex-col gap-6 leading-relaxed font-light mt-4">
               <p>
-                TMHSE (Tural Mammadov Health, Safety, Environment) olaraq missiyamız iş mühitlərini sadəcə qanunvericiliyin tələblərinə uyğunlaşdırmaq deyil, eyni zamanda hər bir əməkdaşın günün sonunda evinə sağ-salamat qayıtdığı təhlükəsizlik mədəniyyətini formalaşdırmaqdır.
+                TM&S olaraq missiyamız iş mühitlərini sadəcə qanunvericiliyin tələblərinə uyğunlaşdırmaq deyil, eyni zamanda hər bir əməkdaşın günün sonunda evinə sağ-salamat qayıtdığı təhlükəsizlik mədəniyyətini formalaşdırmaqdır.
               </p>
               <p>
                 Biz inanırıq ki, SƏTƏM – sağlamlığın, əməyin təhlükəsizliyinin və ətraf mühitin mühafizəsinin vahid yanaşmada birləşməsidir. Uzun illik təcrübəmizə əsaslanaraq, müxtəlif sənaye sahələrindəki müəssisələr üçün risklərin qiymətləndirilməsi, təlimlərin təşkili və auditi üzrə peşəkar xidmətlər göstəririk.

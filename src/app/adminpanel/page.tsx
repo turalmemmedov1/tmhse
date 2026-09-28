@@ -163,7 +163,7 @@ export default function AdminPanelPage() {
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md bg-dark-bg-card p-10 rounded-[2rem] shadow-2xl border border-white/10 flex flex-col items-center">
           <h1 className="text-2xl font-bold mb-8 text-center">İdarəetmə Paneli</h1>
           <form onSubmit={handleLogin} className="w-full flex flex-col gap-4">
-            <input type="email" autoComplete="username" value={email} onChange={e => setEmail(e.target.value)} className="w-full bg-dark-bg border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-accent" placeholder="info@tmhse.expert" />
+            <input type="email" autoComplete="username" value={email} onChange={e => setEmail(e.target.value)} className="w-full bg-dark-bg border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-accent" placeholder="info@hsetms.com" />
             <input type="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-dark-bg border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-accent" placeholder="••••••••" />
             {error && <span className="text-red-400 text-xs">{error}</span>}
             <button type="submit" className="w-full bg-accent text-dark-bg font-bold py-3 rounded-xl mt-4">Daxil Ol</button>
@@ -180,7 +180,7 @@ export default function AdminPanelPage() {
       <div className="w-64 bg-dark-bg text-white flex flex-col fixed inset-y-0 left-0 z-20 border-r border-white/10">
         <div className="p-6 flex items-center gap-3 border-b border-white/10">
           <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden"><Image src="/Logo.png" alt="Logo" width={40} height={40} /></div>
-          <div><span className="font-bold text-sm">TMHSE</span><span className="text-[10px] text-accent block uppercase">Admin Panel</span></div>
+          <div><span className="font-bold text-sm">TM&S</span><span className="text-[10px] text-accent block uppercase">Admin Panel</span></div>
         </div>
         <div className="flex flex-col p-4 gap-2 mt-4 pb-20">
           {[
@@ -504,7 +504,7 @@ export default function AdminPanelPage() {
                 }} className="flex flex-col gap-4">
                   <div className="flex flex-col gap-1">
                     <label className="text-xs font-bold text-dark-bg">Əlaqə E-poçtu (Email)</label>
-                    <input type="email" name="email" defaultValue={settings?.contact_email || ""} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" placeholder="info@tmhse.expert" />
+                    <input type="email" name="email" defaultValue={settings?.contact_email || ""} className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-2 text-sm focus:border-accent" placeholder="info@hsetms.com" />
                   </div>
                   <div className="flex flex-col gap-1">
                     <label className="text-xs font-bold text-dark-bg">Əlaqə Nömrəsi (Telefon)</label>
@@ -605,7 +605,7 @@ export default function AdminPanelPage() {
                   loadData();
                 }} className="flex flex-col gap-4">
                   <div className="flex flex-col gap-1">
-                    <label className="text-sm font-bold text-dark-bg">2. "TMHSE" (Haqqımızda) Şəkli</label>
+                    <label className="text-sm font-bold text-dark-bg">2. "TM&S" (Haqqımızda) Şəkli</label>
                     {settings?.home_image_2 && (
                       <div className="flex items-end gap-4 mb-2">
                         <img src={settings.home_image_2} className="w-32 h-32 object-cover rounded-xl border" />

@@ -42,8 +42,8 @@ export default function Contact() {
             <p className="text-foreground/60 text-lg font-medium">SƏTƏM üzrə əməkdaşlıq və xidmətlər</p>
           </div>
           
-          <a href="mailto:info@tmhse.expert" className="relative z-10 text-3xl md:text-4xl font-black text-dark-bg hover:text-accent-hover transition-colors duration-300 w-fit">
-            info@tmhse.expert
+          <a href="mailto:info@hsetms.com" className="relative z-10 text-3xl md:text-4xl font-black text-dark-bg hover:text-accent-hover transition-colors duration-300 w-fit">
+            info@hsetms.com
           </a>
 
           <Link href="/elaqe">

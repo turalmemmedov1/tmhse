@@ -339,7 +339,7 @@ export async function deleteMessage(id: number) {
 
 export async function verifyAdmin(email: string, pass: string) {
   const { data } = await supabase.from("settings").select("setting_value").eq("setting_key", "admin_credentials").single();
-  const creds = data?.setting_value || "info@tmhse.expert:Tural2026";
+  const creds = data?.setting_value || "info@hsetms.com:Tural2026";
   const [dbEmail, dbPass] = creds.split(":");
   return email === dbEmail && pass === dbPass;
 }

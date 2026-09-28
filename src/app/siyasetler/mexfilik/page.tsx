@@ -19,7 +19,7 @@ export default function PrivacyPolicyPage() {
           className="mb-12"
         >
           <h1 className="text-4xl md:text-6xl font-bold mb-4 text-dark-bg">Məxfilik Siyasəti</h1>
-          <p className="text-lg text-foreground/70 max-w-2xl">TMHSE olaraq məlumatlarınızın qorunmasına və gizliliyinə böyük önəm veririk.</p>
+          <p className="text-lg text-foreground/70 max-w-2xl">TM&S olaraq məlumatlarınızın qorunmasına və gizliliyinə böyük önəm veririk.</p>
         </motion.div>
 
         <div className="bg-white rounded-[2rem] p-8 md:p-16 shadow-xl shadow-black/5 border border-dark-bg/5">
@@ -30,7 +30,7 @@ export default function PrivacyPolicyPage() {
             className="prose prose-base md:prose-lg max-w-4xl prose-headings:text-dark-bg prose-a:text-accent-hover"
           >
             <p><strong>Son yenilənmə tarixi:</strong> 27 Sentyabr 2026</p>
-            <p>Bu məxfilik siyasəti sənədi TMHSE platformasından və xidmətlərindən istifadə edərkən şəxsi məlumatlarınızın necə toplanıldığını, istifadə edildiyini və qorunduğunu izah edir.</p>
+            <p>Bu məxfilik siyasəti sənədi TM&S platformasından və xidmətlərindən istifadə edərkən şəxsi məlumatlarınızın necə toplanıldığını, istifadə edildiyini və qorunduğunu izah edir.</p>
 
             <h3>1. Toplanan Məlumatlar</h3>
             <p>Bizimlə əlaqə saxlayarkən və ya xidmətlərimizdən faydalanarkən (məsələn: e-poçt vasitəsilə müraciət edərkən) adınız, əlaqə vasitələriniz və şirkətiniz barədə təməl məlumatlar toplana bilər.</p>

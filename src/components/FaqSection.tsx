@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     q: "Bizimlə necə əməkdaşlığa başlaya bilərsiniz?",
-    a: "Əlaqə bölməsindən E-poçt (info@tmhse.expert) və ya WhatsApp vasitəsilə bizə yaza bilərsiniz. Mütəxəssislərimiz ən qısa zamanda sizinlə əlaqə saxlayıb ilkin görüşü təyin edəcəklər."
+    a: "Əlaqə bölməsindən E-poçt (info@hsetms.com) və ya WhatsApp vasitəsilə bizə yaza bilərsiniz. Mütəxəssislərimiz ən qısa zamanda sizinlə əlaqə saxlayıb ilkin görüşü təyin edəcəklər."
   }
 ];
 

@@ -60,7 +60,7 @@ export default function ContactPage() {
               </div>
               <div className="flex flex-col gap-1 mt-1">
                 <span className="text-sm font-bold text-dark-bg uppercase tracking-widest">E-poçt</span>
-                <a href={`mailto:${settings.contact_email || 'info@tmhse.expert'}`} className="text-accent-hover font-medium hover:underline text-sm">{settings.contact_email || 'info@tmhse.expert'}</a>
+                <a href={`mailto:${settings.contact_email || 'info@hsetms.com'}`} className="text-accent-hover font-medium hover:underline text-sm">{settings.contact_email || 'info@hsetms.com'}</a>
               </div>
             </div>
 

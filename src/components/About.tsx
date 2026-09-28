@@ -44,7 +44,7 @@ export default function About() {
         >
           <div className="flex items-center gap-4">
             <div className="w-8 h-[2px] bg-accent"></div>
-            <span className="text-xs uppercase tracking-[0.3em] text-accent font-bold">TMHSE</span>
+            <span className="text-xs uppercase tracking-[0.3em] text-accent font-bold">TM&S</span>
           </div>
 
           <h2 className="text-3xl md:text-4xl font-bold leading-[1.2] text-white">

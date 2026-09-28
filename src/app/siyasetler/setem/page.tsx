@@ -30,7 +30,7 @@ export default function HsePolicyPage() {
             className="prose prose-base md:prose-lg max-w-4xl prose-headings:text-dark-bg prose-a:text-accent-hover"
           >
             <h3>Sıfır İnsident Hədəfi</h3>
-            <p>Fəaliyyətimizin əsas məqsədi insan həyatının qorunması və ətraf mühitə zərərin qarşısının alınmasıdır. TMHSE olaraq biz bütün layihələrimizdə "Sıfır İnsident" hədəfini mənimsəyirik.</p>
+            <p>Fəaliyyətimizin əsas məqsədi insan həyatının qorunması və ətraf mühitə zərərin qarşısının alınmasıdır. TM&S olaraq biz bütün layihələrimizdə "Sıfır İnsident" hədəfini mənimsəyirik.</p>
 
             <h3>Ətraf Mühitə Hörmət</h3>
             <p>Biz sadəcə bu günü deyil, gələcək nəsilləri də düşünürük. Tullantıların minimuma endirilməsi, resursların səmərəli istifadəsi və ekoloji davamlılıq əsas fəaliyyət prinsiplərimizdəndir.</p>
