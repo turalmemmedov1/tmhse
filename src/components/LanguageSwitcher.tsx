@@ -81,7 +81,7 @@ export default function LanguageSwitcher() {
   return (
     <div className="relative z-[90]">
       {/* Gizli div */}
-      <div id="google_translate_element" className="absolute top-[-9999px] left-[-9999px] opacity-0 pointer-events-none"></div>
+      <div id="google_translate_element" className="absolute top-[-9999px] left-[-9999px] opacity-0 pointer-events-none w-0 h-0 overflow-hidden"></div>
       
       <button 
         onClick={() => setIsOpen(!isOpen)}

@@ -134,3 +134,24 @@ div[class*="VIpgJd-Zvi9od"],
     width: 0 !important;
     height: 0 !important;
 }
+
+/* Aggressively hide all Google Translate loading spinners */
+.goog-te-spinner-pos,
+.goog-te-spinner-animation,
+.goog-te-spinner-margin,
+.goog-te-spinner,
+img[src*="translate.googleapis.com"],
+img[src*="translate.google.com"],
+img[src*="gstatic.com/images/branding/googlelogo"],
+[class*="goog-te-spinner"],
+.VIpgJd-Zvi9od-aZ2wEe-OiiCO,
+.VIpgJd-Zvi9od-aZ2wEe-wOHMyf-ti6hGc {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    animation: none !important;
+    pointer-events: none !important;
+    z-index: -9999 !important;
+}
