@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { LayoutDashboard, MessageSquare, Phone,  LogOut, Link as LinkIcon, ImageIcon as ImageIcon, Folder as FolderIcon, FileText, Briefcase, FileBadge, Trash2, PlusCircle, Newspaper, Users, BookOpen, Presentation, Video } from "lucide-react";
+import { LayoutDashboard, MessageSquare, Phone, Settings,  LogOut, Link as LinkIcon, ImageIcon as ImageIcon, Folder as FolderIcon, FileText, Briefcase, FileBadge, Trash2, PlusCircle, Newspaper, Users, BookOpen, Presentation, Video } from "lucide-react";
 import Image from "next/image";
 import { 
   getVacancies, deleteVacancy, getCvs, deleteCv, getSettings, updateSetting, 
@@ -193,6 +193,7 @@ export default function AdminPanelPage() {
                         {id:'internships', icon: Presentation, title: 'Təcrübə Proqramı'},
             {id:'services_media', icon: Video, title: 'Xidmət (PDF/Video)'},
             {id:'social', icon: Phone, title: 'Əlaqə və Tənzimləmələr'},
+            {id:'account', icon: Settings, title: 'Hesab Tənzimləmələri'},
             {id:'menus', icon: LayoutDashboard, title: 'Menyular'},
             {id:'home_images', icon: ImageIcon, title: 'Ana Səhifə Şəkilləri'}
           ].map(item => (
@@ -451,7 +452,42 @@ export default function AdminPanelPage() {
               </motion.div>
             )}
             
-            {activeTab === 'social' && (
+            
+            {activeTab === 'account' && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5 max-w-xl">
+                <h3 className="font-bold text-lg text-dark-bg mb-6">Giriş Məlumatlarını Yenilə</h3>
+                <form onSubmit={async (e) => {
+                  e.preventDefault();
+                  const fd = new FormData(e.currentTarget);
+                  const newEmail = fd.get("new_email");
+                  const newPass = fd.get("new_password");
+                  if(newEmail && newPass) {
+                    const t = toast.loading("Yenilənir...");
+                    const success = await updateAdminCredentials(newEmail.toString(), newPass.toString());
+                    if(success) {
+                        toast.success("Giriş məlumatları dəyişdirildi!", { id: t });
+                        (e.target).reset();
+                    }
+                    else toast.error("Xəta baş verdi", { id: t });
+                  }
+                }} className="flex flex-col gap-6">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-bold text-dark-bg">Yeni E-poçt (Login üçün)</label>
+                    <input type="email" name="new_email" required placeholder="yeni_mail@example.com" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-3 text-sm focus:border-accent" />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-bold text-dark-bg">Yeni Şifrə</label>
+                    <input type="password" name="new_password" required placeholder="••••••••" className="w-full bg-background border border-dark-bg/10 rounded-lg px-4 py-3 text-sm focus:border-accent" />
+                  </div>
+                  <div className="bg-blue-50 text-blue-800 p-4 rounded-xl text-xs leading-relaxed">
+                    <strong>Diqqət:</strong> Məlumatları yenilədikdən sonra növbəti girişdə mütləq yeni yazdığınız e-poçt və şifrədən istifadə etməlisiniz. Şifrənizi yaddan çıxarmamağınız tövsiyə olunur.
+                  </div>
+                  <button type="submit" className="bg-red-600 text-white px-8 py-3 rounded-xl text-sm font-bold w-fit hover:bg-red-700 transition-colors shadow-lg shadow-red-600/20">Yenilə</button>
+                </form>
+              </motion.div>
+            )}
+
+{activeTab === 'social' && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white p-8 rounded-2xl shadow-sm border border-dark-bg/5 max-w-xl">
                 <h3 className="font-bold text-lg text-dark-bg mb-6">Əlaqə və Sosial Media</h3>
                 <form onSubmit={async (e) => {
